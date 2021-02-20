@@ -8,6 +8,10 @@ import * as zod from 'zod';
 
 const logger = new Logger({ name: 'GameRouter' })
 
+const ParamsSchema = zod.object({
+  gameId: zod.string()
+});
+
 class GameRouter {
 
   public router = Router();
@@ -29,12 +33,10 @@ class GameRouter {
         gameId: game.id
       });
     });
+
     this.router.get('/game/:gameId/spotify/playlist', async (request, response) => {
       const QuerySchema = zod.object({
         query: zod.string().optional()
-      });
-      const ParamsSchema = zod.object({
-        gameId: zod.string()
       });
       const query = QuerySchema.parse(request.query);
       const params = ParamsSchema.parse(request.params);
@@ -49,7 +51,36 @@ class GameRouter {
         : await game.spotify.getFeaturedPlaylists();
       response.send(playlists.body);
     })
+
+    this.router.get('/game/:gameId/options', (request, response) => {
+      const params = ParamsSchema.parse(request.params);
+      const game = gameStorage.getGame(params.gameId);
+      if (!game) {
+        logger.error('Can not find game with id', params.gameId);
+        response.sendStatus(404);
+        return;
+      }
+      response.status(200).json(game.options);
+    })
+
+    this.router.post('/game/:gameId/options', (request, response) => {
+      const params = ParamsSchema.parse(request.params);
+      const BodySchema = zod.object({
+        spotifyPlaylistId: zod.string()
+      });
+      const body = BodySchema.parse(request.body);
+      const game = gameStorage.getGame(params.gameId);
+      if (!game) {
+        logger.error('Can not find game with id', params.gameId);
+        response.sendStatus(404);
+        return;
+      }
+      game.options.playlistId = body.spotifyPlaylistId;
+      response.status(200).json(game.options);
+    })
+
   }
+
 }
 
 export default GameRouter;

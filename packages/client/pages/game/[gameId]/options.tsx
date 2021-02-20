@@ -1,8 +1,10 @@
 import { useFormik } from "formik";
 import { NextPage } from "next";
 import { useState } from "react";
-import { useQuery } from "react-query";
 import * as yup from 'yup';
+import useGameOptions from "../../../hooks/use-game-options";
+import useMutateGameOptions from "../../../hooks/use-mutate-game-options";
+import useSpotifyPlaylistSearch from "../../../hooks/use-spotify-playlist-search";
 
 interface GameOptionsProps {
   gameId: string;
@@ -30,11 +32,16 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
     }
   })
 
-  const playlistsQuery = useQuery(['spotify-playlists', query], async () => {
-    const response = await fetch(`http://localhost:4000/game/${gameId}/spotify/playlist?query=${encodeURI(query)}`);
-    const json = await response.json();
-    return json as SpotifyApi.ListOfFeaturedPlaylistsResponse;
-  });
+  const mutateGameOptions = useMutateGameOptions(gameId);
+  const playlistsQuery = useSpotifyPlaylistSearch(gameId, query);
+
+  const setPlaylistIdFn = (spotifyPlaylistId: string) => () => {
+    mutateGameOptions.mutate({
+      spotifyPlaylistId
+    });
+  }
+
+  const gameOptionsQuery = useGameOptions(gameId);
 
   return <div className="min-w-screen min-h-screen bg-gray-900 text-white">
       <div className="max-w-screen-lg mx-auto px-5">
@@ -50,12 +57,12 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         </ul>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-7">
           {playlistsQuery.isSuccess && playlistsQuery.data.playlists.items.map(playlist => {
-            return <div className="rounded-lg overflow-hidden relative transition transform hover:scale-110" key={playlist.id}>
+            return <button onClick={setPlaylistIdFn(playlist.id)} className="rounded-lg overflow-hidden relative transition transform hover:scale-110" key={playlist.id}>
               <img src={playlist.images[0].url} className="w-full" />
               <div className="absolute p-2 flex items-center justify-center w-full h-full top-0 left-0 bg-white bg-opacity-90 z-10 transition opacity-0 hover:opacity-100">
                 <span className="text-black font-bold text-xl text-center">{playlist.name}</span>
               </div>
-            </div>
+            </button>
           })}
         </div>
       </div>

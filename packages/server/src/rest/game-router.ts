@@ -4,6 +4,7 @@ import { Logger } from "tslog";
 import spotify from "../libraries/spotify";
 import Game from "../models/game";
 import GameStorage from "../storage/game-storage";
+import * as zod from 'zod';
 
 const logger = new Logger({ name: 'GameRouter' })
 
@@ -28,6 +29,26 @@ class GameRouter {
         gameId: game.id
       });
     });
+    this.router.get('/game/:gameId/spotify/playlist', async (request, response) => {
+      const QuerySchema = zod.object({
+        query: zod.string().optional()
+      });
+      const ParamsSchema = zod.object({
+        gameId: zod.string()
+      });
+      const query = QuerySchema.parse(request.query);
+      const params = ParamsSchema.parse(request.params);
+      const game = gameStorage.getGame(params.gameId);
+      if (!game) {
+        logger.error('Can not find game with id', params.gameId);
+        response.sendStatus(404);
+        return;
+      }
+      const playlists = query.query
+        ? await game.spotify.searchPlaylists(query.query)
+        : await game.spotify.getFeaturedPlaylists();
+      response.send(playlists.body);
+    })
   }
 }
 

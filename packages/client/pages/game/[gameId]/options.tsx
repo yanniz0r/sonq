@@ -8,6 +8,14 @@ interface GameOptionsProps {
   gameId: string;
 }
 
+const queryPresets = [
+  '2000s',
+  '1990s',
+  '1980s',
+  'rock',
+  'metal',
+]
+
 const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const [query, setQuery] = useState('');
   const searchForm = useFormik<{ query: string }>({
@@ -35,6 +43,11 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
           <input className="flex-grow rounded-lg bg-gray-800 p-2 px-4" name="query" value={searchForm.values.query} onChange={searchForm.handleChange} />
           <button className="bg-purple-700 p-2 px-4 ml-2 rounded-lg disabled:opacity-50" disabled={!searchForm.isValid}>Suchen</button>
         </form>
+        <ul className="mt-4">
+          {queryPresets.map(preset => (
+            <button className="p-2 bg-blue-400 font-bold mr-2 text-sm rounded-lg transform transition hover:scale-110" onClick={() => setQuery(preset)}>{preset}</button>
+          ))}
+        </ul>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-7">
           {playlistsQuery.isSuccess && playlistsQuery.data.playlists.items.map(playlist => {
             return <div className="rounded-lg overflow-hidden relative transition transform hover:scale-110" key={playlist.id}>

@@ -5,3 +5,7 @@ export const GameOptionsSchema = zod.object({
 })
 
 export type GameOptions = zod.TypeOf<typeof GameOptionsSchema>;
+
+export interface Player {
+  username: string;
+}

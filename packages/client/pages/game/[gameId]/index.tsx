@@ -7,6 +7,7 @@ import Input from "../../../components/input";
 import { Button } from "../../../components/button";
 import JoinGameModal from "../../../components/join-game-modal";
 import { SocketClient } from "@sonq/api";
+import useSpotifyTrackSearch from "../../../hooks/use-spotify-track-search";
 
 interface GamePageProps {
   gameId: string;
@@ -14,6 +15,8 @@ interface GamePageProps {
 
 const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
   const [joinedGame, setJoinedGame] = useState(false);
+  const [songQuery, setSongQuery] = useState('');
+  const trackSearchQuery = useSpotifyTrackSearch(gameId, songQuery)
 
   const io = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -45,11 +48,26 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
     io.emit('play-next-song');
   }, [io]);
 
-  return <>
+  return <div className="bg-gray-900 min-h-screen">
     <JoinGameModal open={!joinedGame} onJoin={joinGame} />
     <h1>Sonq</h1>
     <button onClick={playSong}>Play Song</button>
-  </>
+    <div className="max-w-screen-lg mx-auto">
+      <h1 className="text-center mb-10 text-4xl text-white font-bold">Wie heißt dieser Song?</h1>
+
+      <Input className="w-full" value={songQuery} onChange={e => setSongQuery(e.currentTarget.value)} />
+      <div className="grid grid-cols-4 gap-5 mt-7">
+        {trackSearchQuery.data?.tracks.items.map(item => (
+          <button className="bg-green-500 rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col">
+            <img src={item.album.images[0].url} />
+            <div className="p-2">
+              <span className="font-bold">{item.name}</span> · {item.artists.map(a => a.name).join(', ')}
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
 }
 
 GamePage.getInitialProps = (context) => {

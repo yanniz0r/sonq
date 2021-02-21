@@ -35,6 +35,23 @@ class GameRouter {
       });
     });
 
+    this.router.get('/game/:gameId/spotify/track', async (request, response) => {
+      const QuerySchema = zod.object({
+        query: zod.string()
+      });
+      const query = QuerySchema.parse(request.query);
+      const params = ParamsSchema.parse(request.params);
+      const game = gameStorage.getGame(params.gameId);
+      if (!game) {
+        logger.error('Can not find game with id', params.gameId);
+        response.sendStatus(404);
+        return;
+      }
+
+      const tracks = await game.spotify.searchTracks(query.query, { limit: 4 });
+      response.status(200).json(tracks.body)
+    })
+
     this.router.get('/game/:gameId/spotify/playlist', async (request, response) => {
       const QuerySchema = zod.object({
         query: zod.string().optional()

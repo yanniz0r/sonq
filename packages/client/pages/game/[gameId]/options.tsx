@@ -1,11 +1,15 @@
 import { useFormik } from "formik";
 import { NextPage } from "next";
 import { useState } from "react";
+import { FaTimes } from "react-icons/fa";
 import * as yup from 'yup';
+import Link from 'next/link';
+
 import SpotifyPlaylistTile from "../../../components/spotify-playlist-tile";
 import useGameOptions from "../../../hooks/use-game-options";
 import useMutateGameOptions from "../../../hooks/use-mutate-game-options";
 import useSpotifyPlaylistSearch from "../../../hooks/use-spotify-playlist-search";
+import Input from "../../../components/input";
 
 interface GameOptionsProps {
   gameId: string;
@@ -45,11 +49,16 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const gameOptionsQuery = useGameOptions(gameId);
 
   return <div className="min-w-screen min-h-screen bg-gray-900 text-white">
+      <Link href={`/game/${gameId}`}>
+        <a className="absolute left-5 top-5 text-xl">
+          <FaTimes />
+        </a>
+      </Link>
       <div className="max-w-screen-lg mx-auto px-5">
         <h2 className="text-5xl pt-7">Playlist aussuchen</h2>
         <form className="flex mt-7" onSubmit={searchForm.handleSubmit}>
-          <input className="flex-grow rounded-lg bg-gray-800 p-2 px-4" name="query" value={searchForm.values.query} onChange={searchForm.handleChange} />
-          <button className="bg-purple-700 p-2 px-4 ml-2 rounded-lg disabled:opacity-50" disabled={!searchForm.isValid}>Suchen</button>
+          <Input name="query" value={searchForm.values.query} onChange={searchForm.handleChange} />
+          <button className="bg-purple-700 p-2 px-4 rounded-lg disabled:opacity-50" disabled={!searchForm.isValid}>Suchen</button>
         </form>
         <ul className="mt-4">
           {queryPresets.map(preset => (

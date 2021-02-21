@@ -10,6 +10,7 @@ import { json } from 'body-parser';
 import GameStorage from './storage/game-storage';
 import GameRouter from './rest/game-router';
 import * as zod from 'zod';
+import JoinHandler from './socket/handlers/join-handler';
 
 const PORT = 4000;
 const logger = new Logger({ name: 'server' })
@@ -50,8 +51,9 @@ io.on('connection', (socket: Socket) => {
     socket.disconnect();
     return;
   }
-  const socketHandler = new SocketController(game, socket);
-  socketHandler.addHandler(new PlaySongHandler(spotify))
+  const socketController = new SocketController(game, socket);
+  socketController.addHandler(new PlaySongHandler(spotify));
+  socketController.addHandler(new JoinHandler());
 })
 
 server.listen(PORT, () => {

@@ -5,6 +5,7 @@ import spotify from "../libraries/spotify";
 import Game from "../models/game";
 import GameStorage from "../storage/game-storage";
 import * as zod from 'zod';
+import { Domain } from "@sonq/api";
 
 const logger = new Logger({ name: 'GameRouter' })
 
@@ -65,17 +66,14 @@ class GameRouter {
 
     this.router.post('/game/:gameId/options', (request, response) => {
       const params = ParamsSchema.parse(request.params);
-      const BodySchema = zod.object({
-        spotifyPlaylistId: zod.string()
-      });
-      const body = BodySchema.parse(request.body);
+      const body = Domain.GameOptionsSchema.parse(request.body);
       const game = gameStorage.getGame(params.gameId);
       if (!game) {
         logger.error('Can not find game with id', params.gameId);
         response.sendStatus(404);
         return;
       }
-      game.options.playlistId = body.spotifyPlaylistId;
+      game.options.spotifyPlaylistId = body.spotifyPlaylistId;
       response.status(200).json(game.options);
     })
 

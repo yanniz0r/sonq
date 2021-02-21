@@ -1,10 +1,7 @@
 import { useMutation } from "react-query";
+import { Domain } from '@sonq/api'
 
-export interface GameOptions {
-  spotifyPlaylistId: string;
-}
-
-const useMutateGameOptions = (gameId: string) => useMutation(async (options: GameOptions) => {
+const useMutateGameOptions = (gameId: string) => useMutation(async (options: Domain.GameOptions) => {
   const response = await fetch(`http://localhost:4000/game/${gameId}/options`, {
     method: 'POST',
     headers: {
@@ -13,7 +10,7 @@ const useMutateGameOptions = (gameId: string) => useMutation(async (options: Gam
     body: JSON.stringify(options),
   })
   const json = await response.json();
-  return json as GameOptions;
+  return json as Domain.GameOptions;
 })
 
 export default useMutateGameOptions;

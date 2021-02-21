@@ -1,6 +1,12 @@
 {
-  "name": "api",
+  "name": "@sonq/api",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT"
+  "main": "dist/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.1.5"
+  },
+  "dependencies": {
+    "zod": "^1.11.11"
+  }
 }

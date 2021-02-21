@@ -1,12 +1,9 @@
 import SpotifyWebApi from "spotify-web-api-node";
-
-export interface GameOptions {
-  playlistId?: string;
-}
+import { Domain } from '@sonq/api';
 
 class Game {
 
-  public options: GameOptions = {};
+  public options: Domain.GameOptions = {};
 
   constructor(
     public id: string,

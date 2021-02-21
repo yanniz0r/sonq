@@ -1,5 +1,6 @@
 import { useMutation } from "react-query";
 import { Domain } from '@sonq/api'
+import queryClient from "../config/query-client";
 
 const useMutateGameOptions = (gameId: string) => useMutation(async (options: Domain.GameOptions) => {
   const response = await fetch(`http://localhost:4000/game/${gameId}/options`, {
@@ -11,6 +12,12 @@ const useMutateGameOptions = (gameId: string) => useMutation(async (options: Dom
   })
   const json = await response.json();
   return json as Domain.GameOptions;
+}, {
+  onSuccess() {
+    queryClient.refetchQueries({
+      queryKey: ['game-options', gameId]
+    });
+  }
 })
 
 export default useMutateGameOptions;

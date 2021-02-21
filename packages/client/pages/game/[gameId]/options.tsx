@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { NextPage } from "next";
 import { useState } from "react";
 import * as yup from 'yup';
+import SpotifyPlaylistTile from "../../../components/spotify-playlist-tile";
 import useGameOptions from "../../../hooks/use-game-options";
 import useMutateGameOptions from "../../../hooks/use-mutate-game-options";
 import useSpotifyPlaylistSearch from "../../../hooks/use-spotify-playlist-search";
@@ -57,12 +58,11 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         </ul>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-7">
           {playlistsQuery.isSuccess && playlistsQuery.data.playlists.items.map(playlist => {
-            return <button onClick={setPlaylistIdFn(playlist.id)} className="rounded-lg overflow-hidden relative transition transform hover:scale-110" key={playlist.id}>
-              <img src={playlist.images[0].url} className="w-full" />
-              <div className="absolute p-2 flex items-center justify-center w-full h-full top-0 left-0 bg-white bg-opacity-90 z-10 transition opacity-0 hover:opacity-100">
-                <span className="text-black font-bold text-xl text-center">{playlist.name}</span>
-              </div>
-            </button>
+            return <SpotifyPlaylistTile
+              selected={playlist.id === gameOptionsQuery.data?.spotifyPlaylistId}
+              onClick={setPlaylistIdFn(playlist.id)}
+              playlist={playlist}
+            />
           })}
         </div>
       </div>

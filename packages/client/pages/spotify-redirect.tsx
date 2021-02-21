@@ -32,8 +32,10 @@ const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
       })
   }, [props.code])
 
-  return <div>
-    Erstelle spiel
+  return <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-900">
+    <div className="flex flex-col items-center">
+      <h1 className="text-6xl text-gray-200">Wir erstellen dein Spiel...</h1>
+    </div>
   </div>
 }
 

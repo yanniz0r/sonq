@@ -1,4 +1,4 @@
-import { Player } from './domain'
+import { GamePhase, Player } from './domain'
 
 export enum Events {
   /**
@@ -12,7 +12,11 @@ export enum Events {
   /**
    * The time when the current round ends has been updated
    */
-  TimeOverUpdate = 'server:time-over-update'
+  TimeOverUpdate = 'server:time-over-update',
+  /**
+   * The games phase has changed
+   */
+  PhaseChange = 'server:phase-change'
 }
 
 export interface SongQuessedEvent {
@@ -21,4 +25,8 @@ export interface SongQuessedEvent {
 
 export interface TimeOverUpdateEvent {
   timeOverAt: string;
+}
+
+export interface PhaseChangeEvent {
+  phase: GamePhase;
 }

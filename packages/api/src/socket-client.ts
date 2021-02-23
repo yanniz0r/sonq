@@ -6,9 +6,9 @@ export enum Events {
    */
   Join = 'client:join',
   /**
-   * The host starts the game
+   * The host continues to the next game phase
    */
-  StartGame = 'client:start-game',
+  Continue = 'client:continue',
   /**
    * A player places a guess for a song
    */

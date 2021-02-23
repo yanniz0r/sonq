@@ -11,6 +11,8 @@ import GameStorage from './storage/game-storage';
 import GameRouter from './rest/game-router';
 import * as zod from 'zod';
 import JoinHandler from './socket/handlers/join-handler';
+import ContinueHandler from './socket/handlers/continue-handler';
+import GuessSongHandler from './socket/handlers/guess-song-handler';
 
 const PORT = 4000;
 const logger = new Logger({ name: 'server' })
@@ -32,7 +34,7 @@ app.use(cors({
 const gameStorage = new GameStorage();
 
 const gameRouter = new GameRouter(gameStorage);
-app.use(gameRouter.router)
+app.use('/game', gameRouter.router)
 
 io.on('connection', (socket: Socket) => {
   const parsedQuery = zod
@@ -54,6 +56,8 @@ io.on('connection', (socket: Socket) => {
   const socketController = new SocketController(game, socket);
   socketController.addHandler(new PlaySongHandler(spotify));
   socketController.addHandler(new JoinHandler());
+  socketController.addHandler(new ContinueHandler());
+  socketController.addHandler(new GuessSongHandler());
 })
 
 server.listen(PORT, () => {

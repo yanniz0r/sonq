@@ -7,6 +7,7 @@ export const GameOptionsSchema = zod.object({
 export type GameOptions = zod.TypeOf<typeof GameOptionsSchema>;
 
 export interface Player {
+  id: string;
   username: string;
 }
 
@@ -33,9 +34,15 @@ export interface ReviewGamePhaseAnswer {
   time?: number;
 }
 
+export interface PlayerScore {
+  player: Player;
+  score: number;
+}
+
 export interface ReviewGamePhaseData {
   track: SpotifyApi.TrackObjectFull,
   answers: ReviewGamePhaseAnswer[];
+  score: PlayerScore[];
 }
 
 export type GamePhase = GamePhaseDefinition<GamePhaseType.Lobby>

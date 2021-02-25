@@ -1,6 +1,7 @@
 import { Domain, SocketClient } from "@sonq/api";
 import { FC, useCallback } from "react";
 import { Button } from "../button";
+import PlayerScores from "../player-scores";
 
 interface ReviewProps {
   io: SocketIOClient.Socket;
@@ -20,11 +21,7 @@ const Review: FC<ReviewProps> = ({ io, phaseData }) => {
         <small className="text-gray-400 text-2xl">{phaseData.track.artists[0].name}</small>
       </h1>
     </div>
-    <ul className="text-white p-5">
-      {phaseData.answers.map((answer, index) => (
-        <li key={index} className="text-center">{answer.player.username}: {answer.time}</li>
-      ))}
-    </ul>
+    <PlayerScores scores={phaseData.score} answers={phaseData.answers} />
     <div className="flex items-center justify-center">
       <Button onClick={continueGame}>Next Round</Button>
     </div>

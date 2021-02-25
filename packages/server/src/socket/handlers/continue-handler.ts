@@ -8,9 +8,6 @@ import Game from "../../models/game";
 
 const logger = new Logger({ name: 'ContinueHandler' })
 
-const PRE_SONG_DELAY = 5 * 1000;
-const PLAY_SONG_TIME = 30 * 1000;
-
 class ContinueHandler implements SocketHandler {
 
   public event = SocketClient.Events.Continue;
@@ -20,8 +17,8 @@ class ContinueHandler implements SocketHandler {
       const { game, socket } = session;
       if (game.phase.type === Domain.GamePhaseType.Lobby || game.phase.type === Domain.GamePhaseType.Review) {
         const randomSong = await this.getRandomSong(session.game);
-        const phaseStartDate = dayjs(new Date()).add(PRE_SONG_DELAY, 'ms');
-        const phaseEndDate = dayjs(phaseStartDate).add(PLAY_SONG_TIME, 'ms');
+        const phaseStartDate = dayjs(new Date()).add(game.preSongDelay, 'ms');
+        const phaseEndDate = dayjs(phaseStartDate).add(game.playSongTime, 'ms');
         game.phase = {
           type: Domain.GamePhaseType.PlaySong,
           data: {
@@ -32,18 +29,7 @@ class ContinueHandler implements SocketHandler {
         };
         logger.debug(`Playing song ${randomSong.track.name} from ${randomSong.track.artists[0].name} in game ${game.id}`);
         game.currentSong = randomSong.track;
-
-        const timeout = setTimeout(() => {
-          game.phase = {
-            type: Domain.GamePhaseType.Review,
-            data: {
-              answers: game.getReviewAnswers(),
-              track: game.currentSong!,
-            }
-          };
-        }, PRE_SONG_DELAY + PLAY_SONG_TIME);
       }
-
     }
   }
 

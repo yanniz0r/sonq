@@ -13,9 +13,6 @@ import * as zod from 'zod';
 import JoinHandler from './socket/handlers/join-handler';
 import ContinueHandler from './socket/handlers/continue-handler';
 import GuessSongHandler from './socket/handlers/guess-song-handler';
-import { autorun, reaction } from 'mobx';
-import { phaseChangeEmitter } from './socket/emitters/phase-change-emitter';
-import { Domain } from '@sonq/api';
 
 const PORT = 4000;
 const logger = new Logger({ name: 'server' })
@@ -36,7 +33,7 @@ app.use(cors({
 
 const gameStorage = new GameStorage();
 
-const gameRouter = new GameRouter(gameStorage);
+const gameRouter = new GameRouter(io, gameStorage);
 app.use('/game', gameRouter.router)
 
 io.on('connection', (socket: Socket) => {
@@ -57,22 +54,6 @@ io.on('connection', (socket: Socket) => {
     socket.disconnect();
     return;
   }
-  
-  reaction(() => game.phase, () => {
-    phaseChangeEmitter(socket, game);
-  })
-
-  reaction(() => game.players.length === game.answers.size, (everyonAnswered) => {
-    if (everyonAnswered) {
-      game.phase = {
-        type: Domain.GamePhaseType.Review,
-        data: {
-          answers: game.getReviewAnswers(),
-          track: game.currentSong!
-        }
-      }
-    }
-  })
 
   const socketController = new SocketController(game, socket);
   socketController.addHandler(new PlaySongHandler(spotify));

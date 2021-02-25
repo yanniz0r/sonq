@@ -1,8 +1,8 @@
 import { SocketServer } from "@sonq/api";
-import { Socket } from "socket.io";
+import { Server } from "socket.io";
 import Game from "../../models/game";
 
-export const phaseChangeEmitter = (socket: Socket, game: Game) => {
+export const phaseChangeEmitter = (socket: Server, game: Game) => {
   const data: SocketServer.PhaseChangeEvent = {
     phase: game.phase, 
   }

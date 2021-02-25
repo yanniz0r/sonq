@@ -10,4 +10,8 @@ export const InputErrorMessage: FC = ({ children }) => {
   </div>
 }
 
+export const Label: FC = ({ children }) => {
+  return <label className="flex flex-col text-lg text-gray-400">{children}</label>
+}
+
 export default Input;

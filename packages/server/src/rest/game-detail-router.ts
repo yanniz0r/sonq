@@ -49,6 +49,7 @@ class GameDetailRouter {
   private postGameOptions: RequestHandler = (request, response) => {
     const body = Domain.GameOptionsSchema.parse(request.body);
     this.game.options.spotifyPlaylistId = body.spotifyPlaylistId;
+    this.game.options.rounds = body.rounds;
     response.status(200).json(this.game.options);
   }
 

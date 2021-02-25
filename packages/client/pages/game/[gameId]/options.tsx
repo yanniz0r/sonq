@@ -9,7 +9,9 @@ import SpotifyPlaylistTile from "../../../components/spotify-playlist-tile";
 import useGameOptions from "../../../hooks/use-game-options";
 import useMutateGameOptions from "../../../hooks/use-mutate-game-options";
 import useSpotifyPlaylistSearch from "../../../hooks/use-spotify-playlist-search";
-import Input from "../../../components/input";
+import Input, { Label } from "../../../components/input";
+import { Domain } from "@sonq/api";
+import { Button } from "../../../components/button";
 
 interface GameOptionsProps {
   gameId: string;
@@ -46,6 +48,15 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
     });
   }
 
+  const advancedGameOptionsForm = useFormik<Pick<Domain.GameOptions, 'rounds'>>({
+    initialValues: {
+      rounds: 15,
+    },
+    onSubmit(values) {
+      mutateGameOptions.mutate(values);
+    }
+  });
+
   const gameOptionsQuery = useGameOptions(gameId);
 
   return <div className="min-w-screen min-h-screen bg-gray-900 text-white">
@@ -58,7 +69,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         <h2 className="text-5xl pt-7">Playlist aussuchen</h2>
         <form className="flex mt-7" onSubmit={searchForm.handleSubmit}>
           <Input name="query" value={searchForm.values.query} onChange={searchForm.handleChange} />
-          <button className="bg-purple-700 p-2 px-4 rounded-lg disabled:opacity-50" disabled={!searchForm.isValid}>Suchen</button>
+          <button className="bg-purple-700 p-2 px-4 rounded-lg disabled:opacity-50 ml-2" disabled={!searchForm.isValid}>Suchen</button>
         </form>
         <ul className="mt-4">
           {queryPresets.map(preset => (
@@ -74,6 +85,22 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
             />
           })}
         </div>
+
+        <h2 className="text-5xl pt-7">Erweiterte Einstellungen</h2>
+        <form className="mt-7" onSubmit={advancedGameOptionsForm.handleSubmit}>
+          <Label>
+            Rundenzahl
+            <Input
+              type="number"
+              value={advancedGameOptionsForm.values.rounds}
+              name="rounds"
+              onChange={advancedGameOptionsForm.handleChange}
+            />
+          </Label>
+          <div className="flex flex-col items-end mt-5">
+            <Button type="submit">Erweiterte Einstellungen speichern</Button>
+          </div>
+        </form>
       </div>
     </div>
 }

@@ -11,6 +11,7 @@ const logger = new Logger({ name: 'Game' })
 
 class Game {
 
+  @observable
   public options: Domain.GameOptions = {};
   @observable
   public players: Player[] = [];
@@ -29,6 +30,8 @@ class Game {
   public preSongDelay = 5 * 1000;
   public playSongTime = 30 * 1000;
 
+  public roundsLeft = 15;
+
   public nextPlaySongPhaseTimeout?: NodeJS.Timeout;
 
   constructor(
@@ -37,6 +40,7 @@ class Game {
     public spotify: SpotifyWebApi
   ) {
     makeObservable(this);
+
     reaction(() => this.phase, () => {
       this.phaseStarted = new Date();
     })
@@ -44,7 +48,7 @@ class Game {
     reaction(() => this.phase, () => {
       phaseChangeEmitter(io, this);
     })
-  
+
     /**
      * React when everyone answered
      */
@@ -132,6 +136,44 @@ class Game {
       }
     }
     this.answers.clear();
+  }
+  
+  public hasRoundsLeft() {
+    return this.roundsLeft >= 1;
+  }
+
+  public transitionToSummary() {
+    this.phase = {
+      type: Domain.GamePhaseType.Summary,
+      data: {
+        answers: this.getReviewAnswers(),
+        score: this.getPlayerScores(),
+        track: this.currentSong!,
+      }
+    }
+  }
+
+  public resetRounds() {
+    const DEFAULT_ROUNDS = 15;
+    this.roundsLeft = this.options.rounds ?? DEFAULT_ROUNDS;
+  }
+
+  public transitionToPlayGame(track: SpotifyApi.TrackObjectFull) {
+    if (this.roundsLeft <= 0) {
+      this.resetRounds();
+    }
+    this.currentSong = track;
+    const phaseStartDate = dayjs(new Date()).add(this.preSongDelay, 'ms');
+    const phaseEndDate = dayjs(phaseStartDate).add(this.playSongTime, 'ms');
+    this.phase = {
+      type: Domain.GamePhaseType.PlaySong,
+      data: {
+        phaseEndDate: phaseEndDate.toISOString(),
+        phaseStartDate: phaseStartDate.toISOString(),
+        previewUrl: track.preview_url!,
+      }
+    };
+    this.roundsLeft -= 1;
   }
 
 }

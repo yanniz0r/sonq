@@ -8,5 +8,8 @@
     "packages/api",
     "packages/client",
     "packages/server"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  }
 }

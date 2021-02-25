@@ -4,7 +4,7 @@ import Game from "../../models/game";
 
 export const phaseChangeEmitter = (socket: Server, game: Game) => {
   const data: SocketServer.PhaseChangeEvent = {
-    phase: game.phase, 
-  }
+    phase: game.phase,
+  };
   socket.emit(SocketServer.Events.PhaseChange, data);
-}
+};

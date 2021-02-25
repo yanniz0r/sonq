@@ -1,26 +1,26 @@
-import { GamePhase, Player } from './domain'
+import { GamePhase, Player } from "./domain";
 
 export enum Events {
   /**
    * A player in the current lobby successfully guessed the song
    */
-  SongGuessed = 'server:song-guessed',
+  SongGuessed = "server:song-guessed",
   /**
    * The countdown for the current round is over
    */
-  TimeOver = 'server:time-over',
+  TimeOver = "server:time-over",
   /**
    * The time when the current round ends has been updated
    */
-  TimeOverUpdate = 'server:time-over-update',
+  TimeOverUpdate = "server:time-over-update",
   /**
    * The games phase has changed
    */
-  PhaseChange = 'server:phase-change'
+  PhaseChange = "server:phase-change",
 }
 
 export interface SongQuessedEvent {
-  player: Player
+  player: Player;
 }
 
 export interface TimeOverUpdateEvent {

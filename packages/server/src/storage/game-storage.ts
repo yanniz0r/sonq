@@ -1,8 +1,7 @@
 import Game from "../models/game";
-import { v4 } from 'uuid';
+import { v4 } from "uuid";
 
 class GameStorage {
-
   private games: Game[] = [];
 
   addGame(game: Game) {
@@ -16,7 +15,6 @@ class GameStorage {
   getGame(id: string) {
     return this.games.find((game) => game.id === id);
   }
-
 }
 
 export default GameStorage;

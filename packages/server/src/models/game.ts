@@ -1,16 +1,15 @@
 import SpotifyWebApi from "spotify-web-api-node";
-import { Domain } from '@sonq/api';
+import { Domain } from "@sonq/api";
 import Player from "./player";
-import dayjs from 'dayjs';
-import { makeObservable, observable, reaction, ObservableMap } from 'mobx';
+import dayjs from "dayjs";
+import { makeObservable, observable, reaction, ObservableMap } from "mobx";
 import { Logger } from "tslog";
 import { Server } from "socket.io";
 import { phaseChangeEmitter } from "../socket/emitters/phase-change-emitter";
 
-const logger = new Logger({ name: 'Game' })
+const logger = new Logger({ name: "Game" });
 
 class Game {
-
   @observable
   public options: Domain.GameOptions = {};
   @observable
@@ -19,7 +18,7 @@ class Game {
   public phase: Domain.GamePhase = {
     type: Domain.GamePhaseType.Lobby,
     data: undefined,
-  }
+  };
   @observable
   public score = new ObservableMap<Player, number>();
 
@@ -34,42 +33,50 @@ class Game {
 
   public nextPlaySongPhaseTimeout?: NodeJS.Timeout;
 
-  constructor(
-    io: Server,
-    public id: string,
-    public spotify: SpotifyWebApi
-  ) {
+  constructor(io: Server, public id: string, public spotify: SpotifyWebApi) {
     makeObservable(this);
 
-    reaction(() => this.phase, () => {
-      this.phaseStarted = new Date();
-    })
+    reaction(
+      () => this.phase,
+      () => {
+        this.phaseStarted = new Date();
+      }
+    );
 
-    reaction(() => this.phase, () => {
-      phaseChangeEmitter(io, this);
-    })
+    reaction(
+      () => this.phase,
+      () => {
+        phaseChangeEmitter(io, this);
+      }
+    );
 
     /**
      * React when everyone answered
      */
-    reaction(() => this.players.length === this.answers.size, (everyonAnswered) => {
-      if (everyonAnswered) {
-        this.transitionToReviewPhase()
-      }
-    })
-  
-    reaction(() => this.phase.type === Domain.GamePhaseType.PlaySong, (isPlaySongPhase) => {
-      if (isPlaySongPhase) {
-        const timeout = setTimeout(() => {
-          this.transitionToReviewPhase()
-        }, this.preSongDelay + this.playSongTime);
-        this.nextPlaySongPhaseTimeout = timeout;
-      } else {
-        if (this.nextPlaySongPhaseTimeout) {
-          clearTimeout(this.nextPlaySongPhaseTimeout);
+    reaction(
+      () => this.players.length === this.answers.size,
+      (everyonAnswered) => {
+        if (everyonAnswered) {
+          this.transitionToReviewPhase();
         }
       }
-    })
+    );
+
+    reaction(
+      () => this.phase.type === Domain.GamePhaseType.PlaySong,
+      (isPlaySongPhase) => {
+        if (isPlaySongPhase) {
+          const timeout = setTimeout(() => {
+            this.transitionToReviewPhase();
+          }, this.preSongDelay + this.playSongTime);
+          this.nextPlaySongPhaseTimeout = timeout;
+        } else {
+          if (this.nextPlaySongPhaseTimeout) {
+            clearTimeout(this.nextPlaySongPhaseTimeout);
+          }
+        }
+      }
+    );
   }
 
   public checkAnswer(songName: string, artistName: string) {
@@ -87,7 +94,7 @@ class Game {
 
   public bookPlayerPointsToScore() {
     this.answers.forEach((answerDate, player) => {
-      this.score.get(player)
+      this.score.get(player);
       let playerScore = this.score.get(player) ?? 0;
       playerScore += this.getPoints(answerDate);
       this.score.set(player, playerScore);
@@ -96,7 +103,7 @@ class Game {
   }
 
   private getPoints(date: Date) {
-    return Math.max(30 - dayjs(date).diff(this.phaseStarted, 's'), 5)
+    return Math.max(30 - dayjs(date).diff(this.phaseStarted, "s"), 5);
   }
 
   public getReviewAnswers(): Domain.ReviewGamePhaseAnswer[] {
@@ -104,9 +111,9 @@ class Game {
     this.answers.forEach((date, player) => {
       answers.push({
         player,
-        time: dayjs(date).diff(this.phaseStarted, 's')
-      })
-    })
+        time: dayjs(date).diff(this.phaseStarted, "s"),
+      });
+    });
     return answers;
   }
 
@@ -115,15 +122,17 @@ class Game {
     this.score.forEach((score, player) => {
       playerScores.push({
         player,
-        score
-      })
-    })
+        score,
+      });
+    });
     return playerScores;
   }
 
   public transitionToReviewPhase() {
     if (this.phase.type !== Domain.GamePhaseType.PlaySong) {
-      logger.error(`Can not transition from ${this.phase.type} to ${Domain.GamePhaseType.Review}`)
+      logger.error(
+        `Can not transition from ${this.phase.type} to ${Domain.GamePhaseType.Review}`
+      );
       return;
     }
     this.bookPlayerPointsToScore();
@@ -133,11 +142,11 @@ class Game {
         answers: this.getReviewAnswers(),
         score: this.getPlayerScores(),
         track: this.currentSong!,
-      }
-    }
+      },
+    };
     this.answers.clear();
   }
-  
+
   public hasRoundsLeft() {
     return this.roundsLeft >= 1;
   }
@@ -149,8 +158,8 @@ class Game {
         answers: this.getReviewAnswers(),
         score: this.getPlayerScores(),
         track: this.currentSong!,
-      }
-    }
+      },
+    };
   }
 
   public resetRounds() {
@@ -163,19 +172,18 @@ class Game {
       this.resetRounds();
     }
     this.currentSong = track;
-    const phaseStartDate = dayjs(new Date()).add(this.preSongDelay, 'ms');
-    const phaseEndDate = dayjs(phaseStartDate).add(this.playSongTime, 'ms');
+    const phaseStartDate = dayjs(new Date()).add(this.preSongDelay, "ms");
+    const phaseEndDate = dayjs(phaseStartDate).add(this.playSongTime, "ms");
     this.phase = {
       type: Domain.GamePhaseType.PlaySong,
       data: {
         phaseEndDate: phaseEndDate.toISOString(),
         phaseStartDate: phaseStartDate.toISOString(),
         previewUrl: track.preview_url!,
-      }
+      },
     };
     this.roundsLeft -= 1;
   }
-
 }
 
 export default Game;

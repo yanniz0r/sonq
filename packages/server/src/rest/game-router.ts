@@ -7,25 +7,21 @@ import Game from "../models/game";
 import GameStorage from "../storage/game-storage";
 import GameDetailRouter from "./game-detail-router";
 
-const logger = new Logger({ name: 'GameRouter' })
+const logger = new Logger({ name: "GameRouter" });
 
 class GameRouter {
-
   public router = Router({ mergeParams: true });
   private gameDetailRouter: GameDetailRouter;
 
-  constructor(
-    private io: Server,
-    private gameStorage: GameStorage
-  ) {
+  constructor(private io: Server, private gameStorage: GameStorage) {
     this.gameDetailRouter = new GameDetailRouter(gameStorage);
 
-    this.router.post('/', this.postGame.bind(this));
-    this.router.use('/:gameId', this.gameDetailRouter.router);
+    this.router.post("/", this.postGame.bind(this));
+    this.router.use("/:gameId", this.gameDetailRouter.router);
   }
 
   private postGame: RequestHandler = async (request, response) => {
-    const codeGrant = await spotify.authorizationCodeGrant(request.body.code)
+    const codeGrant = await spotify.authorizationCodeGrant(request.body.code);
     const gameSpotifyClient = new SpotifyWebApi({
       accessToken: codeGrant.body.access_token,
       refreshToken: codeGrant.body.refresh_token,
@@ -35,16 +31,13 @@ class GameRouter {
     });
     const game = new Game(this.io, this.gameStorage.getId(), gameSpotifyClient);
     this.gameStorage.addGame(game);
-    logger.debug('created game', game.id);
+    logger.debug("created game", game.id);
     response.status(200).send({
-      gameId: game.id
+      gameId: game.id,
     });
-  }
+  };
 
-  private getGame: RequestHandler = (request, response, next) => {
-
-  }
-
+  private getGame: RequestHandler = (request, response, next) => {};
 }
 
 export default GameRouter;

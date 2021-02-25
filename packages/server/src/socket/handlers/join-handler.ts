@@ -18,6 +18,7 @@ class JoinHandler implements SocketHandler {
         return;
       }
       session.player = new Player(joinEvent.username);
+      session.game.players.push(session.player);
       logger.info(`Player ${session.player.username} joined the game ${session.game.id}`);
     }
   }

@@ -2,32 +2,33 @@ import SpotifyWebApi from "spotify-web-api-node";
 import { Domain } from '@sonq/api';
 import Player from "./player";
 import dayjs from 'dayjs';
-import { Logger } from "tslog";
+import { makeObservable, observable, reaction, ObservableMap } from 'mobx';
 
 class Game {
 
   public options: Domain.GameOptions = {};
-  public _phase: Domain.GamePhase = {
+  @observable
+  public players: Player[] = [];
+  @observable
+  public phase: Domain.GamePhase = {
     type: Domain.GamePhaseType.Lobby,
     data: undefined,
   }
   public currentSong?: SpotifyApi.TrackObjectFull;
-  public answers: Map<Player, Date> = new Map();
+  public answers: Map<Player, Date> = new ObservableMap();
   public phaseStarted = new Date();
 
   constructor(
     public id: string,
     public spotify: SpotifyWebApi
-  ) {}
+  ) {
+    makeObservable(this);
 
-  public get phase() {
-    return this._phase;
+    reaction(() => this.phase, () => {
+      this.phaseStarted = new Date();
+    })
   }
 
-  public set phase(newPhase) {
-    this.phaseStarted = new Date();
-    this._phase = newPhase;
-  }
 
   public checkAnswer(songName: string, artistName: string) {
     if (!this.currentSong) {
@@ -42,12 +43,12 @@ class Game {
     return true;
   }
 
-  public getReviewAnswers(roundStart: Date): Domain.ReviewGamePhaseAnswer[] {
+  public getReviewAnswers(): Domain.ReviewGamePhaseAnswer[] {
     const answers: Domain.ReviewGamePhaseAnswer[] = [];
     this.answers.forEach((date, player) => {
       answers.push({
         player,
-        time: dayjs(date).diff(roundStart, 's')
+        time: dayjs(date).diff(this.phaseStarted, 's')
       })
     })
     return answers;

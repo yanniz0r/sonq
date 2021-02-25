@@ -32,17 +32,15 @@ class ContinueHandler implements SocketHandler {
         };
         logger.debug(`Playing song ${randomSong.track.name} from ${randomSong.track.artists[0].name} in game ${game.id}`);
         game.currentSong = randomSong.track;
-        phaseChangeEmitter(socket, game);
 
         const timeout = setTimeout(() => {
           game.phase = {
             type: Domain.GamePhaseType.Review,
             data: {
-              answers: game.getReviewAnswers(game.phaseStarted),
+              answers: game.getReviewAnswers(),
               track: game.currentSong!,
             }
           };
-          phaseChangeEmitter(socket, game);
         }, PRE_SONG_DELAY + PLAY_SONG_TIME);
       }
 

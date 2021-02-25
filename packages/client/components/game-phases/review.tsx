@@ -20,12 +20,14 @@ const Review: FC<ReviewProps> = ({ io, phaseData }) => {
         <small className="text-gray-400 text-2xl">{phaseData.track.artists[0].name}</small>
       </h1>
     </div>
-    <ul>
+    <ul className="text-white p-5">
       {phaseData.answers.map((answer, index) => (
-        <li key={index}>{answer.player.username}: {answer.time}</li>
+        <li key={index} className="text-center">{answer.player.username}: {answer.time}</li>
       ))}
     </ul>
-    <Button onClick={continueGame}>Next Round</Button>
+    <div className="flex items-center justify-center">
+      <Button onClick={continueGame}>Next Round</Button>
+    </div>
   </div>
 }
 

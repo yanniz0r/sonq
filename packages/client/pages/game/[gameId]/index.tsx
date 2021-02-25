@@ -12,6 +12,8 @@ import useGame from "../../../hooks/use-game";
 import Lobby from "../../../components/game-phases/lobby";
 import PlaySong from "../../../components/game-phases/play-song";
 import Review from "../../../components/game-phases/review";
+import Summary from "../../../components/game-phases/summary";
+import Players from "../../../components/players";
 
 interface GamePageProps {
   gameId: string;
@@ -62,13 +64,14 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
 
   return <div className="bg-gray-900 min-h-screen">
     <JoinGameModal open={!joinedGame} onJoin={joinGame} />
+    <Players io={io} />
     <h1>Sonq</h1>
     <button onClick={playSong}>Play Song</button>
     <div className="max-w-screen-lg mx-auto">
       {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} />}
       {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong io={io} phaseData={gamePhase.data} gameId={gameId} />}
       {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} />}
-      {gamePhase.type === Domain.GamePhaseType.Summary && 'Summary'}
+      {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} phaseData={gamePhase.data} />}
     </div>
   </div>
 }

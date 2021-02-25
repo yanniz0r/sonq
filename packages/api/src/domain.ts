@@ -46,8 +46,13 @@ export interface ReviewGamePhaseData {
   score: PlayerScore[];
 }
 
+export interface SummaryGamePhaseData {
+  answers: ReviewGamePhaseAnswer[];
+  score: PlayerScore[];
+}
+
 export type GamePhase =
   | GamePhaseDefinition<GamePhaseType.Lobby>
   | GamePhaseDefinition<GamePhaseType.PlaySong, PlaySongGamePhaseData>
   | GamePhaseDefinition<GamePhaseType.Review, ReviewGamePhaseData>
-  | GamePhaseDefinition<GamePhaseType.Summary, ReviewGamePhaseData>;
+  | GamePhaseDefinition<GamePhaseType.Summary, SummaryGamePhaseData>;

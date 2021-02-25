@@ -33,7 +33,7 @@ class Game {
 
   public nextPlaySongPhaseTimeout?: NodeJS.Timeout;
 
-  constructor(io: Server, public id: string, public spotify: SpotifyWebApi) {
+  constructor(public io: Server, public id: string, public spotify: SpotifyWebApi) {
     makeObservable(this);
 
     reaction(
@@ -46,7 +46,7 @@ class Game {
     reaction(
       () => this.phase,
       () => {
-        phaseChangeEmitter(io, this);
+        phaseChangeEmitter(this.io, this);
       }
     );
 

@@ -6,17 +6,13 @@ export enum Events {
    */
   SongGuessed = "server:song-guessed",
   /**
-   * The countdown for the current round is over
-   */
-  TimeOver = "server:time-over",
-  /**
-   * The time when the current round ends has been updated
-   */
-  TimeOverUpdate = "server:time-over-update",
-  /**
    * The games phase has changed
    */
   PhaseChange = "server:phase-change",
+  /**
+   * 
+   */
+  PlayerJoined = "server:player-joined"
 }
 
 export interface SongQuessedEvent {
@@ -29,4 +25,9 @@ export interface TimeOverUpdateEvent {
 
 export interface PhaseChangeEvent {
   phase: GamePhase;
+}
+
+export interface PlayerJoinedEvent {
+  player: Player;
+  players: Player[];
 }

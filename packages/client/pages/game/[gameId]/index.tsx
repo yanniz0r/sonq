@@ -2,12 +2,8 @@ import { NextPage } from "next";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useOn from "../../../hooks/use-on";
 import socketio from "socket.io-client";
-import Modal from "../../../components/modal";
-import Input from "../../../components/input";
-import { Button } from "../../../components/button";
 import JoinGameModal from "../../../components/join-game-modal";
 import { Domain, SocketClient, SocketServer } from "@sonq/api";
-import useSpotifyTrackSearch from "../../../hooks/use-spotify-track-search";
 import useGame from "../../../hooks/use-game";
 import Lobby from "../../../components/game-phases/lobby";
 import PlaySong from "../../../components/game-phases/play-song";
@@ -58,15 +54,9 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
     setJoinedGame(true);
   }, [io]);
 
-  const playSong = useCallback(() => {
-    io.emit('play-next-song');
-  }, [io]);
-
   return <div className="bg-gray-900 min-h-screen">
     <JoinGameModal open={!joinedGame} onJoin={joinGame} />
     <Players io={io} />
-    <h1>Sonq</h1>
-    <button onClick={playSong}>Play Song</button>
     <div className="max-w-screen-lg mx-auto">
       {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} />}
       {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong io={io} phaseData={gamePhase.data} gameId={gameId} />}

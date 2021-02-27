@@ -10,7 +10,7 @@ class GuessSongHandler implements SocketHandler {
   public event = SocketClient.Events.GuessSong;
 
   handle(session: Session) {
-    return (event: unknown) => {
+    return (event: unknown, ack?: SocketClient.GuessSongAck) => {
       if (!session.player) {
         logger.error("User not signed in");
         return;
@@ -42,6 +42,7 @@ class GuessSongHandler implements SocketHandler {
           guessSongEvent.artistName,
         );
       }
+      ack?.(isAnswerCorrect);
     };
   }
 }

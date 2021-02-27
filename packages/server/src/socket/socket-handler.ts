@@ -1,8 +1,8 @@
 import Session from "../models/session";
 
-interface SocketHandler<D = any> {
+interface SocketHandler {
   event: string;
-  handle(session: Session): (payload: D) => void | Promise<void>;
+  handle(session: Session): (payload: unknown, ack?: () => void) => void | Promise<void>;
 }
 
 export default SocketHandler;

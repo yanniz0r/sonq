@@ -11,8 +11,8 @@ class SocketController {
   }
 
   public addHandler(handler: SocketHandler) {
-    this.socket.on(handler.event, (args) => {
-      handler.handle(this.session)(args);
+    this.socket.on(handler.event, (args, ack) => {
+      handler.handle(this.session)(args, ack);
     });
   }
 }

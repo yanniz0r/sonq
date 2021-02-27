@@ -25,3 +25,4 @@ export const GuessSongEventSchema = zod.object({
   artistName: zod.string(),
 });
 export type GuessSongEvent = zod.TypeOf<typeof GuessSongEventSchema>;
+export type GuessSongAck = (correct: boolean) => void;

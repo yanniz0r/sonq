@@ -4,6 +4,7 @@ import useSpotifyTrackSearch from "../../hooks/use-spotify-track-search";
 import Countdown from "../countdown";
 import Input from "../input";
 import dayjs from 'dayjs';
+import { FaCheck } from "react-icons/fa";
 
 interface PlaySongProps {
   io: SocketIOClient.Socket;
@@ -17,7 +18,7 @@ const executeAt = (fn: () => void, date: Date) => {
 }
 
 const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io }) => {
-
+  const [guessWasCorrect, setGuessWasCorrect] = useState<boolean>();
   useEffect(() => {
     return executeAt(() => {
       console.log("EXECUTED!")
@@ -34,24 +35,39 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io }) => {
       artistName,
       songName,
     }
-    io.emit(SocketClient.Events.GuessSong, event);
+    const guessSongAck: SocketClient.GuessSongAck = setGuessWasCorrect;
+    io.emit(SocketClient.Events.GuessSong, event, guessSongAck);
   }
 
   return <div>
     <p className="text-3xl text-white"><Countdown date={new Date(phaseData.phaseEndDate)} /></p>
     <p className="text-3xl text-white"><Countdown date={new Date(phaseData.phaseStartDate)} /></p>
     <h1 className="text-center mb-10 text-4xl text-white font-bold">Wie heißt dieser Song?</h1>
-    <Input className="w-full" value={songQuery} onChange={e => setSongQuery(e.currentTarget.value)} />
-    <div className="grid grid-cols-4 gap-5 mt-7">
-      {trackSearchQuery.data?.tracks.items.map(item => (
-        <button onClick={submitGuessFn(item.name, item.artists[0].name)} className="bg-green-500 rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col">
-          <img src={item.album.images[0].url} />
-          <div className="p-2">
-            <span className="font-bold">{item.name}</span> · {item.artists.map(a => a.name).join(', ')}
-          </div>
-        </button>
-      ))}
-    </div>
+    {guessWasCorrect &&
+      <div className="bg-green-500 flex p-4 text-white rounded-lg">
+        <div className="text-2xl mr-4">
+          <FaCheck />
+        </div>
+        <div>
+          <h2 className="font-bold">Du hast den Song erfolgreich erraten</h2>
+        </div>
+      </div>
+    }
+    {guessWasCorrect === undefined &&
+      <>
+        <Input className="w-full" value={songQuery} onChange={e => setSongQuery(e.currentTarget.value)} placeholder="Search for your song guess" />
+        <div className="grid grid-cols-4 gap-5 mt-7">
+          {trackSearchQuery.data?.tracks.items.map(item => (
+            <button onClick={submitGuessFn(item.name, item.artists[0].name)} className="bg-green-500 rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col">
+              <img src={item.album.images[0].url} />
+              <div className="p-2">
+                <span className="font-bold">{item.name}</span> · {item.artists.map(a => a.name).join(', ')}
+              </div>
+            </button>
+          ))}
+        </div>
+      </>
+    }
   </div>
 
 }

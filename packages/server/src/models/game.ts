@@ -21,6 +21,7 @@ class Game {
   };
   @observable
   public score = new ObservableMap<Player, number>();
+  public songs: SpotifyApi.TrackObjectFull[] = [];
 
   public currentSong?: SpotifyApi.TrackObjectFull;
   public answers: Map<Player, Date> = new ObservableMap();
@@ -167,11 +168,18 @@ class Game {
     this.roundsLeft = this.options.rounds ?? DEFAULT_ROUNDS;
   }
 
-  public transitionToPlayGame(track: SpotifyApi.TrackObjectFull) {
+  private pickRandomSong() {
+    const index = Math.floor(Math.random() * this.songs.length);
+    const song = this.songs[index];
+    this.songs.splice(index, 1);
+    return song;
+  }
+
+  public transitionToPlayGame() {
     if (this.roundsLeft <= 0) {
       this.resetRounds();
     }
-    this.currentSong = track;
+    this.currentSong = this.pickRandomSong();
     const phaseStartDate = dayjs(new Date()).add(this.preSongDelay, "ms");
     const phaseEndDate = dayjs(phaseStartDate).add(this.playSongTime, "ms");
     this.phase = {
@@ -179,7 +187,7 @@ class Game {
       data: {
         phaseEndDate: phaseEndDate.toISOString(),
         phaseStartDate: phaseStartDate.toISOString(),
-        previewUrl: track.preview_url!,
+        previewUrl: this.currentSong!.preview_url!,
       },
     };
     this.roundsLeft -= 1;

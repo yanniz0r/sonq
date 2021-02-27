@@ -4,6 +4,7 @@ import GameStorage from "../storage/game-storage";
 import * as zod from "zod";
 import { Domain, Rest } from "@sonq/api";
 import Game from "../models/game";
+import SpotifyPlaylistLoader from "../libraries/spotify-playlist-loader";
 
 const ParamsSchema = zod.object({
   gameId: zod.string(),
@@ -45,9 +46,14 @@ class GameDetailRouter {
     return response.status(200).json(payload);
   };
 
-  private postGameOptions: RequestHandler = (request, response) => {
+  private postGameOptions: RequestHandler = async (request, response) => {
     const body = Domain.GameOptionsSchema.parse(request.body);
-    this.game.options.spotifyPlaylistId = body.spotifyPlaylistId;
+    if (body.spotifyPlaylistId && this.game.options.spotifyPlaylistId !== body.spotifyPlaylistId) {
+      this.game.options.spotifyPlaylistId = body.spotifyPlaylistId;
+      const playlistLoader = new SpotifyPlaylistLoader(this.game.spotify, body.spotifyPlaylistId);
+      await playlistLoader.load()
+      this.game.songs = playlistLoader.songs;
+    }
     this.game.options.rounds = body.rounds;
     response.status(200).json(this.game.options);
   };

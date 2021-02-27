@@ -54,7 +54,10 @@ class GameDetailRouter {
       await playlistLoader.load()
       this.game.songs = playlistLoader.songs;
     }
-    this.game.options.rounds = body.rounds;
+    if (body.rounds) {
+      this.game.roundsLeft = body.rounds;
+      this.game.options.rounds = body.rounds;
+    }
     response.status(200).json(this.game.options);
   };
 

@@ -166,11 +166,6 @@ class Game {
     };
   }
 
-  public resetRounds() {
-    const DEFAULT_ROUNDS = 15;
-    this.roundsLeft = this.options.rounds ?? DEFAULT_ROUNDS;
-  }
-
   private pickRandomSong() {
     const index = Math.floor(Math.random() * this.songs.length);
     const song = this.songs[index];
@@ -179,9 +174,6 @@ class Game {
   }
 
   public transitionToPlayGame() {
-    if (this.roundsLeft <= 0) {
-      this.resetRounds();
-    }
     this.currentSong = this.pickRandomSong();
     const phaseStartDate = dayjs(new Date()).add(this.preSongDelay, "ms");
     const phaseEndDate = dayjs(phaseStartDate).add(this.playSongTime, "ms");

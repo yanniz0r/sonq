@@ -14,7 +14,7 @@ const Summary: FC<SummaryProps> = ({ io, phaseData }) => {
   }, [io])
 
   return <div>
-    Summary
+    <PlayerScores scores={phaseData.score} />
     <Button onClick={continueGame}>Next Round</Button>
   </div>
 }

@@ -14,16 +14,10 @@ class ContinueHandler implements SocketHandler {
       const { game } = session;
       if (
         game.phase.type === Domain.GamePhaseType.Lobby ||
-        game.phase.type === Domain.GamePhaseType.Summary
-      ) {
-        game.resetRounds();
-      }
-      if (
-        game.phase.type === Domain.GamePhaseType.Lobby ||
         game.phase.type === Domain.GamePhaseType.Review
       ) {
         if (game.hasRoundsLeft()) {
-          game.transitionToPlayGame(); // TODO check if preview url exists
+          game.transitionToPlayGame();
         } else {
           game.transitionToSummary();
         }

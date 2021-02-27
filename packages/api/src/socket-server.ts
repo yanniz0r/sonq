@@ -12,7 +12,9 @@ export enum Events {
   /**
    * 
    */
-  PlayerJoined = "server:player-joined"
+  PlayerJoined = "server:player-joined",
+
+  PlayerLeft = "server:player-left"
 }
 
 export type SongGuessedEvent = {
@@ -34,6 +36,11 @@ export interface PhaseChangeEvent {
 }
 
 export interface PlayerJoinedEvent {
+  player: Player;
+  players: Player[];
+}
+
+export interface PlayerLeftEvent {
   player: Player;
   players: Player[];
 }

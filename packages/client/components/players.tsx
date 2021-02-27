@@ -48,6 +48,10 @@ const Players: FC<PlayersProps> = ({ io }) => {
     setPlayers(event.players);
   });
 
+  useOn<SocketServer.PlayerJoinedEvent>(io, SocketServer.Events.PlayerLeft, (event) => {
+    setPlayers(event.players);
+  });
+
   // TODO fix this thing
   useOn<SocketServer.PhaseChangeEvent>(io, SocketServer.Events.PhaseChange, (event) => {
     console.log({ event, playerAnswers });

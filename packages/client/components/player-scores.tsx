@@ -8,7 +8,7 @@ interface PlayerScoresProps {
 
 const PlayerScores: FC<PlayerScoresProps> = ({ scores: unfilteredScores, answers }) => {
   const scores = useMemo(() => unfilteredScores.sort((a, b) => b.score - a.score), [unfilteredScores])
-  const highestScore = useMemo(() => scores[0].score, [scores]);
+  const highestScore = useMemo(() => scores[0]?.score ?? 0, [scores]);
   const [growBars, setGrowBars] = useState(false);
 
   useEffect(() => {

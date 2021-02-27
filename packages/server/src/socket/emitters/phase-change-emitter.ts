@@ -6,5 +6,5 @@ export const phaseChangeEmitter = (socket: Server, game: Game) => {
   const data: SocketServer.PhaseChangeEvent = {
     phase: game.phase,
   };
-  socket.emit(SocketServer.Events.PhaseChange, data);
+  socket.to(game.id).emit(SocketServer.Events.PhaseChange, data);
 };

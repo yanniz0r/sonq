@@ -8,5 +8,5 @@ export const playerLeftEmitter = (socket: Server, game: Game, player: Player) =>
     player,
     players: game.players,
   };
-  socket.emit(SocketServer.Events.PlayerLeft, data);
+  socket.to(game.id).emit(SocketServer.Events.PlayerLeft, data);
 };

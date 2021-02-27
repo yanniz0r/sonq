@@ -32,11 +32,11 @@ class GuessSongHandler implements SocketHandler {
           date
         );
         session.game.answers.set(session.player, date);
-        songGuessedCorrectlyEmitter(session.game.io, session.player);
+        songGuessedCorrectlyEmitter(session.game, session.player);
       } else {
         logger.debug("Player answered incorrectly", session.player.username);
         songGuessedIncorrectlyEmitter(
-          session.game.io,
+          session.game,
           session.player,
           guessSongEvent.songName,
           guessSongEvent.artistName,

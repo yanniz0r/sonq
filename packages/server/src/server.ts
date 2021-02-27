@@ -51,12 +51,13 @@ io.on("connection", (socket: Socket) => {
     return;
   }
   const game = gameStorage.getGame(parsedQuery.data.game);
-
+  
   if (!game) {
     logger.error("Can not find game with provided id", parsedQuery.data.game);
     socket.disconnect();
     return;
   }
+  socket.join(game.id);
 
   const socketController = new SocketController(game, socket);
   socketController.addHandler(new PlaySongHandler(spotify));

@@ -8,5 +8,5 @@ export const playerJoinedEmitter = (socket: Server, game: Game, player: Player) 
     player,
     players: game.players,
   };
-  socket.emit(SocketServer.Events.PlayerJoined, data);
+  socket.to(game.id).emit(SocketServer.Events.PlayerJoined, data);
 };

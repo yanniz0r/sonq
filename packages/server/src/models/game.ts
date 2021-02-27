@@ -100,7 +100,6 @@ class Game {
       playerScore += this.getPoints(answerDate);
       this.score.set(player, playerScore);
     });
-    this.answers.clear();
   }
 
   private getPoints(date: Date) {
@@ -121,8 +120,12 @@ class Game {
   private getPlayerScores(): Domain.PlayerScore[] {
     const playerScores: Domain.PlayerScore[] = [];
     this.score.forEach((score, player) => {
+      const answerDate = this.answers.get(player)
+      const added = answerDate && this.getPoints(answerDate);
+
       playerScores.push({
         player,
+        added,
         score,
       });
     });
@@ -192,6 +195,7 @@ class Game {
     };
     logger.debug(`Playing "${this.currentSong.name}" from "${this.currentSong.artists[0].name}"`)
     this.roundsLeft -= 1;
+    this.answers.clear();
   }
 }
 

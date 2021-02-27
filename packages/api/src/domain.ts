@@ -37,6 +37,7 @@ export interface ReviewGamePhaseAnswer {
 
 export interface PlayerScore {
   player: Player;
+  added?: number;
   score: number;
 }
 

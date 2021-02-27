@@ -32,7 +32,13 @@ const PlayerScores: FC<PlayerScoresProps> = ({ scores, answers }) => {
             width: growBars ? `${Math.round(playerScore.score * 100 / highestScore)}%` : '0%',
             transition: 'all 1s'
           }}
-        />
+        >
+          {playerScore.added &&
+            <div className="h-full bg-blue-400 w-0 absolute right-0 text-blue-800 items-center justify-center flex" style={{ width: `${Math.round(playerScore.added * 100 / playerScore.score)}%` }}>
+              +{playerScore.added}
+            </div>
+          }
+        </div>
       </div>
     })}
   </div>

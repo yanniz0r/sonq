@@ -190,6 +190,7 @@ class Game {
         previewUrl: this.currentSong!.preview_url!,
       },
     };
+    logger.debug(`Playing "${this.currentSong.name}" from "${this.currentSong.artists[0].name}"`)
     this.roundsLeft -= 1;
   }
 }

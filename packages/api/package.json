@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "tsc -w"
+  },
   "devDependencies": {
     "typescript": "^4.1.5"
   },

@@ -22,26 +22,13 @@ class ContinueHandler implements SocketHandler {
         game.phase.type === Domain.GamePhaseType.Lobby ||
         game.phase.type === Domain.GamePhaseType.Review
       ) {
-        const randomSong = await this.getRandomSong(session.game);
         if (game.hasRoundsLeft()) {
-          game.transitionToPlayGame(randomSong.track); // TODO check if preview url exists
-          logger.debug(
-            `Playing song ${randomSong.track.name} from ${randomSong.track.artists[0].name} in game ${game.id}`
-          );
+          game.transitionToPlayGame(); // TODO check if preview url exists
         } else {
           game.transitionToSummary();
         }
       }
     };
-  }
-
-  private async getRandomSong(game: Game) {
-    const tracksResponse = await game.spotify.getPlaylistTracks(
-      "49RivMoJZhGLlTz3QiEzBo"
-    );
-    const { items } = tracksResponse.body;
-    const someTrack = items[Math.floor(Math.random() * items.length)];
-    return someTrack;
   }
 }
 

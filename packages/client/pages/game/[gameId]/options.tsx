@@ -23,10 +23,12 @@ const queryPresets = [
   '1980s',
   'rock',
   'metal',
+  'copyright free'
 ]
 
 const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const [query, setQuery] = useState('');
+  const [downloadingPlaylist, setDownloadingPlaylist] = useState<string>();
   const searchForm = useFormik<{ query: string }>({
     initialValues: {
       query: ''
@@ -42,10 +44,15 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const mutateGameOptions = useMutateGameOptions(gameId);
   const playlistsQuery = useSpotifyPlaylistSearch(gameId, query);
 
-  const setPlaylistIdFn = (spotifyPlaylistId: string) => () => {
-    mutateGameOptions.mutate({
-      spotifyPlaylistId
-    });
+  const setPlaylistIdFn = (spotifyPlaylistId: string) => async () => {
+    try {
+      setDownloadingPlaylist(spotifyPlaylistId);
+      await mutateGameOptions.mutateAsync({
+        spotifyPlaylistId
+      });
+    } finally {
+      setDownloadingPlaylist(undefined);
+    }
   }
 
   const advancedGameOptionsForm = useFormik<Pick<Domain.GameOptions, 'rounds'>>({
@@ -79,6 +86,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-7">
           {playlistsQuery.isSuccess && playlistsQuery.data.playlists.items.map(playlist => {
             return <SpotifyPlaylistTile
+              downloading={playlist.id === downloadingPlaylist}
               selected={playlist.id === gameOptionsQuery.data?.spotifyPlaylistId}
               onClick={setPlaylistIdFn(playlist.id)}
               playlist={playlist}

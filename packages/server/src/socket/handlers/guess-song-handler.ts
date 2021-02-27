@@ -2,6 +2,7 @@ import SocketHandler from "../socket-handler";
 import { Domain, SocketClient } from "@sonq/api";
 import Session from "../../models/session";
 import { Logger } from "tslog";
+import { songGuessedCorrectlyEmitter, songGuessedIncorrectlyEmitter } from "../emitters/song-guessed-emitter";
 
 const logger = new Logger({ name: "GuessSongHandler" });
 
@@ -31,8 +32,15 @@ class GuessSongHandler implements SocketHandler {
           date
         );
         session.game.answers.set(session.player, date);
+        songGuessedCorrectlyEmitter(session.game.io, session.player);
       } else {
         logger.debug("Player answered incorrectly", session.player.username);
+        songGuessedIncorrectlyEmitter(
+          session.game.io,
+          session.player,
+          guessSongEvent.songName,
+          guessSongEvent.artistName,
+        );
       }
     };
   }

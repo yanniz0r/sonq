@@ -1,5 +1,3 @@
-import { Server, Socket } from "socket.io";
-import Game from "../models/game";
 import Session from "../models/session";
 
 interface SocketHandler<D = any> {

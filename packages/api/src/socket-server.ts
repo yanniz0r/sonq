@@ -2,7 +2,7 @@ import { GamePhase, Player } from "./domain";
 
 export enum Events {
   /**
-   * A player in the current lobby successfully guessed the song
+   * A player in the current submitted a guess
    */
   SongGuessed = "server:song-guessed",
   /**
@@ -15,8 +15,14 @@ export enum Events {
   PlayerJoined = "server:player-joined"
 }
 
-export interface SongQuessedEvent {
+export type SongGuessedEvent = {
   player: Player;
+  correct: true;
+} | {
+  player: Player;
+  correct: false;
+  artistName: string;
+  songName: string;
 }
 
 export interface TimeOverUpdateEvent {

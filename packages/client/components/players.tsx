@@ -51,7 +51,7 @@ const Players: FC<PlayersProps> = ({ io }) => {
   // TODO fix this thing
   useOn<SocketServer.PhaseChangeEvent>(io, SocketServer.Events.PhaseChange, (event) => {
     console.log({ event, playerAnswers });
-    if (event.phase.type !== Domain.GamePhaseType.PlaySong) {
+    if (event.phase.type === Domain.GamePhaseType.PlaySong) {
       console.log("setPlayerAnswers");
       setPlayerAnswers(() => ({}));
     }
@@ -75,6 +75,11 @@ const Players: FC<PlayersProps> = ({ io }) => {
       [event.player.id]: playerAnswer
     }))
   });
+
+  console.log({
+    players,
+    playerAnswers
+  })
 
   return <div className="absolute pl-2 pt-2">
     {players.map(player => (

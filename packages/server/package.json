@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@sonq/api": "1.0.0",
+    "@types/i18next": "^13.0.0",
+    "@types/react-i18next": "^8.1.0",
     "@types/uuid": "^8.3.0",
     "dayjs": "^1.10.4",
     "dotenv": "^8.2.0",

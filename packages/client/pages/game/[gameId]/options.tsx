@@ -1,19 +1,16 @@
-import { Form, Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import { NextPage } from "next";
 import { useState } from "react";
-import { FaGamepad, FaTimes } from "react-icons/fa";
+import { FaGamepad } from "react-icons/fa";
 import * as yup from 'yup';
-import Link from 'next/link';
-
+import { useTranslation } from 'react-i18next'
 import SpotifyPlaylistTile from "../../../components/spotify-playlist-tile";
-import useGameOptions from "../../../hooks/use-game-options";
 import useMutateGameOptions from "../../../hooks/use-mutate-game-options";
 import useSpotifyPlaylistSearch from "../../../hooks/use-spotify-playlist-search";
 import Input, { Label } from "../../../components/input";
 import { Domain } from "@sonq/api";
-import { Button } from "../../../components/button";
 import LoadingSpinner from "../../../components/loading-spinner";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import useGame from "../../../hooks/use-game";
 
 interface GameOptionsProps {
@@ -30,6 +27,7 @@ const queryPresets = [
 ]
 
 const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
+  const {t} = useTranslation('gameOptions')
   const [query, setQuery] = useState('');
   const router = useRouter();
   const searchForm = useFormik<{ query: string }>({
@@ -71,11 +69,11 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   console.log({ values: gameOptionsForm.values })
 
   return <form className="min-w-screen min-h-screen bg-gray-900 text-white" onSubmit={gameOptionsForm.handleSubmit}>
-      <div className="max-w-screen-lg mx-auto px-5">
-        <h2 className="text-5xl pt-7">Playlist aussuchen</h2>
+      <div className="max-w-screen-lg mx-auto px-5 pb-32">
+        <h2 className="text-5xl pt-7">{t('selectPlaylist')}</h2>
         <div className="flex mt-7">
           <Input name="query" value={searchForm.values.query} onChange={searchForm.handleChange} />
-          <button className="bg-purple-700 p-2 px-4 rounded-lg disabled:opacity-50 ml-2" disabled={!searchForm.isValid} onClick={searchForm.submitForm}>Suchen</button>
+          <button className="bg-purple-700 p-2 px-4 rounded-lg disabled:opacity-50 ml-2" disabled={!searchForm.isValid} onClick={searchForm.submitForm}>{t('searchPlaylist')}</button>
         </div>
         <ul className="mt-4">
           {queryPresets.map(preset => (
@@ -92,7 +90,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
           })}
         </div>
 
-        <h2 className="text-5xl pt-7">Erweiterte Einstellungen</h2>
+        <h2 className="text-5xl pt-7">{t('gameOptionsHeadline')}</h2>
         <div className="mt-7">
           <Label>
             Rundenzahl
@@ -110,11 +108,14 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
           <div>
             <input className="bg-pink-500 p-2 px-4 rounded-lg" value="https://todo.com/game/12345678" />
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end items-center">
+            {gameOptionsForm.isSubmitting &&
+              <span className="text-white opacity-80 mr-2">{t('startGameHint')}</span>
+            }
             <button type="submit" className="bg-pink-700 relative px-4 p-2 rounded-lg font-bold disabled:opacity-50">
               <div className={`flex items-center ${gameOptionsForm.isSubmitting ? 'opacity-0' : 'opacity-100'}`}>
                 <FaGamepad className="mr-2"/>
-                Spiel starten
+                {t('startGame')}
               </div>
               {gameOptionsForm.isSubmitting &&
                 <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">

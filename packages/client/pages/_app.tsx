@@ -1,6 +1,7 @@
 import { QueryClientProvider } from 'react-query'
 import '../styles/globals.css'
-import "tailwindcss/tailwind.css";
+import 'tailwindcss/tailwind.css';
+import '../locales'
 import queryClient from '../config/query-client';
 
 function MyApp({ Component, pageProps }) {

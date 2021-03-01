@@ -1,46 +1,49 @@
 import SpotifyWebApi from "spotify-web-api-node";
 import { Logger } from "tslog";
-import { playerJoinedEmitter } from "../socket/emitters/player-joined-emitter";
 
 const logger = new Logger({ name: 'SpotifyPlaylistLoader' });
 
 class SpotifyPlaylistLoader {
 
-  public songs: SpotifyApi.TrackObjectFull[] = [];
-
-  public loaded = false;
+  public progress = 0;
 
   constructor(
-    private spotify: SpotifyWebApi,
-    private playlistId: string
+    private spotify: SpotifyWebApi
   ) { }
 
-  async load() {
-    let offset = 0;
+  async load(playlistId: string) {
+    this.progress = 0;
+    const songs: SpotifyApi.TrackObjectFull[] = [];
     const limit = 20;
+    let offset = 0;
+    let loaded = false;
 
     try {
       do {
-        const playlistTracks = await this.spotify.getPlaylistTracks(this.playlistId, {
+        const playlistTracks = await this.spotify.getPlaylistTracks(playlistId, {
           limit,
           offset,
         })
         if (playlistTracks.body.items.length < limit) {
-          this.loaded = true;
+          loaded = true;
         }
 
         for (let item of playlistTracks.body.items) {
           if (item.track.preview_url) {
-            this.songs.push(item.track);
+            songs.push(item.track);
           }
         }
+
+        this.progress = songs.length / playlistTracks.body.total
 
         await new Promise((resolve) => setTimeout(resolve, 2000));
         logger.debug('Loaded tracks', limit,  offset);
         offset += limit;
-      } while(!this.loaded)
+      } while(!loaded)
+      return songs;
     } catch (e) {
-      logger.error('An error occurred')
+      logger.error('An error occurred while downloading playlist data', playlistId)
+      throw e;
     }
   }
 

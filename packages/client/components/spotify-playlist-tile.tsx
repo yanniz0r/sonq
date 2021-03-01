@@ -9,7 +9,7 @@ interface SpotifyPlaylistTile {
 }
 
 const SpotifyPlaylistTile: FC<SpotifyPlaylistTile> = ({ onClick, playlist, selected, downloading }) => {
-  return <button onClick={onClick} className={`transition rounded-lg overflow-hidden relative transition transform hover:scale-110 border-green-500 ${selected ? 'border-4' : 'border-0'}`} key={playlist.id}>
+  return <button type="button" onClick={onClick} className={`rounded-lg overflow-hidden relative transition transform hover:scale-110 border-green-500 ${selected ? 'border-4' : 'border-0'}`} key={playlist.id}>
     <img src={playlist.images[0].url} className="w-full" />
     {downloading &&
       <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-opacity-60 bg-black">

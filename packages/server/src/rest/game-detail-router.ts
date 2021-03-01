@@ -41,6 +41,7 @@ class GameDetailRouter {
   private get: RequestHandler = (request, response) => {
     const payload: Rest.GetGameDetails = {
       options: this.game.options,
+      playlistDataDownloadProgress: this.game.playlistLoader.progress,
       phase: this.game.phase,
     };
     return response.status(200).json(payload);
@@ -50,9 +51,8 @@ class GameDetailRouter {
     const body = Domain.GameOptionsSchema.parse(request.body);
     if (body.spotifyPlaylistId && this.game.options.spotifyPlaylistId !== body.spotifyPlaylistId) {
       this.game.options.spotifyPlaylistId = body.spotifyPlaylistId;
-      const playlistLoader = new SpotifyPlaylistLoader(this.game.spotify, body.spotifyPlaylistId);
-      await playlistLoader.load()
-      this.game.songs = playlistLoader.songs;
+      const songs = await this.game.playlistLoader.load(body.spotifyPlaylistId)
+      this.game.songs = songs;
     }
     if (body.rounds) {
       this.game.roundsLeft = body.rounds;

@@ -2,10 +2,11 @@ import SpotifyWebApi from "spotify-web-api-node";
 import { Domain } from "@sonq/api";
 import Player from "./player";
 import dayjs from "dayjs";
-import { makeObservable, observable, reaction, ObservableMap } from "mobx";
+import { makeObservable, observable, reaction, ObservableMap, computed } from "mobx";
 import { Logger } from "tslog";
 import { Server } from "socket.io";
 import { phaseChangeEmitter } from "../socket/emitters/phase-change-emitter";
+import SpotifyPlaylistLoader from "../libraries/spotify-playlist-loader";
 
 const logger = new Logger({ name: "Game" });
 
@@ -23,6 +24,7 @@ class Game {
   public score = new ObservableMap<Player, number>();
   public songs: SpotifyApi.TrackObjectFull[] = [];
 
+  public playlistLoader: SpotifyPlaylistLoader;
   public currentSong?: SpotifyApi.TrackObjectFull;
   public answers: Map<Player, Date> = new ObservableMap();
   public phaseStarted = new Date();
@@ -36,6 +38,8 @@ class Game {
 
   constructor(public io: Server, public id: string, public spotify: SpotifyWebApi) {
     makeObservable(this);
+
+    this.playlistLoader = new SpotifyPlaylistLoader(spotify);
 
     reaction(
       () => this.phase,

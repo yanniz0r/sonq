@@ -4,6 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "dev": "lerna run --parallel dev"
+  },
   "workspaces": [
     "packages/api",
     "packages/client",

@@ -6,8 +6,8 @@ import SocketHandler from "./socket-handler";
 class SocketController {
   private session: Session;
 
-  constructor(private game: Game, private socket: Socket) {
-    this.session = new Session(game, socket);
+  constructor(game: Game, private socket: Socket, isAdmin: boolean) {
+    this.session = new Session(game, socket, isAdmin);
   }
 
   public addHandler(handler: SocketHandler) {

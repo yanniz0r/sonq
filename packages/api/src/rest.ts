@@ -1,4 +1,5 @@
 import { GameOptions, GamePhase } from "./domain";
+import * as zod from 'zod';
 
 export interface GetGameDetails {
   phase: GamePhase;
@@ -7,4 +8,14 @@ export interface GetGameDetails {
    */
   playlistDataDownloadProgress: number;
   options: GameOptions;
+}
+
+export const PostGameBodySchema = zod.object({
+  code: zod.string()
+})
+export type PostGameBody = zod.TypeOf<typeof PostGameBodySchema>;
+
+export interface PostGame {
+  gameId: string;
+  adminKey: string;
 }

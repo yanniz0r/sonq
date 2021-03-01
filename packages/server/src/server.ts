@@ -14,6 +14,7 @@ import JoinHandler from "./socket/handlers/join-handler";
 import ContinueHandler from "./socket/handlers/continue-handler";
 import GuessSongHandler from "./socket/handlers/guess-song-handler";
 import DisconnectHandler from "./socket/handlers/disconnect-handler";
+import { isAction } from "mobx";
 
 const PORT = 4000;
 const logger = new Logger({ name: "server" });
@@ -43,6 +44,7 @@ io.on("connection", (socket: Socket) => {
   const parsedQuery = zod
     .object({
       game: zod.string(),
+      adminKey: zod.string().optional(),
     })
     .nonstrict()
     .safeParse(socket.handshake.query);
@@ -59,7 +61,9 @@ io.on("connection", (socket: Socket) => {
   }
   socket.join(game.id);
 
-  const socketController = new SocketController(game, socket);
+  const isAdmin = parsedQuery.data.adminKey === game.adminKey;
+
+  const socketController = new SocketController(game, socket, isAdmin);
   socketController.addHandler(new PlaySongHandler(spotify));
   socketController.addHandler(new JoinHandler());
   socketController.addHandler(new ContinueHandler());

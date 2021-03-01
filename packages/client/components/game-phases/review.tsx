@@ -1,17 +1,20 @@
 import { Domain, SocketClient } from "@sonq/api";
 import { FC, useCallback } from "react";
+import useIsAdmin from "../../hooks/use-is-admin";
 import { Button } from "../button";
 import PlayerScores from "../player-scores";
 
 interface ReviewProps {
   io: SocketIOClient.Socket;
   phaseData: Domain.ReviewGamePhaseData;
+  gameId: string;
 }
 
-const Review: FC<ReviewProps> = ({ io, phaseData }) => {
+const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
   const continueGame = useCallback(() => {
     io.emit(SocketClient.Events.Continue);
   }, [io])
+  const isAdmin = useIsAdmin(gameId)
 
   return <div>
     <div className="flex flex-col justify-center items-center">
@@ -22,9 +25,11 @@ const Review: FC<ReviewProps> = ({ io, phaseData }) => {
       </h1>
     </div>
     <PlayerScores scores={phaseData.score} answers={phaseData.answers} />
-    <div className="flex items-center justify-center">
-      <Button onClick={continueGame}>Next Round</Button>
-    </div>
+    {isAdmin &&
+      <div className="flex items-center justify-center">
+        <Button onClick={continueGame}>Next Round</Button>
+      </div>
+    }
   </div>
 }
 

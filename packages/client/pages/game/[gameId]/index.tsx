@@ -10,6 +10,7 @@ import PlaySong from "../../../components/game-phases/play-song";
 import Review from "../../../components/game-phases/review";
 import Summary from "../../../components/game-phases/summary";
 import Players from "../../../components/players";
+import { ADMINKEY } from "../../../constants/local-storage";
 
 interface GamePageProps {
   gameId: string;
@@ -36,7 +37,8 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
     
     return socketio('http://localhost:4000', {
       query: {
-        game: gameId
+        game: gameId,
+        adminKey: localStorage.getItem(ADMINKEY(gameId))
       }
     });
   }, [gameId]);
@@ -58,9 +60,9 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
     <JoinGameModal open={!joinedGame} onJoin={joinGame} />
     <Players io={io} />
     <div className="max-w-screen-lg mx-auto">
-      {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} />}
+      {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} gameId={gameId} />}
       {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong io={io} phaseData={gamePhase.data} gameId={gameId} />}
-      {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} />}
+      {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} gameId={gameId} />}
       {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} phaseData={gamePhase.data} />}
     </div>
   </div>

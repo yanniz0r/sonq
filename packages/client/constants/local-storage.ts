@@ -1,0 +1,1 @@
+export const ADMINKEY = (gameId: string) => `admin-key-${gameId}`;

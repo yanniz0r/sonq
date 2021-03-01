@@ -1,3 +1,4 @@
+import { Rest } from "@sonq/api";
 import { RequestHandler, Router } from "express";
 import { Server } from "socket.io";
 import SpotifyWebApi from "spotify-web-api-node";
@@ -32,12 +33,12 @@ class GameRouter {
     const game = new Game(this.io, this.gameStorage.getId(), gameSpotifyClient);
     this.gameStorage.addGame(game);
     logger.debug("created game", game.id);
-    response.status(200).send({
+    const responseData: Rest.PostGame = {
       gameId: game.id,
-    });
+      adminKey: game.adminKey,
+    }
+    response.status(200).json(responseData);
   };
-
-  private getGame: RequestHandler = (request, response, next) => {};
 }
 
 export default GameRouter;

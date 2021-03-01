@@ -2,6 +2,8 @@ import { NextPage } from "next";
 import { useEffect } from "react";
 import { useMutation } from "react-query";
 import { useRouter } from 'next/router'
+import { Rest } from "@sonq/api";
+import { ADMINKEY } from "../constants/local-storage";
 
 interface SpotifyRedirectPageProps {
   code: string;
@@ -18,17 +20,17 @@ const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
         code
       })
     });
-    const json = await response.json();
-    return json.gameId as string;
+    const json: Rest.PostGame = await response.json();
+    return json;
   });
   const router = useRouter();
 
   useEffect(() => {
     createGameMutation
       .mutateAsync(props.code)
-      .then(gameId => {
-        console.log({ gameId });
-        router.push(`/game/${gameId}/options`);
+      .then(data => {
+        localStorage.setItem(ADMINKEY(data.gameId), data.adminKey);
+        router.push(`/game/${data.gameId}/options`);
       })
   }, [props.code])
 

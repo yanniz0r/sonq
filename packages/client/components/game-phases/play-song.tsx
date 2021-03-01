@@ -5,6 +5,7 @@ import Countdown from "../countdown";
 import Input from "../input";
 import dayjs from 'dayjs';
 import { FaCheck } from "react-icons/fa";
+import useIsAdmin from "../../hooks/use-is-admin";
 
 interface PlaySongProps {
   io: SocketIOClient.Socket;
@@ -53,7 +54,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io }) => {
         </div>
       </div>
     }
-    {guessWasCorrect === undefined &&
+    {!guessWasCorrect &&
       <>
         <Input className="w-full" value={songQuery} onChange={e => setSongQuery(e.currentTarget.value)} placeholder="Search for your song guess" />
         <div className="grid grid-cols-4 gap-5 mt-7">

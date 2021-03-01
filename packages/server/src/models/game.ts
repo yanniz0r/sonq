@@ -7,6 +7,7 @@ import { Logger } from "tslog";
 import { Server } from "socket.io";
 import { phaseChangeEmitter } from "../socket/emitters/phase-change-emitter";
 import SpotifyPlaylistLoader from "../libraries/spotify-playlist-loader";
+import { v4 } from "uuid";
 
 const logger = new Logger({ name: "Game" });
 
@@ -35,6 +36,11 @@ class Game {
   public roundsLeft = 15;
 
   public nextPlaySongPhaseTimeout?: NodeJS.Timeout;
+
+  /**
+   * A credential that is used to control game access
+   */
+  public adminKey = v4();
 
   constructor(public io: Server, public id: string, public spotify: SpotifyWebApi) {
     makeObservable(this);

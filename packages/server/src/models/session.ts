@@ -5,7 +5,7 @@ import Player from "./player";
 class Session {
   public player?: Player;
 
-  constructor(public game: Game, public socket: Socket) {}
+  constructor(public game: Game, public socket: Socket, public isAdmin: boolean) {}
 }
 
 export default Session;

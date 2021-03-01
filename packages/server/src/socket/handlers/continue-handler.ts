@@ -11,7 +11,11 @@ class ContinueHandler implements SocketHandler {
 
   handle(session: Session) {
     return async () => {
-      const { game } = session;
+      const { game, isAdmin } = session;
+      if (!isAdmin) {
+        logger.error('User has to be admin in order to continue the game')
+        return;
+      }
       if (
         game.phase.type === Domain.GamePhaseType.Lobby ||
         game.phase.type === Domain.GamePhaseType.Review

@@ -1,11 +1,12 @@
 import { Domain, SocketClient } from "@sonq/api";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import useSpotifyTrackSearch from "../../hooks/use-spotify-track-search";
 import Countdown from "../countdown";
 import Input from "../input";
 import dayjs from 'dayjs';
 import { FaCheck } from "react-icons/fa";
 import useIsAdmin from "../../hooks/use-is-admin";
+import { debounce } from 'lodash';
 
 interface PlaySongProps {
   io: SocketIOClient.Socket;
@@ -28,7 +29,14 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io }) => {
     }, new Date(phaseData.phaseStartDate));
   }, [phaseData.previewUrl])
 
+  const [songQueryInput, setSongQueryInput] = useState('');
   const [songQuery, setSongQuery] = useState('');
+  const debouncedSetSongQuery = useMemo(() => debounce(setSongQuery, 500), [setSongQuery])
+
+  useEffect(() => {
+    debouncedSetSongQuery(songQueryInput);
+  }, [songQueryInput]);
+
   const trackSearchQuery = useSpotifyTrackSearch(gameId, songQuery)
 
   const submitGuessFn = (songName: string, artistName: string) => () => {
@@ -56,7 +64,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io }) => {
     }
     {!guessWasCorrect &&
       <>
-        <Input className="w-full" value={songQuery} onChange={e => setSongQuery(e.currentTarget.value)} placeholder="Search for your song guess" />
+        <Input className="w-full" value={songQueryInput} onChange={e => setSongQueryInput(e.currentTarget.value)} placeholder="Search for your song guess" />
         <div className="grid grid-cols-4 gap-5 mt-7">
           {trackSearchQuery.data?.tracks.items.map(item => (
             <button onClick={submitGuessFn(item.name, item.artists[0].name)} className="bg-green-500 rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col">

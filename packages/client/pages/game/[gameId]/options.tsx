@@ -73,7 +73,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         <h2 className="text-5xl pt-7">{t('selectPlaylist')}</h2>
         <div className="flex mt-7">
           <Input name="query" value={searchForm.values.query} onChange={searchForm.handleChange} />
-          <button className="bg-purple-700 p-2 px-4 rounded-lg disabled:opacity-50 ml-2" disabled={!searchForm.isValid} onClick={searchForm.submitForm}>{t('searchPlaylist')}</button>
+          <button type="button" className="bg-purple-700 p-2 px-4 rounded-lg disabled:opacity-50 ml-2" disabled={!searchForm.isValid} onClick={searchForm.submitForm}>{t('searchPlaylist')}</button>
         </div>
         <ul className="mt-4">
           {queryPresets.map(preset => (

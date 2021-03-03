@@ -6,7 +6,7 @@ const config = getConfig();
 const useSpotifyPlaylistSearch = (gameId: string, query: string) =>
   useQuery(["spotify-playlists", query], async () => {
     const response = await fetch(
-      `${config.serverUrl}/game/${gameId}/spotify/playlist?query=${encodeURI(
+      `${config.publicRuntimeConfig.serverUrl}/game/${gameId}/spotify/playlist?query=${encodeURI(
         query
       )}`
     );

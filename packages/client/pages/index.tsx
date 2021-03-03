@@ -84,8 +84,8 @@ const Home: NextPage<HomePageProps> = (props) => {
 
 Home.getInitialProps = () => {
   const spotify = new SpotifyWebApi({
-    clientId: config.spotifyClientId,
-    redirectUri: `${config.clientUrl}/spotify-redirect`
+    clientId: config.publicRuntimeConfig.publicRuntimeConfig.spotifyClientId,
+    redirectUri: `${config.publicRuntimeConfig.publicRuntimeConfig.clientUrl}/spotify-redirect`
   })
   return {
     spotifyAuthorizeUrl: spotify.createAuthorizeURL([], '')

@@ -14,7 +14,7 @@ interface SpotifyRedirectPageProps {
 
 const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
   const createGameMutation = useMutation(async (code: string) => {
-    const response = await fetch(`${config.serverUrl}/game`, {
+    const response = await fetch(`${config.publicRuntimeConfig.erverUrl}/game`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

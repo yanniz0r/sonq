@@ -9,7 +9,7 @@ const useMutateGameOptions = (gameId: string) =>
   useMutation(
     async (options: Domain.GameOptions) => {
       const response = await fetch(
-        `${config.serverUrl}/game/${gameId}/options`,
+        `${config.publicRuntimeConfig.serverUrl}/game/${gameId}/options`,
         {
           method: "POST",
           headers: {

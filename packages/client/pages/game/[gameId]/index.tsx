@@ -40,7 +40,7 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
       return;
     }
     
-    return socketio(config.serverUrl, {
+    return socketio(config.publicRuntimeConfig.serverUrl, {
       query: {
         game: gameId,
         adminKey: localStorage.getItem(ADMINKEY(gameId))

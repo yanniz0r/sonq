@@ -8,7 +8,7 @@ const useSpotifyTrackSearch = (gameId: string, query: string) =>
     ["spotify-tracks", query],
     async () => {
       const response = await fetch(
-        `${config.serverUrl}/game/${gameId}/spotify/track?query=${query}`
+        `${config.publicRuntimeConfig.serverUrl}/game/${gameId}/spotify/track?query=${query}`
       );
       const json = await response.json();
       return json as SpotifyApi.SearchResponse;

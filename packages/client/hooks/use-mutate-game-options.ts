@@ -2,6 +2,7 @@ import { useMutation } from "react-query";
 import { Domain } from "@sonq/api";
 import queryClient from "../config/query-client";
 import getConfig from "next/config";
+import { ADMINKEY } from "../constants/local-storage";
 
 const config = getConfig()
 
@@ -14,6 +15,7 @@ const useMutateGameOptions = (gameId: string) =>
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem(ADMINKEY(gameId))}`,
           },
           body: JSON.stringify(options),
         }

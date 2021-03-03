@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { NextPage } from "next";
-import { useState } from "react";
-import { FaGamepad } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaGamepad, FaUser } from "react-icons/fa";
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next'
 import SpotifyPlaylistTile from "../../../components/spotify-playlist-tile";
@@ -12,6 +12,8 @@ import { Domain } from "@sonq/api";
 import LoadingSpinner from "../../../components/loading-spinner";
 import { useRouter } from "next/router";
 import useGame from "../../../hooks/use-game";
+import useIsAdmin from "../../../hooks/use-is-admin";
+import Alert from "../../../components/alert";
 
 interface GameOptionsProps {
   gameId: string;
@@ -26,7 +28,10 @@ const queryPresets = [
   'copyright free'
 ]
 
+const isClientSide = typeof window !== 'undefined';
+
 const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
+  const isAdmin = useIsAdmin(gameId);
   const {t} = useTranslation('gameOptions')
   const [query, setQuery] = useState('');
   const router = useRouter();
@@ -41,6 +46,12 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
       setQuery(values.query);
     }
   })
+
+  useEffect(() => {
+    if (isClientSide && !isAdmin) {
+      router.replace(`/game/${gameId}`);
+    }
+  }, [isAdmin]);
 
   const gameOptionsForm = useFormik<Domain.GameOptions>({
     initialValues: {
@@ -66,7 +77,6 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
     enabled: gameOptionsForm.isSubmitting,
     refetchInterval: gameOptionsForm.isSubmitting ? 750 : undefined,
   });
-  console.log({ values: gameOptionsForm.values })
 
   return <form className="min-w-screen min-h-screen bg-gray-900 text-white" onSubmit={gameOptionsForm.handleSubmit}>
       <div className="max-w-screen-lg mx-auto px-5 pb-32">

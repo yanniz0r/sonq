@@ -1,5 +1,5 @@
 import { Domain, SocketClient } from "@sonq/api";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import useSpotifyTrackSearch from "../../hooks/use-spotify-track-search";
 import Countdown from "../countdown";
 import Input from "../input";
@@ -16,6 +16,7 @@ interface PlaySongProps {
   io: SocketIOClient.Socket;
   phaseData: Domain.PlaySongGamePhaseData;
   gameId: string;
+  volume: number;
 }
 
 const executeAt = (fn: () => void, date: Date) => {
@@ -23,7 +24,7 @@ const executeAt = (fn: () => void, date: Date) => {
   return () => clearTimeout(timeout);
 }
 
-const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io }) => {
+const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   const {t} = useTranslation('game');
   const [showSearchHelp, setShowSearchHelp] = useState(typeof window !== 'undefined' && localStorage.getItem(HIDESONGSEARCHHELP) !== 'true')
   const [guessWasCorrect, setGuessWasCorrect] = useState<boolean>();
@@ -31,6 +32,13 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io }) => {
   const [isPreDelay, setPreDelay] = useState(true);
   const startRoundCountdown = useCountdown(new Date(phaseData.phaseStartDate))
   const endRoundCountdown = useCountdown(new Date(phaseData.phaseEndDate))
+  const audioRef = useRef<HTMLAudioElement>()
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 10;
+    }
+  }, [volume])
 
   useEffect(() => {
     return executeAt(() => {
@@ -41,8 +49,9 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io }) => {
   useEffect(() => {
     return executeAt(() => {
       console.log("EXECUTED!")
-      const audio = new Audio(phaseData.previewUrl);
-      audio.play();
+      audioRef.current = new Audio(phaseData.previewUrl);
+      audioRef.current.volume = volume / 10;
+      audioRef.current.play();
     }, new Date(phaseData.phaseStartDate));
   }, [phaseData.previewUrl])
 

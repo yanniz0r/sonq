@@ -12,6 +12,7 @@ import Summary from "../../../components/game-phases/summary";
 import Players from "../../../components/players";
 import { ADMINKEY } from "../../../constants/local-storage";
 import getConfig from 'next/config';
+import VolumeControl from "../../../components/volume-control";
 
 const config = getConfig();
 
@@ -20,6 +21,7 @@ interface GamePageProps {
 }
 
 const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
+  const [volume, setVolume] = useState(5);
   const [joinedGame, setJoinedGame] = useState(false);
   const gameQuery = useGame(gameId);
   const [gamePhase, setGamePhase] = useState<Domain.GamePhase>({
@@ -76,10 +78,11 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
     }
     <div className="max-w-screen-lg mx-auto">
       {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} gameId={gameId} players={players} />}
-      {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong io={io} phaseData={gamePhase.data} gameId={gameId} />}
+      {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong volume={volume} io={io} phaseData={gamePhase.data} gameId={gameId} />}
       {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} gameId={gameId} />}
       {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} phaseData={gamePhase.data} />}
     </div>
+    <VolumeControl onChange={setVolume} />
   </div>
 }
 

@@ -3,8 +3,6 @@ import SpotifyWebApi from 'spotify-web-api-node'
 import { FaInfo, FaSpotify } from 'react-icons/fa';
 import getConfig from 'next/config';
 
-const config = getConfig();
-
 interface HomePageProps {
   spotifyAuthorizeUrl: string;
 }
@@ -83,9 +81,10 @@ const Home: NextPage<HomePageProps> = (props) => {
 }
 
 Home.getInitialProps = () => {
+  const config = getConfig();
   const spotify = new SpotifyWebApi({
-    clientId: config.publicRuntimeConfig.publicRuntimeConfig.spotifyClientId,
-    redirectUri: `${config.publicRuntimeConfig.publicRuntimeConfig.clientUrl}/spotify-redirect`
+    clientId: config.publicRuntimeConfig.spotifyClientId,
+    redirectUri: `${config.publicRuntimeConfig.clientUrl}/spotify-redirect`
   })
   return {
     spotifyAuthorizeUrl: spotify.createAuthorizeURL([], '')

@@ -1,6 +1,4 @@
 module.exports = {
-  serverRuntimeConfig: {
-  },
   publicRuntimeConfig: {
     spotifyClientId: process.env.SPOTIFY_CLIENT_ID ?? '01c8e06b52aa40328e5382eca409846c',
     serverUrl: process.env.SERVER_URL ?? 'http://localhost:4000',

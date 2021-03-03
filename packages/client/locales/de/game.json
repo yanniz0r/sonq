@@ -2,5 +2,15 @@
   "startGame": "Spiel starten",
   "waitingForPlayers": "Warte auf Spieler",
   "waitingForGameStart": "Warte auf Spielstart...",
-  "copied": "Beitrittslink kopiert!"
+  "copied": "Beitrittslink kopiert!",
+  "playSong": {
+    "roundStartHeadline": "Der Song startet in {{count}} Sekunde",
+    "roundStartHeadline_plural": "Der Song startet in {{count}} Sekunden",
+    "guessSongDescription": "Rundenende in {{count}} Sekunde",
+    "guessSongDescription_plural": "Rundenende in {{count}} Sekunden",
+    "guessSongHeadline": "Wie heißt dieser Song?",
+    "searchSongHelperText": "Gib hier Informationen zu dem Song, wie Interpret, Album oder Songnamen ein. Mit der Magie von Spotify werden wir passende Songs finden. Du musst dann nur noch den entsprechenden Song anklicken.",
+    "guessCorrectAlert": "Du hast den Song erfolgreich erraten"
+
+  }
 }

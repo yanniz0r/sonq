@@ -13,12 +13,7 @@ class DisconnectHandler implements SocketHandler {
       if (!session.player) {
         return;
       }
-      const playerIndex = session.game.players.indexOf(session.player);
-      if (playerIndex === -1) {
-        logger.error('The player is not assigned to the game')
-        return;
-      }
-      session.game.players = session.game.players.splice(playerIndex, 1);
+      session.game.players = session.game.players.filter(joinedPlayer => joinedPlayer !== session.player);
       logger.info(
         'Player disconnected',
         session.player

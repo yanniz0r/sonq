@@ -15,7 +15,7 @@ import ContinueHandler from "./socket/handlers/continue-handler";
 import GuessSongHandler from "./socket/handlers/guess-song-handler";
 import DisconnectHandler from "./socket/handlers/disconnect-handler";
 
-const PORT = 4000;
+const PORT = process.env.PORT ?? 4000;
 const logger = new Logger({ name: "server" });
 
 const app = express();

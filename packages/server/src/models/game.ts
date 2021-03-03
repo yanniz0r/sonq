@@ -28,6 +28,7 @@ class Game {
   public playlistLoader: SpotifyPlaylistLoader;
   public currentSong?: SpotifyApi.TrackObjectFull;
   public answers: Map<Player, Date> = new ObservableMap();
+  public wrongGuesses: Domain.SongGuess[] = [];
   public phaseStarted = new Date();
 
   public preSongDelay = 5 * 1000;
@@ -91,16 +92,14 @@ class Game {
   }
 
   public checkAnswer(songName: string, artistName: string) {
-    if (!this.currentSong) {
-      return false;
+    if (this.currentSong && this.currentSong.name === songName && artistName === this.currentSong.artists[0].name) {
+      return true;
     }
-    if (songName !== this.currentSong.name) {
-      return false;
-    }
-    if (artistName !== this.currentSong.artists[0].name) {
-      return false;
-    }
-    return true;
+    this.wrongGuesses.push({
+      artistName,
+      songName,
+    })
+    return false;
   }
 
   public bookPlayerPointsToScore() {
@@ -153,6 +152,7 @@ class Game {
     this.phase = {
       type: Domain.GamePhaseType.Review,
       data: {
+        wrongGuesses: this.wrongGuesses,
         answers: this.getReviewAnswers(),
         score: this.getPlayerScores(),
         track: this.currentSong!,
@@ -184,6 +184,7 @@ class Game {
   }
 
   public transitionToPlayGame() {
+    this.wrongGuesses = [];
     this.currentSong = this.pickRandomSong();
     const phaseStartDate = dayjs(new Date()).add(this.preSongDelay, "ms");
     const phaseEndDate = dayjs(phaseStartDate).add(this.playSongTime, "ms");

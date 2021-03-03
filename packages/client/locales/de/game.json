@@ -11,6 +11,8 @@
     "guessSongHeadline": "Wie heißt dieser Song?",
     "searchSongHelperText": "Gib hier Informationen zu dem Song, wie Interpret, Album oder Songnamen ein. Mit der Magie von Spotify werden wir passende Songs finden. Du musst dann nur noch den entsprechenden Song anklicken.",
     "guessCorrectAlert": "Du hast den Song erfolgreich erraten"
-
+  },
+  "review": {
+    "wrongGuessesHeadline": "Ehrenhafte Versuche"
   }
 }

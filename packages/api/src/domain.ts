@@ -41,10 +41,16 @@ export interface PlayerScore {
   score: number;
 }
 
+export interface SongGuess {
+  songName: string;
+  artistName: string;
+}
+
 export interface ReviewGamePhaseData {
   track: SpotifyApi.TrackObjectFull;
   answers: ReviewGamePhaseAnswer[];
   score: PlayerScore[];
+  wrongGuesses: SongGuess[];
 }
 
 export interface SummaryGamePhaseData {

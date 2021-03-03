@@ -1,12 +1,15 @@
 import { useMutation } from "react-query";
 import { Domain } from "@sonq/api";
 import queryClient from "../config/query-client";
+import getConfig from "next/config";
+
+const config = getConfig()
 
 const useMutateGameOptions = (gameId: string) =>
   useMutation(
     async (options: Domain.GameOptions) => {
       const response = await fetch(
-        `http://localhost:4000/game/${gameId}/options`,
+        `${config.serverUrl}/game/${gameId}/options`,
         {
           method: "POST",
           headers: {

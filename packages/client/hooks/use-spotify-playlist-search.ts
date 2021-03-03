@@ -1,9 +1,12 @@
 import { useQuery } from "react-query";
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 const useSpotifyPlaylistSearch = (gameId: string, query: string) =>
   useQuery(["spotify-playlists", query], async () => {
     const response = await fetch(
-      `http://localhost:4000/game/${gameId}/spotify/playlist?query=${encodeURI(
+      `${config.serverUrl}/game/${gameId}/spotify/playlist?query=${encodeURI(
         query
       )}`
     );

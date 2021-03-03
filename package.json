@@ -5,7 +5,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "lerna run --parallel dev"
+    "dev": "lerna run --parallel dev",
+    "deploy": "git push dokku main:main",
+    "start": "yarn workspace @sonq/server run start",
+    "build": "yarn workspace @sonq/api run build && yarn workspace @sonq/server run build"
   },
   "workspaces": [
     "packages/api",

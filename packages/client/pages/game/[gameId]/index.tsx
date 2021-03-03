@@ -11,6 +11,9 @@ import Review from "../../../components/game-phases/review";
 import Summary from "../../../components/game-phases/summary";
 import Players from "../../../components/players";
 import { ADMINKEY } from "../../../constants/local-storage";
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 interface GamePageProps {
   gameId: string;
@@ -37,7 +40,7 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
       return;
     }
     
-    return socketio('http://localhost:4000', {
+    return socketio(config.serverUrl, {
       query: {
         game: gameId,
         adminKey: localStorage.getItem(ADMINKEY(gameId))

@@ -4,6 +4,9 @@ import { useMutation } from "react-query";
 import { useRouter } from 'next/router'
 import { Rest } from "@sonq/api";
 import { ADMINKEY } from "../constants/local-storage";
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 interface SpotifyRedirectPageProps {
   code: string;
@@ -11,7 +14,7 @@ interface SpotifyRedirectPageProps {
 
 const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
   const createGameMutation = useMutation(async (code: string) => {
-    const response = await fetch('http://localhost:4000/game', {
+    const response = await fetch(`${config.serverUrl}/game`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

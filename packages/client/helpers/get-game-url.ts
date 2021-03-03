@@ -1,5 +1,9 @@
+import getConfig from 'next/config';
+
+const config = getConfig();
+
 const getGameUrl = (gameId: string) => {
-  return `http://localhost:3000/game/${gameId}`;
+  return `${config.clientUrl}/game/${gameId}`;
 }
 
 export default getGameUrl;

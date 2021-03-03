@@ -1,9 +1,11 @@
 import { Domain, SocketServer } from "@sonq/api";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa"
 import useOn from "../hooks/use-on";
 
 interface PlayersProps {
+  phase: Domain.GamePhaseType;
+  players: Domain.Player[];
   io: SocketIOClient.Socket;
 }
 
@@ -40,26 +42,15 @@ const Avatar: FC<AvatarProps> = ({ children, player, answer }) => {
   </div> 
 }
 
-const Players: FC<PlayersProps> = ({ io }) => {
-  const [players, setPlayers] = useState<Domain.Player[]>([]);
+const Players: FC<PlayersProps> = ({ io, players, phase }) => {
   const [playerAnswers, setPlayerAnswers] = useState<Record<string, PlayerAnwswer>>({});
 
-  useOn<SocketServer.PlayerJoinedEvent>(io, SocketServer.Events.PlayerJoined, (event) => {
-    setPlayers(event.players);
-  });
-
-  useOn<SocketServer.PlayerJoinedEvent>(io, SocketServer.Events.PlayerLeft, (event) => {
-    setPlayers(event.players);
-  });
-
-  // TODO fix this thing
-  useOn<SocketServer.PhaseChangeEvent>(io, SocketServer.Events.PhaseChange, (event) => {
-    console.log({ event, playerAnswers });
-    if (event.phase.type === Domain.GamePhaseType.PlaySong) {
+  useEffect(() => {
+    if (phase === Domain.GamePhaseType.PlaySong) {
       console.log("setPlayerAnswers");
       setPlayerAnswers(() => ({}));
     }
-  })
+  }, [phase])
 
   useOn<SocketServer.SongGuessedEvent>(io, SocketServer.Events.SongGuessed, (event) => {
     let playerAnswer: PlayerAnwswer;
@@ -79,11 +70,6 @@ const Players: FC<PlayersProps> = ({ io }) => {
       [event.player.id]: playerAnswer
     }))
   });
-
-  console.log({
-    players,
-    playerAnswers
-  })
 
   return <div className="absolute pl-2 pt-2">
     {players.map(player => (

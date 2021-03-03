@@ -14,7 +14,6 @@ import JoinHandler from "./socket/handlers/join-handler";
 import ContinueHandler from "./socket/handlers/continue-handler";
 import GuessSongHandler from "./socket/handlers/guess-song-handler";
 import DisconnectHandler from "./socket/handlers/disconnect-handler";
-import { isAction } from "mobx";
 
 const PORT = 4000;
 const logger = new Logger({ name: "server" });

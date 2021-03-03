@@ -39,10 +39,11 @@ class GameDetailRouter {
   };
 
   private get: RequestHandler = (request, response) => {
-    const payload: Rest.GetGameDetails = {
+    const payload: Rest.GetGame = {
       options: this.game.options,
       playlistDataDownloadProgress: this.game.playlistLoader.progress,
       phase: this.game.phase,
+      players: this.game.players,
     };
     return response.status(200).json(payload);
   };

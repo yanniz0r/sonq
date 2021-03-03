@@ -13,6 +13,7 @@
     "guessCorrectAlert": "Du hast den Song erfolgreich erraten"
   },
   "review": {
-    "wrongGuessesHeadline": "Ehrenhafte Versuche"
+    "wrongGuessesHeadline": "Ehrenhafte Versuche",
+    "checkoutOnSpotify": "In Spotify ansehen"
   }
 }

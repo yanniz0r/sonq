@@ -4,6 +4,7 @@ import useIsAdmin from "../../hooks/use-is-admin";
 import { Button } from "../button";
 import PlayerScores from "../player-scores";
 import { useTranslation } from 'react-i18next'
+import { FaSpotify } from "react-icons/fa";
 
 interface ReviewProps {
   io: SocketIOClient.Socket;
@@ -25,6 +26,9 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
         <span>{phaseData.track.name}</span>
         <small className="text-gray-400 text-2xl">{phaseData.track.artists[0].name}</small>
       </h1>
+      <a href={`https://open.spotify.com/track/${phaseData.track.id}`} target="_blank" className="mt-5 text-lg py-2 px-3 text-white flex items-center rounded-full" style={{ backgroundColor: '#1DD05D' }}>
+        <FaSpotify className="mr-2" />{t('review.checkoutOnSpotify')}
+      </a>
     </div>
     <PlayerScores scores={phaseData.score} answers={phaseData.answers} />
     {phaseData.wrongGuesses.length > 0 &&

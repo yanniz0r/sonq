@@ -4,7 +4,7 @@ import useOn from "../../../hooks/use-on";
 import socketio from "socket.io-client";
 import JoinGameModal from "../../../components/join-game-modal";
 import { Domain, SocketClient, SocketServer } from "@sonq/api";
-import useGame from "../../../hooks/use-game";
+import useGame, { GameNotFoundError } from "../../../hooks/use-game";
 import Lobby from "../../../components/game-phases/lobby";
 import PlaySong from "../../../components/game-phases/play-song";
 import Review from "../../../components/game-phases/review";
@@ -13,6 +13,8 @@ import Players from "../../../components/players";
 import { ADMINKEY } from "../../../constants/local-storage";
 import getConfig from 'next/config';
 import VolumeControl from "../../../components/volume-control";
+import { useRouter } from "next/router";
+import LoadingSpinner from "../../../components/loading-spinner";
 
 const config = getConfig();
 
@@ -23,7 +25,18 @@ interface GamePageProps {
 const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
   const [volume, setVolume] = useState(5);
   const [joinedGame, setJoinedGame] = useState(false);
-  const gameQuery = useGame(gameId);
+  const router = useRouter();
+  const gameQuery = useGame(gameId, {
+    retry(_errorCount, error) {
+      return !(error instanceof GameNotFoundError)
+    },
+    onError(error) {
+      if (error instanceof GameNotFoundError) {
+        console.warn(error.message);
+        router.replace(`/?error=game-not-found`)
+      }
+    }
+  });
   const [gamePhase, setGamePhase] = useState<Domain.GamePhase>({
     type: Domain.GamePhaseType.Lobby,
     data: undefined,
@@ -72,17 +85,24 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
   }, [io]);
 
   return <div className="bg-gray-900 min-h-screen">
-    <JoinGameModal open={!joinedGame} onJoin={joinGame} />
-    {gamePhase.type !== Domain.GamePhaseType.Lobby &&
-      <Players players={players} io={io} phase={gamePhase.type} />
+    {gameQuery.isLoading
+      ? <div className="p-20 flex justify-center text-white">
+          <LoadingSpinner />
+        </div>
+      : <>
+          <JoinGameModal open={!joinedGame} onJoin={joinGame} />
+          {gamePhase.type !== Domain.GamePhaseType.Lobby &&
+            <Players players={players} io={io} phase={gamePhase.type} />
+          }
+          <div className="max-w-screen-lg mx-auto">
+            {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} gameId={gameId} players={players} />}
+            {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong volume={volume} io={io} phaseData={gamePhase.data} gameId={gameId} />}
+            {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} gameId={gameId} />}
+            {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} phaseData={gamePhase.data} />}
+          </div>
+          <VolumeControl onChange={setVolume} />
+        </>
     }
-    <div className="max-w-screen-lg mx-auto">
-      {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} gameId={gameId} players={players} />}
-      {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong volume={volume} io={io} phaseData={gamePhase.data} gameId={gameId} />}
-      {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} gameId={gameId} />}
-      {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} phaseData={gamePhase.data} />}
-    </div>
-    <VolumeControl onChange={setVolume} />
   </div>
 }
 

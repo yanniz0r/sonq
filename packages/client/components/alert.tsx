@@ -21,7 +21,7 @@ const Alert: FC<AlertProps> = ({children, icon, type, className, onClose}) => {
 
   return <div className={`p-4 ${backgroundColor} relative rounded-lg text-white flex ${className ?? ''}`}>
     {icon && 
-      <div className="pr-3 text-xl mt-2">
+      <div className="pr-3 text-xl mt-1">
         {icon}
       </div>
     }

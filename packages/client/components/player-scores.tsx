@@ -23,7 +23,7 @@ const PlayerScores: FC<PlayerScoresProps> = ({ scores: unfilteredScores, answers
       const answerTime = answers?.find((answer) => answer.player.id === playerScore.player.id)?.time ?? null;
       const answeredInText = answerTime && `answered in ${answerTime} seconds`
       return <div className="my-5">
-        <h3 className="font-bold text-pink-100 flex items-baseline">
+        <h3 className="font-bold text-gray-200 flex items-baseline">
           {index + 1}: {playerScore.player.username} ({playerScore.score})
           <small className="ml-2">{answeredInText}</small>
         </h3>

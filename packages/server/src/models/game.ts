@@ -112,7 +112,7 @@ class Game {
   }
 
   private getPoints(date: Date) {
-    return Math.max(30 - dayjs(date).diff(this.phaseStarted, "s"), 5) * this.currentSongPopularityFactor;
+    return Math.round(Math.max(30 - dayjs(date).diff(this.phaseStarted, "s"), 5) * this.currentSongPopularityFactor);
   }
 
   public getReviewAnswers(): Domain.ReviewGamePhaseAnswer[] {

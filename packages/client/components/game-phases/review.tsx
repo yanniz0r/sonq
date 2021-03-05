@@ -24,9 +24,9 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
     bonus: `${phaseData.popularityBonus * 100}%`
   }
   let popularityBonusDescription = t('review.popularityBonusDescriptionAverage', bonusInterpolation);
-  if (phaseData.track.popularity < 90) {
+  if (phaseData.track.popularity < 0.7) {
     popularityBonusDescription = t('review.popularityBonusDescriptionLow', bonusInterpolation);
-  } else if (phaseData.track.popularity > 110) {
+  } else if (phaseData.track.popularity > 1.3) {
     popularityBonusDescription = t('review.popularityBonusDescriptionHigh', bonusInterpolation);
   }
 

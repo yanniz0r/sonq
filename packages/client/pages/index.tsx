@@ -64,7 +64,9 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
               <h3 className="text-2xl font-bold text-pink-600 pt-4">You choose the playlist</h3>
               <p className="pt-3 text-lg">
                 You select a playlist that you want to play so you don't have to worry about songs that nobody knows.
-              </p>''
+              </p>
+            </div>
+            <div>
               <h3 className="text-2xl font-bold text-pink-600 pt-4">Play in a group</h3>
               <p className="pt-3 text-lg">
                 By sharing the link with your buddies you can start a comepetative song-guessing-match.

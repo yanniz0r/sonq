@@ -2,7 +2,7 @@ import SpotifyWebApi from "spotify-web-api-node";
 import { Domain } from "@sonq/api";
 import Player from "./player";
 import dayjs from "dayjs";
-import { makeObservable, observable, reaction, ObservableMap, computed } from "mobx";
+import { makeObservable, observable, reaction, ObservableMap } from "mobx";
 import { Logger } from "tslog";
 import { Server } from "socket.io";
 import { phaseChangeEmitter } from "../socket/emitters/phase-change-emitter";

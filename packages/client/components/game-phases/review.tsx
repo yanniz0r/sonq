@@ -67,6 +67,9 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
       <div className="md:col-span-2 bg-black bg-opacity-20 p-10 rounded-xl order-5 md:order-5">
         <h2 className="text-white mt-10 text-3xl font-bold">{t('review.wrongGuessesHeadline')}</h2>
         <div className="my-5 flex flex-wrap">
+          {phaseData.wrongGuesses.length === 0 && 
+            <p className="text-gray-400 text-lg">{t('review.wrongGuessesEmpty')}</p>
+          }
           {phaseData.wrongGuesses.map(wrongGuess => (
             <div className="text-white bg-pink-600 p-1 px-2 text-xs rounded-full mr-2 mb-2">{wrongGuess.songName} - {wrongGuess.artistName}</div>
           ))}

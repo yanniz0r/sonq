@@ -18,6 +18,7 @@
   },
   "review": {
     "wrongGuessesHeadline": "Ehrenhafte Versuche",
+    "wrongGuessesEmpty": "...gab es nicht. Ihr seid echte Songkenner oder habt euch nicht getraut zu raten!",
     "checkoutOnSpotify": "In Spotify ansehen",
     "popularityBonusHeadline": "Popularitätsbonus",
     "scoresHeadline": "Aktueller Punktestand",
@@ -25,7 +26,6 @@
     "popularityBonusDescriptionLow": "Wow, {{trackName}} scheint wirklich unbekannt zu sein. Wir belohnen dein Wissen mit einem Bonus von {{bonus}}!",
     "popularityBonusDescriptionHigh": "{{trackName}} ist ziemlich Mainstream. Dafür gibt es nur einen Bonus von {{bonus}}.",
     "popularityBonusDescriptionAverage": "{{trackName}} ist ein durchschnittlich populärer Song. Wir vergeben für den Track {{bonus}} der Punkte."
-    
   },
   "summary": {
     "headline": "Das Ergebnis steht fest...",

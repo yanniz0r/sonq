@@ -48,7 +48,7 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
       <div className="bg-black bg-opacity-20 rounded-xl flex flex-col justify-center p-10 order-1 md:order-3">
         <div>
           <h2 className="text-gray-300 text-xl font-bold">{phaseData.track.artists[0].name}</h2>
-          <span className="text-6xl font-extrabold mb text-pink-600 my-4">{phaseData.track.name}</span>
+          <span className="text-4xl font-extrabold mb text-pink-600 my-4">{phaseData.track.name}</span>
           <p className="text-gray-400 text-xs">{phaseData.track.album.name}</p>
           <div>
             <a href={`https://open.spotify.com/track/${phaseData.track.id}`} target="_blank" className="mt-5 py-2 px-3 font-bold text-sm text-white inline-flex items-center rounded-full" style={{ backgroundColor: '#1DD05D' }}>

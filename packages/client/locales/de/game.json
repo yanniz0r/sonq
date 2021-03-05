@@ -1,8 +1,12 @@
 {
-  "startGame": "Spiel starten",
-  "waitingForPlayers": "Warte auf Spieler",
-  "waitingForGameStart": "Warte auf Spielstart...",
-  "copied": "Beitrittslink kopiert!",
+  "lobby": {
+    "startGame": "Spiel starten",
+    "waitingForPlayers": "Warte auf Spieler",
+    "waitingForGameStart": "Warte auf Spielstart...",
+    "copied": "Beitrittslink kopiert!",
+    "shareTitle": "Sonq Beitrittslink teilen",
+    "shareText": "Tritt meinem Sonq Spiel bei!"
+  },
   "playSong": {
     "roundStartHeadline": "Der Song startet in {{count}} Sekunde",
     "roundStartHeadline_plural": "Der Song startet in {{count}} Sekunden",

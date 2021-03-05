@@ -51,6 +51,7 @@ export interface ReviewGamePhaseData {
   answers: ReviewGamePhaseAnswer[];
   score: PlayerScore[];
   wrongGuesses: SongGuess[];
+  popularityBonus: number;
 }
 
 export interface SummaryGamePhaseData {

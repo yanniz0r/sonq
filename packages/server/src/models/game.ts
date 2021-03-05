@@ -156,6 +156,7 @@ class Game {
         answers: this.getReviewAnswers(),
         score: this.getPlayerScores(),
         track: this.currentSong!,
+        popularityBonus: this.currentSongPopularityFactor,
       },
     };
     this.answers.clear();
@@ -163,6 +164,13 @@ class Game {
 
   public hasRoundsLeft() {
     return this.roundsLeft >= 1;
+  }
+
+  public get currentSongPopularityFactor() {
+    if (!this.currentSong) {
+      throw new Error('No song currently selected');
+    }
+    return (100 - (this.currentSong.popularity - 50)) / 100;
   }
 
   public transitionToSummary() {

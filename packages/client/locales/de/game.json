@@ -15,5 +15,10 @@
   "review": {
     "wrongGuessesHeadline": "Ehrenhafte Versuche",
     "checkoutOnSpotify": "In Spotify ansehen"
+  },
+  "summary": {
+    "headline": "Das Ergebnis steht fest...",
+    "startNextRound": "Nächste Runde starten",
+    "options": "Spieleinstellungen ändern"
   }
 }

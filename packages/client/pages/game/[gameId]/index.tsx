@@ -98,7 +98,7 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
             {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} gameId={gameId} players={players} />}
             {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong volume={volume} io={io} phaseData={gamePhase.data} gameId={gameId} />}
             {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} gameId={gameId} />}
-            {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} phaseData={gamePhase.data} />}
+            {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} gameId={gameId} phaseData={gamePhase.data} />}
           </div>
           <VolumeControl onChange={setVolume} />
         </>

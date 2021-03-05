@@ -24,7 +24,7 @@
     "scoresHeadline": "Aktueller Punktestand",
     "headline": "Rundenergebnisse",
     "popularityBonusDescriptionLow": "Wow, {{trackName}} scheint wirklich unbekannt zu sein. Wir belohnen dein Wissen mit einem Bonus von {{bonus}}!",
-    "popularityBonusDescriptionHigh": "{{trackName}} ist ziemlich Mainstream. Dafür gibt es nur einen Bonus von {{bonus}}.",
+    "popularityBonusDescriptionHigh": "{{trackName}} ist ziemlich Mainstream. Dafür gibt es nur {{bonus}} der Punkte.",
     "popularityBonusDescriptionAverage": "{{trackName}} ist ein durchschnittlich populärer Song. Wir vergeben für den Track {{bonus}} der Punkte."
   },
   "summary": {

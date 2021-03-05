@@ -21,12 +21,10 @@ const VolumeControl: FC<VolumeControlProps> = ({ onChange }) => {
 
       }
     `}</style>
-    <div className="flex w-full fixed justify-center bottom-2">
-      <div className="flex items-center p-4 bg-black bg-opacity-40 rounded-full">
-        <FaVolumeDown className="text-gray-600 mr-2" />
-        <input type="range" min="0" max="10" value={volume} onChange={e => setVolume(Number(e.currentTarget.value))} className="bg-gray-800 h-5 appearance-none rounded-lg slider" />
-        <FaVolumeUp className="text-gray-600 ml-2" />
-      </div>
+    <div className="flex items-center p-4 bg-black bg-opacity-40 rounded-full">
+      <FaVolumeDown className="text-gray-600 mr-2" />
+      <input type="range" min="0" max="10" value={volume} onChange={e => setVolume(Number(e.currentTarget.value))} className="bg-gray-800 min-w-0 h-5 appearance-none rounded-lg slider" />
+      <FaVolumeUp className="text-gray-600 ml-2" />
     </div>
   </>
 }

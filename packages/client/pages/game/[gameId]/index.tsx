@@ -15,6 +15,7 @@ import getConfig from 'next/config';
 import VolumeControl from "../../../components/volume-control";
 import { useRouter } from "next/router";
 import LoadingSpinner from "../../../components/loading-spinner";
+import GameSideBar from "../../../components/game-side-bar";
 
 const config = getConfig();
 
@@ -84,24 +85,26 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
     setJoinedGame(true);
   }, [io]);
 
-  return <div className="bg-gray-900 min-h-screen">
+  return <div className="bg-gray-900">
     {gameQuery.isLoading
       ? <div className="p-20 flex justify-center text-white">
           <LoadingSpinner />
         </div>
-      : <>
-          <JoinGameModal open={!joinedGame} onJoin={joinGame} />
-          {gamePhase.type !== Domain.GamePhaseType.Lobby &&
-            <Players players={players} io={io} phase={gamePhase.type} />
-          }
-          <div className="max-w-screen-lg mx-auto">
-            {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} gameId={gameId} players={players} />}
-            {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong volume={volume} io={io} phaseData={gamePhase.data} gameId={gameId} />}
-            {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} gameId={gameId} />}
-            {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} gameId={gameId} phaseData={gamePhase.data} />}
+      : <div className="flex min-h-screen">
+          <GameSideBar players={players} setVolume={setVolume} io={io} phase={gamePhase.type} />
+          <div className="flex-grow">
+            <JoinGameModal open={!joinedGame} onJoin={joinGame} />
+            {/* {gamePhase.type !== Domain.GamePhaseType.Lobby &&
+              <Players players={players} io={io} phase={gamePhase.type} />
+            } */}
+            <div className="max-w-screen-lg mx-auto">
+              {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} gameId={gameId} players={players} />}
+              {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong volume={volume} io={io} phaseData={gamePhase.data} gameId={gameId} />}
+              {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} gameId={gameId} />}
+              {gamePhase.type === Domain.GamePhaseType.Summary && <Summary io={io} gameId={gameId} phaseData={gamePhase.data} />}
+            </div>
           </div>
-          <VolumeControl onChange={setVolume} />
-        </>
+        </div>
     }
   </div>
 }

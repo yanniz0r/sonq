@@ -29,8 +29,16 @@ const Lobby: FC<LobbyProps> = ({ io, gameId, players }) => {
   const isAdmin = useIsAdmin(gameId)
 
   const copyGameLink = useCallback(() => {
-    setJustCopied(true);
-    window.navigator.clipboard.writeText(getGameUrl(gameId));
+    if (navigator.share) {
+      navigator.share({
+        text: t('lobby.shareText'),
+        title: t('lobby.shareTitle'),
+        url: getGameUrl(gameId)
+      })
+    } else {
+      setJustCopied(true);
+      window.navigator.clipboard.writeText(getGameUrl(gameId));
+    }
   }, [gameId])
 
   return <div className="py-44 flex flex-col items-center justify-center">

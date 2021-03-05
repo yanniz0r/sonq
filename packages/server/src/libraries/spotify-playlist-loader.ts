@@ -36,7 +36,7 @@ class SpotifyPlaylistLoader {
 
         this.progress = songs.length / playlistTracks.body.total
 
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         logger.debug('Loaded tracks', limit,  offset);
         offset += limit;
       } while(!loaded)

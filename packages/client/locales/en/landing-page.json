@@ -1,0 +1,33 @@
+{
+  "errors": {
+    "gameNotFound": "We couldn't find the game you are looking for."
+  },
+  "landing": {
+    "logoSubtitle": "Interactive Song guessing",
+    "slogan": "Modern Song Guessing",
+    "spotifyLogin": "Login to start!"
+  },
+  "devider": {
+    "title": "How good do you know popular songs?",
+    "text": "Challenge your friends/colleagues/whatever in a competative song guessing game"
+  },
+  "information": {
+    "howToPlay": "How to Play",
+    "choosePlaylist": {
+      "title": "Choose a Playlist",
+      "text": "You select a playlist that you want to play so you don't have to worry about songs that nobody knows."
+    },
+    "playInGroup": {
+      "title": "Play in a Group",
+      "text": "By sharing the link with your buddies you can start a comepetative song-guessing-match."
+    },
+    "enjoySpotify": {
+      "title": "Enjoy spotify features",
+      "text": "This whole beast is backed by the spotify API. Therfore you can access all those fance spotify features."
+    },
+    "whySignIn": {
+      "title": "But why do I have to sign in?",
+      "text": "In order to access functions of spotify, the person creating a game has to sign in with their spotify account. We do nothing else than requesting spotifies data with your account. If you do not trust us, you can have a look at the "
+    }
+  }
+}

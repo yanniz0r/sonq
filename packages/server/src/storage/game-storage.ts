@@ -17,13 +17,15 @@ class GameStorage {
     let id: string;
     let collisions = 0;
     do {
-      id = '';
+      id = "";
       while (id.length <= length) {
-        id += chars[Math.floor(Math.random() * chars.length)]
+        id += chars[Math.floor(Math.random() * chars.length)];
       }
-      logger.debug(`Generated id ${id} with ${collisions} previous collision(s)`)
+      logger.debug(
+        `Generated id ${id} with ${collisions} previous collision(s)`
+      );
       collisions++;
-    } while(this.games.find(game => game.id === id))
+    } while (this.games.find((game) => game.id === id));
     return id;
   }
 

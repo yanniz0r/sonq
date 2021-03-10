@@ -25,13 +25,17 @@ const Summary: FC<SummaryProps> = ({ io, phaseData, gameId }) => {
         {t("summary.headline")}
       </h1>
       <PlayerScores scores={phaseData.score} />
-      <Button onClick={continueGame} className="mr-2">
-        {t("summary.startNextRound")}
-      </Button>
       {isAdmin && (
-        <Link href={`/game/${gameId}/options`} passHref>
-          <ButtonLink onClick={continueGame}>{t("summary.options")}</ButtonLink>
-        </Link>
+        <>
+          <Button onClick={continueGame} className="mr-2">
+            {t("summary.startNextRound")}
+          </Button>
+          <Link href={`/game/${gameId}/options`} passHref>
+            <ButtonLink onClick={continueGame}>
+              {t("summary.options")}
+            </ButtonLink>
+          </Link>
+        </>
       )}
     </div>
   );

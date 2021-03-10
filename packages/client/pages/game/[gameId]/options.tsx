@@ -130,7 +130,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         <h2 className="text-5xl pt-7">{t("gameOptionsHeadline")}</h2>
         <div className="mt-7">
           <Label>
-            {t('rounds')}
+            {t("rounds")}
             <Input
               type="number"
               value={gameOptionsForm.values.rounds}

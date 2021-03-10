@@ -1,15 +1,17 @@
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const differenceToNowInSeconds = (date: Date) => {
-  return dayjs(date).diff(new Date(), 's')
+const differenceToNowInSeconds = (someDate: Date) => {
+  return dayjs(new Date()).diff(someDate, 's')
 }
 
-const useCountdown = (date: Date) => {
-  const [seconds, setSeconds] = useState(differenceToNowInSeconds(date));
+const useCountdown = (countDownFrom: number) => {
+  const startDateRef = useRef(new Date());
+  const [seconds, setSeconds] = useState(Math.round(countDownFrom / 1000));
   useEffect(() => {
     const id = setInterval(() => {
-      const newSeconds = differenceToNowInSeconds(date);
+      const diff = differenceToNowInSeconds(startDateRef.current);
+      const newSeconds = Math.round((countDownFrom / 1000) - diff);
       if (newSeconds < 0) {
         clearInterval(id);
         return;
@@ -17,7 +19,7 @@ const useCountdown = (date: Date) => {
       setSeconds(newSeconds);
     }, 250);
     return () => clearInterval(id);
-  }, [date])
+  }, [])
   return seconds;
 }
 

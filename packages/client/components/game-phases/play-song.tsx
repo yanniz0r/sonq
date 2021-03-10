@@ -1,11 +1,9 @@
 import { Domain, SocketClient } from "@sonq/api";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import useSpotifyTrackSearch from "../../hooks/use-spotify-track-search";
-import Countdown from "../countdown";
 import Input from "../input";
 import dayjs from 'dayjs';
 import { FaCheck, FaInfo, FaTimes } from "react-icons/fa";
-import useIsAdmin from "../../hooks/use-is-admin";
 import { debounce } from 'lodash';
 import useCountdown from "../../hooks/use-countdown";
 import { useTranslation } from 'react-i18next';
@@ -19,19 +17,14 @@ interface PlaySongProps {
   volume: number;
 }
 
-const executeAt = (fn: () => void, date: Date) => {
-  const timeout = setTimeout(fn, dayjs(date).diff(new Date(), 'ms'));
-  return () => clearTimeout(timeout);
-}
-
 const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   const {t} = useTranslation('game');
   const [showSearchHelp, setShowSearchHelp] = useState(typeof window !== 'undefined' && localStorage.getItem(HIDESONGSEARCHHELP) !== 'true')
   const [guessWasCorrect, setGuessWasCorrect] = useState<boolean>();
   const [incorrectGuess, setIncorrectGuess] = useState<string>();
   const [isPreDelay, setPreDelay] = useState(true);
-  const startRoundCountdown = useCountdown(new Date(phaseData.phaseStartDate))
-  const endRoundCountdown = useCountdown(new Date(phaseData.phaseEndDate))
+  const startRoundCountdown = useCountdown(phaseData.phaseStart)
+  const endRoundCountdown = useCountdown(phaseData.phaseEnd)
   const audioRef = useRef<HTMLAudioElement>()
 
   useEffect(() => {
@@ -41,16 +34,18 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   }, [volume])
 
   useEffect(() => {
-    return executeAt(() => {
+    const timeout = setTimeout(() => {
       setPreDelay(false);
-    }, new Date(phaseData.phaseStartDate))
-  }, [phaseData.phaseEndDate])
+    }, phaseData.phaseStart)
+    return () => clearTimeout(timeout)
+  }, [phaseData.phaseEnd])
 
   useEffect(() => {
-    return executeAt(() => {
+    const timeout = setTimeout(() => {
       audioRef.current.volume = volume / 10;
       audioRef.current.play();
-    }, new Date(phaseData.phaseStartDate));
+    }, phaseData.phaseStart);
+    return () => clearTimeout(timeout)
   }, [phaseData.previewUrl])
 
   const [songQueryInput, setSongQueryInput] = useState('');

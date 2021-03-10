@@ -196,13 +196,11 @@ class Game {
   public transitionToPlayGame() {
     this.wrongGuesses = [];
     this.currentSong = this.pickRandomSong();
-    const phaseStartDate = dayjs(new Date()).add(this.preSongDelay, "ms");
-    const phaseEndDate = dayjs(phaseStartDate).add(this.playSongTime, "ms");
     this.phase = {
       type: Domain.GamePhaseType.PlaySong,
       data: {
-        phaseEndDate: phaseEndDate.toISOString(),
-        phaseStartDate: phaseStartDate.toISOString(),
+        phaseEnd: this.preSongDelay + this.playSongTime,
+        phaseStart: this.preSongDelay,
         previewUrl: this.currentSong!.preview_url!,
       },
     };

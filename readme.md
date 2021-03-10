@@ -2,6 +2,10 @@
 
 > An interactive song guessing game, hostend in the interwebz
 
+![alt text](./docs/ingame.png)
+
+![alt text](./docs/result.png)
+
 Sonq is a web based online multiplayer game which allows you to guess songs based on the spotify 30 second preview. When you guess a song correctly, you get points based on the time it took you and the popularity of the song.
 
 ## Configuration

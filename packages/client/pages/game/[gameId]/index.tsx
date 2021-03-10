@@ -9,7 +9,6 @@ import Lobby from "../../../components/game-phases/lobby";
 import PlaySong from "../../../components/game-phases/play-song";
 import Review from "../../../components/game-phases/review";
 import Summary from "../../../components/game-phases/summary";
-import Players from "../../../components/players";
 import { ADMINKEY } from "../../../constants/local-storage";
 import getConfig from "next/config";
 import VolumeControl from "../../../components/volume-control";

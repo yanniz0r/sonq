@@ -1,5 +1,9 @@
 import Game from "../models/game";
 import { v4 } from "uuid";
+import dayjs from "dayjs";
+import { Logger } from "tslog";
+
+const logger = new Logger({ name: 'GameStorage' })
 
 class GameStorage {
   private games: Game[] = [];
@@ -15,6 +19,19 @@ class GameStorage {
   getGame(id: string) {
     return this.games.find((game) => game.id === id);
   }
+
+  cleanup() {
+    const now = new Date();
+    logger.debug('Starting cleanup', this.games.length)
+    const activeGames = this.games.filter((game) => {
+      const isEmpty = game.players.length === 0;
+      const isOld = dayjs(now).diff(game.createdAt, 'minutes') > 10;
+      return !(isEmpty && isOld)
+    })
+    this.games = activeGames;
+    logger.debug('Finished cleanup', this.games.length)
+  }
+
 }
 
 export default GameStorage;

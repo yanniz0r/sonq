@@ -38,6 +38,8 @@ class Game {
 
   public nextPlaySongPhaseTimeout?: NodeJS.Timeout;
 
+  public createdAt = new Date();
+
   /**
    * A credential that is used to control game access
    */

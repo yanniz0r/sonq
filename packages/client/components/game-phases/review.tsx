@@ -69,7 +69,7 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
             <h2 className="text-gray-300 text-xl font-bold">
               {phaseData.track.artists[0].name}
             </h2>
-            <span className="text-4xl font-extrabold mb text-pink-600 my-4">
+            <span className="text-4xl font-extrabold mb text-pink-600 my-2 line-clamp-3">
               {phaseData.track.name}
             </span>
             <p className="text-gray-400 text-xs">

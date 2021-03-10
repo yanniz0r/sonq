@@ -42,7 +42,7 @@ const Lobby: FC<LobbyProps> = ({ io, gameId, players }) => {
   }, [gameId])
 
   return <div className="py-44 flex flex-col items-center justify-center">
-    <h1 className="text-3xl font-bold text-white mb-5">{t('waitingForPlayers')}</h1>
+    <h1 className="text-3xl font-bold text-white mb-5">{t('lobby.waitingForPlayers')}</h1>
     <div className="flex flex-row">
       {players.map(player => (
         <div className="p-5 text-white flex flex-col items-center">
@@ -62,11 +62,11 @@ const Lobby: FC<LobbyProps> = ({ io, gameId, players }) => {
     {!isAdmin &&
       <div>
         <h1 className="text-center text-gray-200 text-3xl">
-          {t('waitingForGameStart')}
+          {t('lobby.waitingForGameStart')}
         </h1>
       </div>
     }
-    {isAdmin && <Button onClick={continueGame}>{t('startGame')}</Button>}
+    {isAdmin && <Button onClick={continueGame}>{t('lobby.startGame')}</Button>}
   </div>
 }
 

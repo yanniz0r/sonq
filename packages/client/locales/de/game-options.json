@@ -4,5 +4,6 @@
   "gameOptionsHeadline": "Spieleinstellungen",
   "startGame": "Spiel starten",
   "startGameHint": "Lade Playlist herunter...",
-  "downloadingPlaylist": "Lade Playlist herunter..."
+  "downloadingPlaylist": "Lade Playlist herunter...",
+  "rounds": "Rundenzahl"
 }

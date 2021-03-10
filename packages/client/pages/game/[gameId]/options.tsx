@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import useGame from "../../../hooks/use-game";
 import useIsAdmin from "../../../hooks/use-is-admin";
 import Alert from "../../../components/alert";
+import getGameUrl from "../../../helpers/get-game-url";
 
 interface GameOptionsProps {
   gameId: string;
@@ -129,7 +130,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         <h2 className="text-5xl pt-7">{t("gameOptionsHeadline")}</h2>
         <div className="mt-7">
           <Label>
-            Rundenzahl
+            {t('rounds')}
             <Input
               type="number"
               value={gameOptionsForm.values.rounds}
@@ -144,7 +145,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
           <div>
             <input
               className="bg-pink-500 p-2 px-4 rounded-lg"
-              value="https://todo.com/game/12345678"
+              value={getGameUrl(gameId)}
             />
           </div>
           <div className="flex justify-end items-center">

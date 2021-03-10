@@ -12,8 +12,8 @@ class GameStorage {
   }
 
   getId() {
-    const length = 6;
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const length = 5;
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     let id: string;
     let collisions = 0;
     do {

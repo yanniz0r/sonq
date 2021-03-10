@@ -118,7 +118,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
       <div className="bg-gray-900 py-20">
         <div className="max-w-screen-lg mx-auto">
           <p className="text-center text-gray-200">
-            Built with heart by{" "}
+            Built with ❤️ by{" "}
             <a
               href="https://github.com/yanniz0r/sonq"
               className="text-pink-600"

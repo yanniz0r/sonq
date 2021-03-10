@@ -4,7 +4,7 @@
   },
   "landing": {
     "logoSubtitle": "Interaktives Song raten",
-    "slogan": "Song Rate in Modern",
+    "slogan": "Song Raten in Modern",
     "spotifyLogin": "Einloggen um zu beginnen!"
   },
   "devider": {
@@ -12,7 +12,7 @@
     "text": "Fordere deine Freunde/Kollegen oder wen auch immer zum Duell heraus"
   },
   "information": {
-    "howToPlay": "Wie das Spiel Funktioniert",
+    "howToPlay": "Wie das Spiel funktioniert",
     "choosePlaylist": {
       "title": "Wähle eine Playlist",
       "text": "Du wählst die Playlist, damit hast du die volle Kontrolle über die zu Ratenden Songs."

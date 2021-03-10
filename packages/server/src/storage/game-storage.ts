@@ -1,5 +1,4 @@
 import Game from "../models/game";
-import { v4 } from "uuid";
 import dayjs from "dayjs";
 import { Logger } from "tslog";
 
@@ -13,7 +12,19 @@ class GameStorage {
   }
 
   getId() {
-    return v4();
+    const length = 6;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let id: string;
+    let collisions = 0;
+    do {
+      id = '';
+      while (id.length <= length) {
+        id += chars[Math.floor(Math.random() * chars.length)]
+      }
+      logger.debug(`Generated id ${id} with ${collisions} previous collision(s)`)
+      collisions++;
+    } while(this.games.find(game => game.id === id))
+    return id;
   }
 
   getGame(id: string) {

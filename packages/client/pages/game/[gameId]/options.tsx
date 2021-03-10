@@ -85,7 +85,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
       onSubmit={gameOptionsForm.handleSubmit}
     >
       <div className="max-w-screen-lg mx-auto px-5 pb-32">
-        <h2 className="text-5xl pt-7">{t("selectPlaylist")}</h2>
+        <h2 className="text-3xl md:text-5xl pt-7">{t("selectPlaylist")}</h2>
         <div className="flex mt-7">
           <Input
             name="query"
@@ -111,7 +111,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
           {queryPresets.map((preset) => (
             <button
               type="button"
-              className="p-2 bg-blue-400 font-bold mr-2 text-sm rounded-lg transform transition hover:scale-110"
+              className="p-2 bg-blue-400 font-bold mr-2 mb-2 text-sm rounded-lg transform transition hover:scale-110"
               onClick={() => setQuery(preset)}
             >
               {preset}
@@ -133,7 +133,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
             })}
         </div>
 
-        <h2 className="text-5xl pt-7">{t("gameOptionsHeadline")}</h2>
+        <h2 className="text-3xl md:text-5xl pt-7">{t("gameOptionsHeadline")}</h2>
         <div className="mt-7">
           <Label>
             {t("rounds")}
@@ -147,8 +147,8 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         </div>
       </div>
       <div className="fixed bg-pink-600 text-white w-full p-5 shadow-xl bottom-0">
-        <div className="mx-auto max-w-screen-lg grid grid-cols-2 grid-gap-10 px-5">
-          <div>
+        <div className="mx-auto max-w-screen-lg grid grid-cols-1 md:grid-cols-2 grid-gap-10 px-5">
+          <div className="hidden md:block">
             <input
               className="bg-pink-500 p-2 px-4 rounded-lg"
               value={getGameUrl(gameId)}
@@ -156,16 +156,16 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
           </div>
           <div className="flex justify-end items-center">
             {gameOptionsForm.isSubmitting && (
-              <span className="text-white opacity-80 mr-2">
+              <span className="hidden md:inline-block text-white opacity-80 mr-2">
                 {t("startGameHint")}
               </span>
             )}
             <button
               type="submit"
-              className="bg-pink-700 relative px-4 p-2 rounded-lg font-bold disabled:opacity-50"
+              className="bg-pink-700 relative px-4 p-2 rounded-lg font-bold disabled:opacity-50 w-full md:w-auto"
             >
               <div
-                className={`flex items-center ${
+                className={`flex items-center justify-center ${
                   gameOptionsForm.isSubmitting ? "opacity-0" : "opacity-100"
                 }`}
               >

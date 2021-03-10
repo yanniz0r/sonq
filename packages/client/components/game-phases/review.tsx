@@ -41,7 +41,7 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
 
   return (
     <div className="py-20 px-5">
-      <h1 className="text-gray-200 text-5xl font-bold mb-10">
+      <h1 className="text-gray-200 text-3xl md:text-5xl font-bold mb-10">
         {t("review.headline")}
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-3 gap-7 auto-rows-min">
@@ -57,7 +57,7 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
           </div>
           {isAdmin && (
             <Button onClick={continueGame} className="block w-full">
-              Next Round
+              {t("review.nextRound")}
             </Button>
           )}
         </div>

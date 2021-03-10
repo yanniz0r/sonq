@@ -137,7 +137,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
                 onChange={(e) => setSongQueryInput(e.currentTarget.value)}
                 placeholder="Search for your song guess"
               />
-              <div className="grid grid-cols-4 gap-5 mt-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mt-7">
                 {trackSearchQuery.data?.tracks.items.map((item) => (
                   <button
                     onClick={submitGuessFn(item.id, item)}

@@ -91,6 +91,12 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
             name="query"
             value={searchForm.values.query}
             onChange={searchForm.handleChange}
+            onKeyDown={(e) => {
+              if(e.key === 'Enter') {
+                e.preventDefault();
+                searchForm.submitForm()
+              }
+            }}
           />
           <button
             type="button"

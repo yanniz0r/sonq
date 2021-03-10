@@ -73,10 +73,11 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
 
   const trackSearchQuery = useSpotifyTrackSearch(gameId, songQuery)
 
-  const submitGuessFn = (id: string, songName: string, artistName: string) => () => {
+  const submitGuessFn = (id: string, track: SpotifyApi.TrackObjectFull) => () => {
     const event: SocketClient.GuessSongEvent = {
-      artistName,
-      songName,
+      artistName: track.artists[0].name,
+      songName: track.name,
+      spotifyId: track.id
     }
     const guessSongAck: SocketClient.GuessSongAck = (correct) => {
       if (!correct) {
@@ -118,7 +119,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
               <Input className="w-full" value={songQueryInput} onChange={e => setSongQueryInput(e.currentTarget.value)} placeholder="Search for your song guess" />
               <div className="grid grid-cols-4 gap-5 mt-7">
                 {trackSearchQuery.data?.tracks.items.map(item => (
-                  <button onClick={submitGuessFn(item.id, item.name, item.artists[0].name)} className="bg-green-500 relative rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col">
+                  <button onClick={submitGuessFn(item.id, item)} className="bg-green-500 relative rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col">
                     <img src={item.album.images[0].url} />
                     <div className="p-2">
                       <span className="font-bold">{item.name}</span> · {item.artists.map(a => a.name).join(', ')}

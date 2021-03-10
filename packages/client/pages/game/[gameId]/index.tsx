@@ -16,6 +16,7 @@ import VolumeControl from "../../../components/volume-control";
 import { useRouter } from "next/router";
 import LoadingSpinner from "../../../components/loading-spinner";
 import GameSideBar from "../../../components/game-side-bar";
+import GuessBubbles from "../../../components/guess-bubbles";
 
 const config = getConfig();
 
@@ -92,12 +93,13 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
         </div>
       : <div className="flex min-h-screen">
           <GameSideBar players={players} setVolume={setVolume} io={io} phase={gamePhase.type} />
-          <div className="flex-grow">
+          <div className="flex-grow relative">
+            <GuessBubbles io={io} />
             <JoinGameModal open={!joinedGame} onJoin={joinGame} />
             {/* {gamePhase.type !== Domain.GamePhaseType.Lobby &&
               <Players players={players} io={io} phase={gamePhase.type} />
             } */}
-            <div className="max-w-screen-lg mx-auto">
+            <div className="max-w-screen-lg mx-auto relative z-10">
               {gamePhase.type === Domain.GamePhaseType.Lobby && <Lobby io={io} gameId={gameId} players={players} />}
               {gamePhase.type === Domain.GamePhaseType.PlaySong && <PlaySong volume={volume} io={io} phaseData={gamePhase.data} gameId={gameId} />}
               {gamePhase.type === Domain.GamePhaseType.Review && <Review io={io} phaseData={gamePhase.data} gameId={gameId} />}

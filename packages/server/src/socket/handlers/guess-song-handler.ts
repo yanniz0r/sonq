@@ -35,12 +35,17 @@ class GuessSongHandler implements SocketHandler {
         songGuessedCorrectlyEmitter(session.game, session.player);
       } else {
         logger.debug("Player answered incorrectly", session.player.username);
-        songGuessedIncorrectlyEmitter(
-          session.game,
-          session.player,
-          guessSongEvent.songName,
-          guessSongEvent.artistName,
-        );
+        session.game.spotify.getTrack(guessSongEvent.spotifyId).then(track => {
+          if (!session.player) {
+            logger.error("User not signed in");
+            return;
+          }
+          songGuessedIncorrectlyEmitter(
+            session.game,
+            session.player,
+            track.body,
+          );
+        });
       }
       ack?.(isAnswerCorrect);
     };

@@ -23,6 +23,7 @@ export type JoinEvent = zod.TypeOf<typeof JoinEventSchema>;
 export const GuessSongEventSchema = zod.object({
   songName: zod.string(),
   artistName: zod.string(),
+  spotifyId: zod.string(),
 });
 export type GuessSongEvent = zod.TypeOf<typeof GuessSongEventSchema>;
 export type GuessSongAck = (correct: boolean) => void;

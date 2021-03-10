@@ -23,6 +23,7 @@ export type SongGuessedEvent = {
 } | {
   player: Player;
   correct: false;
+  coverImage: string;
   artistName: string;
   songName: string;
 }

@@ -48,8 +48,6 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
 
   useEffect(() => {
     return executeAt(() => {
-      console.log("EXECUTED!")
-      audioRef.current = new Audio(phaseData.previewUrl);
       audioRef.current.volume = volume / 10;
       audioRef.current.play();
     }, new Date(phaseData.phaseStartDate));
@@ -89,6 +87,9 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   }
 
   return <div className="py-20">
+    <audio ref={audioRef}>
+      <source src={phaseData.previewUrl} />
+    </audio>
     {isPreDelay
       ? <div>
           <h1 className="text-center mb-10 text-4xl text-white font-bold">{t('playSong.roundStartHeadline', { count: startRoundCountdown })}</h1>

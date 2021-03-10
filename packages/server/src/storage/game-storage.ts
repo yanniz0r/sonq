@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import dayjs from "dayjs";
 import { Logger } from "tslog";
 
-const logger = new Logger({ name: 'GameStorage' })
+const logger = new Logger({ name: "GameStorage" });
 
 class GameStorage {
   private games: Game[] = [];
@@ -22,16 +22,15 @@ class GameStorage {
 
   cleanup() {
     const now = new Date();
-    logger.debug('Starting cleanup', this.games.length)
+    logger.debug("Starting cleanup", this.games.length);
     const activeGames = this.games.filter((game) => {
       const isEmpty = game.players.length === 0;
-      const isOld = dayjs(now).diff(game.createdAt, 'minutes') > 10;
-      return !(isEmpty && isOld)
-    })
+      const isOld = dayjs(now).diff(game.createdAt, "minutes") > 10;
+      return !(isEmpty && isOld);
+    });
     this.games = activeGames;
-    logger.debug('Finished cleanup', this.games.length)
+    logger.debug("Finished cleanup", this.games.length);
   }
-
 }
 
 export default GameStorage;

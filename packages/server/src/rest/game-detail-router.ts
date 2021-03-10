@@ -49,14 +49,17 @@ class GameDetailRouter {
   };
 
   private postGameOptions: RequestHandler = async (request, response) => {
-    if (!this.authorize(request.headers['authorization'])) {
+    if (!this.authorize(request.headers["authorization"])) {
       response.sendStatus(401);
       return;
     }
     const body = Domain.GameOptionsSchema.parse(request.body);
-    if (body.spotifyPlaylistId && this.game.options.spotifyPlaylistId !== body.spotifyPlaylistId) {
+    if (
+      body.spotifyPlaylistId &&
+      this.game.options.spotifyPlaylistId !== body.spotifyPlaylistId
+    ) {
       this.game.options.spotifyPlaylistId = body.spotifyPlaylistId;
-      const songs = await this.game.playlistLoader.load(body.spotifyPlaylistId)
+      const songs = await this.game.playlistLoader.load(body.spotifyPlaylistId);
       this.game.songs = songs;
     }
     if (body.rounds) {
@@ -97,10 +100,9 @@ class GameDetailRouter {
     if (!authorizationHeader) {
       return false;
     }
-    const adminKey = authorizationHeader.replace('Bearer ', '')
+    const adminKey = authorizationHeader.replace("Bearer ", "");
     return this.game.adminKey === adminKey;
   }
-
 }
 
 export default GameDetailRouter;

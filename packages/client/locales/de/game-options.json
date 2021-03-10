@@ -3,5 +3,6 @@
   "searchPlaylist": "Suchen",
   "gameOptionsHeadline": "Spieleinstellungen",
   "startGame": "Spiel starten",
-  "startGameHint": "Lade Playlist herunter..."
+  "startGameHint": "Lade Playlist herunter...",
+  "downloadingPlaylist": "Lade Playlist herunter..."
 }

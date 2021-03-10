@@ -53,7 +53,7 @@ io.on("connection", (socket: Socket) => {
     return;
   }
   const game = gameStorage.getGame(parsedQuery.data.game);
-  
+
   if (!game) {
     logger.error("Can not find game with provided id", parsedQuery.data.game);
     socket.disconnect();
@@ -71,7 +71,7 @@ io.on("connection", (socket: Socket) => {
   socketController.addHandler(new DisconnectHandler());
 });
 
-setupGarbageCollection(gameStorage)
+setupGarbageCollection(gameStorage);
 
 server.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}!`);

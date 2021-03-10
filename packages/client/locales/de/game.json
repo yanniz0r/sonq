@@ -31,5 +31,8 @@
     "headline": "Das Ergebnis steht fest...",
     "startNextRound": "Nächste Runde starten",
     "options": "Spieleinstellungen ändern"
-  }
+  },
+  "joinGameModalHeadline": "Hallo!",
+  "joinGameModalJoinButton": "Beitreten",
+  "joinGameModalDescription": "Bitte gib einen Namen an, damit andere Spieler dich erkennen."
 }

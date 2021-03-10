@@ -45,7 +45,11 @@ class Game {
    */
   public adminKey = v4();
 
-  constructor(public io: Server, public id: string, public spotify: SpotifyWebApi) {
+  constructor(
+    public io: Server,
+    public id: string,
+    public spotify: SpotifyWebApi
+  ) {
     makeObservable(this);
 
     this.playlistLoader = new SpotifyPlaylistLoader(spotify);
@@ -94,13 +98,17 @@ class Game {
   }
 
   public checkAnswer(songName: string, artistName: string) {
-    if (this.currentSong && this.currentSong.name === songName && artistName === this.currentSong.artists[0].name) {
+    if (
+      this.currentSong &&
+      this.currentSong.name === songName &&
+      artistName === this.currentSong.artists[0].name
+    ) {
       return true;
     }
     this.wrongGuesses.push({
       artistName,
       songName,
-    })
+    });
     return false;
   }
 
@@ -114,7 +122,10 @@ class Game {
   }
 
   private getPoints(date: Date) {
-    return Math.round(Math.max(30 - dayjs(date).diff(this.phaseStarted, "s"), 5) * this.currentSongPopularityFactor);
+    return Math.round(
+      Math.max(30 - dayjs(date).diff(this.phaseStarted, "s"), 5) *
+        this.currentSongPopularityFactor
+    );
   }
 
   public getReviewAnswers(): Domain.ReviewGamePhaseAnswer[] {
@@ -131,7 +142,7 @@ class Game {
   private getPlayerScores(): Domain.PlayerScore[] {
     const playerScores: Domain.PlayerScore[] = [];
     this.score.forEach((score, player) => {
-      const answerDate = this.answers.get(player)
+      const answerDate = this.answers.get(player);
       const added = answerDate && this.getPoints(answerDate);
 
       playerScores.push({
@@ -170,7 +181,7 @@ class Game {
 
   public get currentSongPopularityFactor() {
     if (!this.currentSong) {
-      throw new Error('No song currently selected');
+      throw new Error("No song currently selected");
     }
     return (100 - (this.currentSong.popularity - 50)) / 100;
   }
@@ -204,7 +215,9 @@ class Game {
         previewUrl: this.currentSong!.preview_url!,
       },
     };
-    logger.debug(`Playing "${this.currentSong.name}" from "${this.currentSong.artists[0].name}"`)
+    logger.debug(
+      `Playing "${this.currentSong.name}" from "${this.currentSong.artists[0].name}"`
+    );
     this.roundsLeft -= 1;
     this.answers.clear();
   }

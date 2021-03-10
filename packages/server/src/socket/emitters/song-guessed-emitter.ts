@@ -2,7 +2,11 @@ import { SocketServer } from "@sonq/api";
 import Game from "../../models/game";
 import Player from "../../models/player";
 
-export const songGuessedIncorrectlyEmitter = (game: Game, player: Player, track: SpotifyApi.TrackObjectFull) => {
+export const songGuessedIncorrectlyEmitter = (
+  game: Game,
+  player: Player,
+  track: SpotifyApi.TrackObjectFull
+) => {
   const data: SocketServer.SongGuessedEvent = {
     player,
     correct: false,

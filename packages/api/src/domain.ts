@@ -30,7 +30,7 @@ export interface PlaySongGamePhaseData {
    */
   phaseEnd: number;
   /**
-   * Time (in milliseconds) until the phase starts 
+   * Time (in milliseconds) until the phase starts
    */
   phaseStart: number;
   previewUrl: string;

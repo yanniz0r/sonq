@@ -15,20 +15,31 @@ const Modal: FC<ModalProps> = ({ children, close, open }) => {
     } else {
       setTimeout(() => {
         setShouldRender(false);
-      }, 500)
+      }, 500);
     }
     setVisible(open);
-  }, [open])
+  }, [open]);
 
   if (!shouldRender) {
     return null;
   }
 
-  return <div className={`fixed top-0 left-0 w-screen h-screen bg-black z-40 ${visible ? 'bg-opacity-50' : 'bg-opacity-0'} flex justify-center items-center`} onClick={close}>
-      <div className={`bg-gray-900 max-w-screen-md p-5 rounded-lg  text-white transform transition ${visible ? 'scale-100' : 'scale-0'}`}>
+  return (
+    <div
+      className={`fixed top-0 left-0 w-screen h-screen bg-black z-40 ${
+        visible ? "bg-opacity-50" : "bg-opacity-0"
+      } flex justify-center items-center`}
+      onClick={close}
+    >
+      <div
+        className={`bg-gray-900 max-w-screen-md p-5 rounded-lg  text-white transform transition ${
+          visible ? "scale-100" : "scale-0"
+        }`}
+      >
         {children}
       </div>
     </div>
-}
+  );
+};
 
 export default Modal;

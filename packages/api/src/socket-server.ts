@@ -10,23 +10,25 @@ export enum Events {
    */
   PhaseChange = "server:phase-change",
   /**
-   * 
+   *
    */
   PlayerJoined = "server:player-joined",
 
-  PlayerLeft = "server:player-left"
+  PlayerLeft = "server:player-left",
 }
 
-export type SongGuessedEvent = {
-  player: Player;
-  correct: true;
-} | {
-  player: Player;
-  correct: false;
-  coverImage: string;
-  artistName: string;
-  songName: string;
-}
+export type SongGuessedEvent =
+  | {
+      player: Player;
+      correct: true;
+    }
+  | {
+      player: Player;
+      correct: false;
+      coverImage: string;
+      artistName: string;
+      songName: string;
+    };
 
 export interface TimeOverUpdateEvent {
   timeOverAt: string;

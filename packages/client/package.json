@@ -10,6 +10,9 @@
   "dependencies": {
     "@sonq/api": "1.0.0",
     "@unly/universal-language-detector": "^2.0.3",
+    "@tailwindcss/aspect-ratio": "^0.2.0",
+    "@tailwindcss/line-clamp": "^0.2.0",
+    "@types/lodash": "^4.14.168",
     "dayjs": "^1.10.4",
     "formik": "^2.2.6",
     "i18next-browser-languagedetector": "^6.0.1",

@@ -1,6 +1,6 @@
 import { Domain } from "@sonq/api";
 import { useQuery } from "react-query";
-import getConfig from 'next/config';
+import getConfig from "next/config";
 
 const config = getConfig();
 

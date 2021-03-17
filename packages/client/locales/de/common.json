@@ -1,0 +1,5 @@
+{
+  "validation": {
+    "minLength": "Bitte gib mindestens {{count}} Zeichen ein"
+  }
+}

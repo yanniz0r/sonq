@@ -3,5 +3,20 @@
   "searchPlaylist": "Suchen",
   "gameOptionsHeadline": "Spieleinstellungen",
   "startGame": "Spiel starten",
-  "startGameHint": "Lade Playlist herunter..."
+  "startGameHint": "Lade Playlist herunter...",
+  "downloadingPlaylist": "Lade Playlist herunter...",
+  "rounds": "Rundenzahl",
+  "validation": {
+    "spotifyPlaylist": {
+      "required": "Bitte wähle erst eine Playlist aus"
+    },
+    "rounds": {
+      "required": "Bitte setze eine Rundenzahl",
+      "min": "Bitte gib mindestens eine Runde an",
+      "min_plural": "Bitte gib mindestens {{count}} Runden an",
+      "max_plural": "Bitte gib maximal {{count}} Runden an"
+
+    }
+  },
+  "searchPlaylistPlaceholder": "Gib einen Suchbegriff ein"
 }

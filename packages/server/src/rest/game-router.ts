@@ -36,7 +36,7 @@ class GameRouter {
     const responseData: Rest.PostGame = {
       gameId: game.id,
       adminKey: game.adminKey,
-    }
+    };
     response.status(200).json(responseData);
   };
 }

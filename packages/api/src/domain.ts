@@ -25,8 +25,14 @@ export type GamePhaseDefinition<Type, Data = undefined> = {
 };
 
 export interface PlaySongGamePhaseData {
-  phaseEndDate: string;
-  phaseStartDate: string;
+  /**
+   * Time (in milliseconds) until the phase ends
+   */
+  phaseEnd: number;
+  /**
+   * Time (in milliseconds) until the phase starts
+   */
+  phaseStart: number;
   previewUrl: string;
 }
 

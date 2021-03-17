@@ -1,14 +1,18 @@
 import { SocketServer } from "@sonq/api";
-import { Server } from "socket.io";
 import Game from "../../models/game";
 import Player from "../../models/player";
 
-export const songGuessedIncorrectlyEmitter = (game: Game, player: Player, songName: string, artistName: string) => {
+export const songGuessedIncorrectlyEmitter = (
+  game: Game,
+  player: Player,
+  track: SpotifyApi.TrackObjectFull
+) => {
   const data: SocketServer.SongGuessedEvent = {
     player,
     correct: false,
-    artistName,
-    songName,
+    coverImage: track.album.images[0].url,
+    artistName: track.artists[0].name,
+    songName: track.name,
   };
   game.io.to(game.id).emit(SocketServer.Events.SongGuessed, data);
 };

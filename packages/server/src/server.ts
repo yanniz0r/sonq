@@ -14,6 +14,7 @@ import JoinHandler from "./socket/handlers/join-handler";
 import ContinueHandler from "./socket/handlers/continue-handler";
 import GuessSongHandler from "./socket/handlers/guess-song-handler";
 import DisconnectHandler from "./socket/handlers/disconnect-handler";
+import setupGarbageCollection from "./setup-garbage-collection";
 
 const PORT = process.env.PORT ?? 4000;
 const logger = new Logger({ name: "server" });
@@ -52,7 +53,7 @@ io.on("connection", (socket: Socket) => {
     return;
   }
   const game = gameStorage.getGame(parsedQuery.data.game);
-  
+
   if (!game) {
     logger.error("Can not find game with provided id", parsedQuery.data.game);
     socket.disconnect();
@@ -69,6 +70,8 @@ io.on("connection", (socket: Socket) => {
   socketController.addHandler(new GuessSongHandler());
   socketController.addHandler(new DisconnectHandler());
 });
+
+setupGarbageCollection(gameStorage);
 
 server.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}!`);

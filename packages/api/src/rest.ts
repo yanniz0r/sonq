@@ -1,5 +1,5 @@
 import { GameOptions, GamePhase, Player } from "./domain";
-import * as zod from 'zod';
+import * as zod from "zod";
 
 export interface GetGame {
   phase: GamePhase;
@@ -12,8 +12,8 @@ export interface GetGame {
 }
 
 export const PostGameBodySchema = zod.object({
-  code: zod.string()
-})
+  code: zod.string(),
+});
 export type PostGameBody = zod.TypeOf<typeof PostGameBodySchema>;
 
 export interface PostGame {

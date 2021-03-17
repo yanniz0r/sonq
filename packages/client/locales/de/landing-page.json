@@ -1,5 +1,33 @@
 {
   "errors": {
     "gameNotFound": "Das Spiel nach dem du suchst konnte nicht gefunden werden."
+  },
+  "landing": {
+    "logoSubtitle": "Interaktives Song raten",
+    "slogan": "Song Raten in Modern",
+    "spotifyLogin": "Einloggen um zu beginnen!"
+  },
+  "devider": {
+    "title": "Wie gut kennst du dich mit bekannten Sons aus?",
+    "text": "Fordere deine Freunde/Kollegen oder wen auch immer zum Duell heraus"
+  },
+  "information": {
+    "howToPlay": "Wie das Spiel funktioniert",
+    "choosePlaylist": {
+      "title": "Wähle eine Playlist",
+      "text": "Du wählst die Playlist, damit hast du die volle Kontrolle über die zu Ratenden Songs."
+    },
+    "playInGroup": {
+      "title": "Spiel in einer Gruppe",
+      "text": "Du erhälst einen Link, den du teilen kannst, um deine Freunde einzuladen."
+    },
+    "enjoySpotify": {
+      "title": "Genieß die Spotify Features",
+      "text": "Der ganze Kram läuft über die Spotofy API. All die coolen Features kannst du nutzen."
+    },
+    "whySignIn": {
+      "title": "Warum muss ich mich bei Spotify einloggen?",
+      "text": "Um Spotify features nutzen zu können, muss sich der Ersteller einloggen. Wir benutzen deinen Account ausschließlich um Spotify daten anzufordern. Wenn du uns nicht traust, schau in den "
+    }
   }
 }

@@ -83,6 +83,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         </div>
       </div>
       <div className="fixed bg-pink-600 text-white w-full p-5 shadow-xl bottom-0">
+
         <div className="mx-auto max-w-screen-lg grid grid-cols-1 md:grid-cols-2 grid-gap-10 px-5">
           <div className="hidden md:block">
             <input

@@ -1,6 +1,6 @@
 import { NextPage, NextPageContext } from "next";
-import Image from 'next/image'
 import { FaCogs, FaGamepad, FaInfo, FaShare, FaSpotify, FaTimes } from "react-icons/fa";
+
 import * as zod from "zod";
 import Alert from "../components/alert";
 import { useTranslation } from "react-i18next";
@@ -28,7 +28,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
                 Son<span className="text-pink-600">q</span>
               </div>
               <div className="text-white text-opacity-50 text-xs">
-                Interactive Song guessing
+                {t("landing.logoSubtitle")}
               </div>
             </div>
           </div>
@@ -46,10 +46,11 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
             )}
           </div>
         )}
+
         <div className="flex py-52 px-5 md:py-80 flex-col items-center justify-center relative">
           <div className="flex flex-col items-center">
             <h1 className="text-6xl text-gray-200">
-              Song Raten in <span className="font-bold">Modern</span>
+              {t("landing.slogan")}
             </h1>
             <a
               href="/api/spotify-login"
@@ -57,7 +58,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
               className="text-white p-4 px-5 inline-flex items-center font-bold rounded-full mt-10 transform transition hover:scale-110"
             >
               <FaSpotify className="mr-2 text-xl" />
-              Start with Spotify
+              {t("landing.spotifyLogin")}
             </a>
           </div>
         </div>
@@ -65,43 +66,41 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
       <div className="bg-pink-600 px-5 py-10 md:py-20 text-white">
         <div className="max-w-screen-lg mx-auto">
           <h2 className="text-center text-4xl font-bold">
-            How good do you know popular songs?
+            {t("divider.title")}
           </h2>
           <p className="text-center mt-5 text-lg">
-            Challenge your friends/colleagues/whatever in a competative song
-            guessing game
+            {t("divider.text")}
           </p>
         </div>
       </div>
       <div className="py-10 md:py-20 px-5 bg-white">
         <div className="max-w-screen-lg mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900">What's the deal</h2>
+          <h2 className="text-4xl font-bold text-gray-900">
+            {t("information.howToPlay")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div>
               <h3 className="text-2xl font-bold text-pink-600 pt-4">
-                You choose the playlist
+                {t("information.choosePlaylist.title")}
               </h3>
               <p className="pt-3 text-lg">
-                You select a playlist that you want to play so you don't have to
-                worry about songs that nobody knows.
+                {t("information.choosePlaylist.text")}
               </p>
             </div>
             <div>
               <h3 className="text-2xl font-bold text-pink-600 pt-4">
-                Play in a group
+                {t("information.playInGroup.title")}
               </h3>
               <p className="pt-3 text-lg">
-                By sharing the link with your buddies you can start a
-                comepetative song-guessing-match.
+                {t("information.playInGroup.text")}
               </p>
             </div>
             <div>
               <h3 className="text-2xl font-bold text-pink-600 pt-4">
-                Enjoy spotify features
+                {t("information.enjoySpotify.title")}
               </h3>
               <p className="pt-3 text-lg">
-                This whole beast is backed by the spotify API. Therfore you can
-                access all those fance spotify features.
+                {t("information.enjoySpotify.text")}
               </p>
             </div>
           </div>
@@ -110,18 +109,18 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
               <FaInfo />
             </div>
             <div>
-              <h3 className="font-bold">But why do I have to sign in?</h3>
-              In order to access functions of spotify, the person creating a
-              game has to sign in with their spotify account. We do nothing else
-              than requesting spotifies data with your account. If you do not
-              trust us, you can have a look at the{" "}
+              <h3 className="font-bold">{t("information.whySignIn.title")}</h3>
+              {t("information.whySignIn.text")}
+
+              <h3 className="font-bold">{t("information.whySignIn.title")}</h3>
+              {t("information.whySignIn.text")}
+
               <a
                 href="https://github.com/yanniz0r/sonq"
                 className="text-blue-600"
               >
                 source code
               </a>
-              .
             </div>
           </div>
         </div>

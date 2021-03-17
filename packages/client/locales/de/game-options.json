@@ -12,7 +12,7 @@
     },
     "rounds": {
       "required": "Bitte setze eine Rundenzahl",
-      "min": "Bitte gib mindestens {{count}} Runde an",
+      "min": "Bitte gib mindestens eine Runde an",
       "min_plural": "Bitte gib mindestens {{count}} Runden an",
       "max_plural": "Bitte gib maximal {{count}} Runden an"
 

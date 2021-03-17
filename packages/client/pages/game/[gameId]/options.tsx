@@ -39,7 +39,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
       spotifyPlaylistId: undefined,
     },
     validationSchema: yup.object({
-      rounds: yup.number().required(t('validation.rounds.required')).min(1, t('validation.rounds.min', { count: 10 })).max(100, t('validation.rounds.max', { count: 10 })),
+      rounds: yup.number().required(t('validation.rounds.required')).min(1, t('validation.rounds.min', { count: 1 })).max(100, t('validation.rounds.max', { count: 100 })),
       spotifyPlaylistId: yup.string().required(t('validation.spotifyPlaylist.required')),
     }),
     async onSubmit(values) {

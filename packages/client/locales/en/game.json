@@ -1,0 +1,40 @@
+{
+  "lobby": {
+    "startGame": "Start game",
+    "waitingForPlayers": "Waiting for players",
+    "waitingForGameStart": "Waiting for game start...",
+    "copied": "Copied link!",
+    "shareTitle": "share Sonq link",
+    "shareText": "Enter my game on Sonq!"
+  },
+  "playSong": {
+    "cooldown": "Answercooldown",
+    "roundStartHeadline": "The song starts in {{count}} second",
+    "roundStartHeadline_plural": "The song starts in {{count}} seconds",
+    "guessSongDescription": "Round ends in {{count}} second",
+    "guessSongDescription_plural": "Round ends in {{count}} seconds",
+    "guessSongHeadline": "What song is this?",
+    "searchSongHelperText": "Enter something about the song you mean like name, artist or album name. We'll find the song you mean with the magic of spotify.",
+    "guessCorrectAlert": "You successfully guessed the song!"
+  },
+  "review": {
+    "wrongGuessesHeadline": "Nice tries",
+    "wrongGuessesEmpty": "...did not happen! You know everything or nothing!",
+    "checkoutOnSpotify": "View in spotify",
+    "popularityBonusHeadline": "Popularitybonus",
+    "scoresHeadline": "Current score",
+    "headline": "Round score",
+    "popularityBonusDescriptionLow": "Wow, {{trackName}} seems to be really unknown. We grant you a bonus of {{bonus}}!",
+    "popularityBonusDescriptionHigh": "{{trackName}} is pretty mainstream. You get just {{bonus}} of the points.",
+    "popularityBonusDescriptionAverage": "{{trackName}} is an averagly known song. You get {{bonus}} of the points.",
+    "nextRound": "Next round"
+  },
+  "summary": {
+    "headline": "And the winner is...",
+    "startNextRound": "Start next round",
+    "options": "Change game settings"
+  },
+  "joinGameModalHeadline": "Hello!",
+  "joinGameModalJoinButton": "Join",
+  "joinGameModalDescription": "Please enter a name first so that other players recognize you."
+}

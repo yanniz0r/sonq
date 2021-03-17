@@ -29,5 +29,23 @@
       "title": "But why do I have to sign in?",
       "text": "In order to access functions of spotify, the person creating a game has to sign in with their spotify account. We do nothing else than requesting spotifies data with your account. If you do not trust us, you can have a look at the "
     }
+  },
+  "explanation": {
+    "signIn": {
+      "title": "Sign in",
+      "text": "You want a spicy playlist? Play 100 rounds in a row? Punish wrong answers with an enormous timeout? We got you."
+    },
+    "adjust": {
+      "title": "Adjust the game to your liking",
+      "text": "Du willst eine würzige Playlist? 100 Runden hintereinander ballern? Falschantworten mit eine Auszeit bestrafen? Wir erlauben's dir."
+    },
+    "invite": {
+      "title": "Invite others",
+      "text": "Share your game link to allow your friends to join the game and play with you."
+    },
+    "play": {
+      "title": "Play!",
+      "text": "Start the game, select a username and have fun with your friends."      
+    }
   }
 }

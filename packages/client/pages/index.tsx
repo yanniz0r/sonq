@@ -109,18 +109,16 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
               <FaInfo />
             </div>
             <div>
-              <h3 className="font-bold">{t("information.whySignIn.title")}</h3>
-              {t("information.whySignIn.text")}
-
-              <h3 className="font-bold">{t("information.whySignIn.title")}</h3>
-              {t("information.whySignIn.text")}
-
-              <a
-                href="https://github.com/yanniz0r/sonq"
-                className="text-blue-600"
-              >
-                source code
-              </a>
+              <h3 className="font-bold text-blue">{t("information.whySignIn.title")}</h3>
+              <p>
+                {t("information.whySignIn.text")}
+                <a
+                  href="https://github.com/yanniz0r/sonq"
+                  className="text-blue-600"
+                >
+                  source code
+                </a>
+              </p>
             </div>
           </div>
         </div>
@@ -132,8 +130,8 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-10">
             <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
               <div className="z-10 relative">
-                <h3 className="text-gray-100 text-2xl font-bold mb-3">Sign in</h3>
-                <p className="text-lg">Use spotify to sign in and create a game for you and your friends</p>
+                <h3 className="text-gray-100 text-2xl font-bold mb-3">{t('explanation.signIn.title')}</h3>
+                <p className="text-lg">{t('explanation.signIn.text')}</p>
               </div>
               <div className="absolute bottom-5 right-5">
                 <FaSpotify className="text-black opacity-30 text-9xl z-0" />
@@ -141,8 +139,8 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
             </div>
             <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
               <div className="z-10 relative">
-                <h3 className="text-gray-100 text-2xl font-bold mb-3">Adjust the game to your liking</h3>
-                <p className="text-lg">You want a spicy playlist? Play 100 rounds in a row? Punish wrong answers with an enormous timeout? We gou you</p>
+                <h3 className="text-gray-100 text-2xl font-bold mb-3">{t('explanation.adjust.title')}</h3>
+                <p className="text-lg">{t('explanation.adjust.text')}</p>
               </div>
               <div className="absolute bottom-5 right-5">
                 <FaCogs className="text-black opacity-30 text-9xl z-0" />
@@ -150,8 +148,8 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
             </div>
             <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
               <div className="z-10 relative">
-                <h3 className="text-gray-100 text-2xl font-bold mb-3">Invite others</h3>
-                <p className="text-lg">Share your game link to allow your friends to join the game and play with you</p>
+                <h3 className="text-gray-100 text-2xl font-bold mb-3">{t('explanation.invite.title')}</h3>
+                <p className="text-lg">{t('explanation.invite.text')}</p>
               </div>
               <div className="absolute bottom-5 right-5">
                 <FaShare className="text-black opacity-30 text-9xl z-0" />
@@ -159,8 +157,8 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
             </div>
             <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
               <div className="z-10 relative">
-                <h3 className="text-gray-100 text-2xl font-bold mb-3">Play!</h3>
-                <p className="text-lg">Start the game, select a username and have fun with your friends.</p>
+                <h3 className="text-gray-100 text-2xl font-bold mb-3">{t('explanation.play.title')}</h3>
+                <p className="text-lg">{t('explanation.play.text')}</p>
               </div>
               <div className="absolute bottom-5 right-5">
                 <FaGamepad className="text-black opacity-30 text-9xl z-0" />

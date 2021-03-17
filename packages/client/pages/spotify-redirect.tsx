@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 import { Rest } from "@sonq/api";
 import { ADMINKEY } from "../constants/local-storage";
 import getConfig from "next/config";
+import { useTranslation } from 'react-i18next'
+import { FaCog } from "react-icons/fa";
+import LoadingSpinner from "../components/loading-spinner";
 
 const config = getConfig();
 
@@ -13,6 +16,7 @@ interface SpotifyRedirectPageProps {
 }
 
 const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
+  const {t} = useTranslation('gameOptions')
   const createGameMutation = useMutation(async (code: string) => {
     const response = await fetch(
       `${config.publicRuntimeConfig.serverUrl}/game`,
@@ -41,7 +45,10 @@ const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-900">
       <div className="flex flex-col items-center">
-        <h1 className="text-6xl text-gray-200">Wir erstellen dein Spiel...</h1>
+        <div className="text-pink-600 text-6xl mb-12">
+          <LoadingSpinner />
+        </div>
+        <h1 className="text-6xl text-gray-200">{t('creatingGame')}</h1>
       </div>
     </div>
   );

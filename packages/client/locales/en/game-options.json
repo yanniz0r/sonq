@@ -1,0 +1,23 @@
+{
+  "creatingGame": "We're creating your game...",
+  "selectPlaylist": "Select playlist",
+  "searchPlaylist": "Search",
+  "gameOptionsHeadline": "Gamesettings",
+  "startGame": "Start game",
+  "startGameHint": "Downloading playlist...",
+  "downloadingPlaylist": "Downloading playlist...",
+  "rounds": "Rounds",
+  "validation": {
+    "spotifyPlaylist": {
+      "required": "Please select a playlist first"
+    },
+    "rounds": {
+      "required": "Please define a round length",
+      "min": "Please enter at least one round",
+      "min_plural": "Please enter at least {{count}} rounds",
+      "max_plural": "Please enter less than {{count}} rounds"
+
+    }
+  },
+  "searchPlaylistPlaceholder": "Please enter a search query"
+}

@@ -7,8 +7,8 @@
     "slogan": "Song Raten in Modern",
     "spotifyLogin": "Einloggen um zu beginnen!"
   },
-  "devider": {
-    "title": "Wie gut kennst du dich mit bekannten Sons aus?",
+  "divider": {
+    "title": "Wie gut kennst du dich mit bekannten Songs aus?",
     "text": "Fordere deine Freunde/Kollegen oder wen auch immer zum Duell heraus"
   },
   "information": {
@@ -28,6 +28,24 @@
     "whySignIn": {
       "title": "Warum muss ich mich bei Spotify einloggen?",
       "text": "Um Spotify features nutzen zu können, muss sich der Ersteller einloggen. Wir benutzen deinen Account ausschließlich um Spotify daten anzufordern. Wenn du uns nicht traust, schau in den "
+    }
+  },
+  "explanation": {
+    "signIn": {
+      "title": "Anmelden",
+      "text": "Benutze deinen Spotify Account zur Anmeldung und erstelle ein Spiel für dich und deine Freunde"
+    },
+    "adjust": {
+      "title": "Bestimme die Regeln",
+      "text": "Du willst eine würzige Playlist? 100 Runden hintereinander ballern? Falschantworten mit eine Auszeit bestrafen? Wir erlauben's dir."
+    },
+    "invite": {
+      "title": "Freunde einladen",
+      "text": "Teile den Beitrittslink um gemeinsam mit deinen Freunden zu spielen."
+    },
+    "play": {
+      "title": "Spielen!",
+      "text": "Starte das Spiel, wähle einen Nutzernamen und hab Spaß!"      
     }
   }
 }

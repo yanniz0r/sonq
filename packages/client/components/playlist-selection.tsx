@@ -29,8 +29,11 @@ const PlaylistSelection: FC<PlaylistSelectionProps> = ({ gameId, onSelect, selec
 
   const onChange = useCallback((event: FormEvent<HTMLInputElement>) => {
     setQuery(event.currentTarget.value)
-    debouncedSetSearchQuery(event.currentTarget.value)
   }, [])
+
+  useEffect(() => {
+    debouncedSetSearchQuery(query)
+  }, [query])
 
   return <>
     <div className="flex mt-7">
@@ -47,7 +50,10 @@ const PlaylistSelection: FC<PlaylistSelectionProps> = ({ gameId, onSelect, selec
           key={preset}
           type="button"
           className="p-2 bg-blue-400 font-bold mr-2 mb-2 text-sm rounded-lg transform transition hover:scale-110"
-          onClick={() => setQuery(preset)}
+          onClick={() => {
+            setQuery(preset);
+            setSearchQuery(preset);
+          }}
         >
           {preset}
         </button>

@@ -61,9 +61,9 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
       <div className="bg-pink-600 px-5 py-10 md:py-20 text-white">
         <div className="max-w-screen-lg mx-auto">
           <h2 className="text-center text-3xl font-bold">
-            {t("devider.title")}
+            {t("divider.title")}
           </h2>
-          <p className="text-center mt-5 text-lg">{t("devider.text")}</p>
+          <p className="text-center mt-5 text-lg">{t("divider.text")}</p>
         </div>
       </div>
       <div className="py-10 md:py-20 px-5 bg-gray-50">

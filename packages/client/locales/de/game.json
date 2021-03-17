@@ -8,6 +8,7 @@
     "shareText": "Tritt meinem Sonq Spiel bei!"
   },
   "playSong": {
+    "cooldown": "Antwortcooldown",
     "roundStartHeadline": "Der Song startet in {{count}} Sekunde",
     "roundStartHeadline_plural": "Der Song startet in {{count}} Sekunden",
     "guessSongDescription": "Rundenende in {{count}} Sekunde",

@@ -2,7 +2,7 @@ import { Domain, SocketClient } from "@sonq/api";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import useSpotifyTrackSearch from "../../hooks/use-spotify-track-search";
 import Input from "../input";
-import { FaCheck, FaInfo, FaTimes } from "react-icons/fa";
+import { FaCheck, FaInfo, FaStopwatch, FaTimes } from "react-icons/fa";
 import { debounce } from "lodash";
 import useCountdown from "../../hooks/use-countdown";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,7 @@ interface PlaySongProps {
 
 const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   const { t } = useTranslation("game");
+  const [canGuess, setCanGuess] = useState(true);
   const [showSearchHelp, setShowSearchHelp] = useState(
     typeof window !== "undefined" &&
       localStorage.getItem(HIDESONGSEARCHHELP) !== "true"
@@ -74,6 +75,14 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
     id: string,
     track: SpotifyApi.TrackObjectFull
   ) => () => {
+    if (!canGuess) return;
+
+    setCanGuess(false);
+
+    setTimeout(() => {
+      setCanGuess(true)
+    }, 2000)
+
     const event: SocketClient.GuessSongEvent = {
       artistName: track.artists[0].name,
       songName: track.name,
@@ -141,7 +150,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
                 {trackSearchQuery.data?.tracks.items.map((item) => (
                   <button
                     onClick={submitGuessFn(item.id, item)}
-                    className="bg-green-500 relative rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col"
+                    className="bg-pink-600 relative rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col"
                   >
                     <img src={item.album.images[0].url} />
                     <div className="p-2">
@@ -151,6 +160,14 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
                     {item.id === incorrectGuess && (
                       <div className="absolute top-0 left-0 w-full h-full bg-red-600 bg-opacity-90 text-white flex items-center justify-center">
                         <FaTimes className="text-3xl" />
+                      </div>
+                    )}
+                    {item.id !== incorrectGuess && !canGuess && (
+                      <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-50 text-gray-800 flex flex-col items-center justify-center">
+                        <FaStopwatch className="text-3xl" />
+                        <span className="uppercase text-lg mt-2">
+                          {t('playSong.cooldown')}
+                        </span>
                       </div>
                     )}
                   </button>

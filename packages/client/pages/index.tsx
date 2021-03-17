@@ -1,5 +1,6 @@
 import { NextPage, NextPageContext } from "next";
-import { FaInfo, FaSpotify, FaTimes } from "react-icons/fa";
+import Image from 'next/image'
+import { FaCogs, FaGamepad, FaInfo, FaShare, FaSpotify, FaTimes } from "react-icons/fa";
 import * as zod from "zod";
 import Alert from "../components/alert";
 import { useTranslation } from "react-i18next";
@@ -18,7 +19,8 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
   const { t } = useTranslation("landingPage");
   return (
     <div>
-      <div className="bg-gray-900">
+      <div className="bg-gray-900 relative">
+        <div className="absolute w-full h-full bg-center bg-fixed bg-cover opacity-20" style={{ backgroundImage: "url('/images/landingpage-header.jpg')" }}/>
         <div className="text-white">
           <div className="flex">
             <div className="p-5">
@@ -44,7 +46,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
             )}
           </div>
         )}
-        <div className="flex py-52 px-5 md:py-80 flex-col items-center justify-center">
+        <div className="flex py-52 px-5 md:py-80 flex-col items-center justify-center relative">
           <div className="flex flex-col items-center">
             <h1 className="text-6xl text-gray-200">
               Song Raten in <span className="font-bold">Modern</span>
@@ -62,7 +64,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
       </div>
       <div className="bg-pink-600 px-5 py-10 md:py-20 text-white">
         <div className="max-w-screen-lg mx-auto">
-          <h2 className="text-center text-3xl font-bold">
+          <h2 className="text-center text-4xl font-bold">
             How good do you know popular songs?
           </h2>
           <p className="text-center mt-5 text-lg">
@@ -71,7 +73,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
           </p>
         </div>
       </div>
-      <div className="py-10 md:py-20 px-5 bg-gray-50">
+      <div className="py-10 md:py-20 px-5 bg-white">
         <div className="max-w-screen-lg mx-auto">
           <h2 className="text-4xl font-bold text-gray-900">What's the deal</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -120,6 +122,50 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
                 source code
               </a>
               .
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="py-10 md:py-20 px-5 bg-pink-50">
+        <div className="max-w-screen-lg mx-auto">
+          <h2 className="text-center text-4xl font-bold">How does it work?</h2>
+          <p className="text-pink-600 font-bold text-center text-lg">Get started with Sonq in X easy steps</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-10">
+            <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
+              <div className="z-10 relative">
+                <h3 className="text-gray-100 text-2xl font-bold mb-3">Sign in</h3>
+                <p className="text-lg">Use spotify to sign in and create a game for you and your friends</p>
+              </div>
+              <div className="absolute bottom-5 right-5">
+                <FaSpotify className="text-black opacity-30 text-9xl z-0" />
+              </div>
+            </div>
+            <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
+              <div className="z-10 relative">
+                <h3 className="text-gray-100 text-2xl font-bold mb-3">Adjust the game to your liking</h3>
+                <p className="text-lg">You want a spicy playlist? Play 100 rounds in a row? Punish wrong answers with an enormous timeout? We gou you</p>
+              </div>
+              <div className="absolute bottom-5 right-5">
+                <FaCogs className="text-black opacity-30 text-9xl z-0" />
+              </div>
+            </div>
+            <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
+              <div className="z-10 relative">
+                <h3 className="text-gray-100 text-2xl font-bold mb-3">Invite others</h3>
+                <p className="text-lg">Share your game link to allow your friends to join the game and play with you</p>
+              </div>
+              <div className="absolute bottom-5 right-5">
+                <FaShare className="text-black opacity-30 text-9xl z-0" />
+              </div>
+            </div>
+            <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
+              <div className="z-10 relative">
+                <h3 className="text-gray-100 text-2xl font-bold mb-3">Play!</h3>
+                <p className="text-lg">Start the game, select a username and have fun with your friends.</p>
+              </div>
+              <div className="absolute bottom-5 right-5">
+                <FaGamepad className="text-black opacity-30 text-9xl z-0" />
+              </div>
             </div>
           </div>
         </div>

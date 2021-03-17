@@ -23,7 +23,6 @@ const isClientSide = typeof window !== "undefined";
 const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const isAdmin = useIsAdmin(gameId);
   const { t } = useTranslation("gameOptions");
-  const [query, setQuery] = useState("");
   const router = useRouter();
 
   useEffect(() => {

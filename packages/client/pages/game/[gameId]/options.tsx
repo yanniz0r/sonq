@@ -24,6 +24,28 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const isAdmin = useIsAdmin(gameId);
   const { t } = useTranslation("gameOptions");
   const router = useRouter();
+  const [justCopied, setJustCopied] = useState(false);
+
+  const copyGameLink = useCallback(() => {
+    if (navigator.share) {
+      navigator.share({
+        text: t("lobby.shareText"),
+        title: t("lobby.shareTitle"),
+        url: getGameUrl(gameId),
+      });
+    } else {
+      setJustCopied(true);
+      window.navigator.clipboard.writeText(getGameUrl(gameId));
+    }
+  }, [gameId]);
+
+  useEffect(() => {
+    if (justCopied) {
+      setTimeout(() => {
+        setJustCopied(false);
+      }, 2000);
+    }
+  }, [justCopied]);
 
   useEffect(() => {
     if (isClientSide && !isAdmin) {
@@ -83,14 +105,24 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
         </div>
       </div>
       <div className="fixed bg-pink-600 text-white w-full p-5 shadow-xl bottom-0">
-
         <div className="mx-auto max-w-screen-lg grid grid-cols-1 md:grid-cols-2 grid-gap-10 px-5">
           <div className="hidden md:block">
-            <input
-              className="bg-pink-500 p-2 px-4 rounded-lg"
-              readOnly
-              value={getGameUrl(gameId)}
-            />
+          <div>
+            <div className="overflow-hidden rounded-lg transform transition hover:scale-110 relative inline-flex flex-col items-center">
+              <button
+                onClick={copyGameLink}
+                type="button"
+                className="px-3 py-2 text-lg bg-pink-500 text-white rounded-lg"
+              >
+                {getGameUrl(gameId)}
+              </button>
+              {justCopied && (
+                <div className="absolute bg-pink-700 text-white font-bold h-full w-full flex justify-center items-center">
+                  {t("game:copied")}
+                </div>
+              )}
+            </div>
+          </div>
           </div>
           <div className="flex justify-end items-center">
             <span className="hidden md:inline-block text-white opacity-80 mr-4">

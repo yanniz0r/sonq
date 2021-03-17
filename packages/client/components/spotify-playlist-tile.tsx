@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 interface SpotifyPlaylistTile {
-  onClick?(): void;
+  onClick?(playlistId): void;
   selected?: boolean;
   downloading?: boolean;
   playlist: SpotifyApi.PlaylistBaseObject;
@@ -15,7 +15,7 @@ const SpotifyPlaylistTile: FC<SpotifyPlaylistTile> = ({
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={() => onClick?.(playlist.id)}
       className={`aspect-w-1 aspect-h-1 rounded-lg overflow-hidden relative transition transform hover:scale-110 border-green-500 ${
         selected ? "border-4" : "border-0"
       }`}

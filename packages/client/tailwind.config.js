@@ -9,7 +9,10 @@ module.exports = {
     }
   },
   variants: {
-    extend: {},
+    extend: {
+      opacity: ['disabled'],
+      transform: ['hover'],
+    },
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),

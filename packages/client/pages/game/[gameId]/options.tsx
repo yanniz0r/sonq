@@ -1,33 +1,22 @@
 import { useFormik } from "formik";
 import { NextPage } from "next";
-import { useEffect, useState } from "react";
-import { FaGamepad, FaUser } from "react-icons/fa";
+import { useCallback, useEffect, useState } from "react";
+import { FaGamepad } from "react-icons/fa";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
-import SpotifyPlaylistTile from "../../../components/spotify-playlist-tile";
 import useMutateGameOptions from "../../../hooks/use-mutate-game-options";
-import useSpotifyPlaylistSearch from "../../../hooks/use-spotify-playlist-search";
 import Input, { Label } from "../../../components/input";
 import { Domain } from "@sonq/api";
 import LoadingSpinner from "../../../components/loading-spinner";
 import { useRouter } from "next/router";
 import useGame from "../../../hooks/use-game";
 import useIsAdmin from "../../../hooks/use-is-admin";
-import Alert from "../../../components/alert";
 import getGameUrl from "../../../helpers/get-game-url";
+import PlaylistSelection from "../../../components/playlist-selection";
 
 interface GameOptionsProps {
   gameId: string;
 }
-
-const queryPresets = [
-  "2000s",
-  "1990s",
-  "1980s",
-  "rock",
-  "metal",
-  "copyright free",
-];
 
 const isClientSide = typeof window !== "undefined";
 
@@ -36,17 +25,6 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const { t } = useTranslation("gameOptions");
   const [query, setQuery] = useState("");
   const router = useRouter();
-  const searchForm = useFormik<{ query: string }>({
-    initialValues: {
-      query: "",
-    },
-    validationSchema: yup.object({
-      query: yup.string().required().min(2),
-    }),
-    onSubmit(values) {
-      setQuery(values.query);
-    },
-  });
 
   useEffect(() => {
     if (isClientSide && !isAdmin) {
@@ -55,9 +33,15 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   }, [isAdmin]);
 
   const gameOptionsForm = useFormik<Domain.GameOptions>({
+    validateOnMount: true,
     initialValues: {
       rounds: 15,
+      spotifyPlaylistId: undefined,
     },
+    validationSchema: yup.object({
+      rounds: yup.number().required(t('validation.rounds.required')).min(1, t('validation.rounds.min', { count: 10 })).max(100, t('validation.rounds.max', { count: 10 })),
+      spotifyPlaylistId: yup.string().required(t('validation.spotifyPlaylist.required')),
+    }),
     async onSubmit(values) {
       await mutateGameOptions.mutateAsync(values);
       router.push(`/game/${gameId}`);
@@ -65,14 +49,13 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   });
 
   const mutateGameOptions = useMutateGameOptions(gameId);
-  const playlistsQuery = useSpotifyPlaylistSearch(gameId, query);
 
-  const setPlaylistIdFn = (spotifyPlaylistId: string) => () => {
-    gameOptionsForm.setValues({
-      ...gameOptionsForm.values,
+  const onPlaylistSelect = useCallback((spotifyPlaylistId: string) => {
+    gameOptionsForm.setValues((oldValues) => ({
+      ...oldValues,
       spotifyPlaylistId,
-    });
-  };
+    }))
+  }, [])
 
   const gameQuery = useGame(gameId, {
     enabled: gameOptionsForm.isSubmitting,
@@ -86,53 +69,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
     >
       <div className="max-w-screen-lg mx-auto px-5 pb-32">
         <h2 className="text-3xl md:text-5xl pt-7">{t("selectPlaylist")}</h2>
-        <div className="flex mt-7">
-          <Input
-            name="query"
-            value={searchForm.values.query}
-            onChange={searchForm.handleChange}
-            onKeyDown={(e) => {
-              if(e.key === 'Enter') {
-                e.preventDefault();
-                searchForm.submitForm()
-              }
-            }}
-          />
-          <button
-            type="button"
-            className="bg-purple-700 p-2 px-4 rounded-lg disabled:opacity-50 ml-2"
-            disabled={!searchForm.isValid}
-            onClick={searchForm.submitForm}
-          >
-            {t("searchPlaylist")}
-          </button>
-        </div>
-        <ul className="mt-4">
-          {queryPresets.map((preset) => (
-            <button
-              type="button"
-              className="p-2 bg-blue-400 font-bold mr-2 mb-2 text-sm rounded-lg transform transition hover:scale-110"
-              onClick={() => setQuery(preset)}
-            >
-              {preset}
-            </button>
-          ))}
-        </ul>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-7">
-          {playlistsQuery.isSuccess &&
-            playlistsQuery.data.playlists.items.map((playlist) => {
-              return (
-                <SpotifyPlaylistTile
-                  selected={
-                    playlist.id === gameOptionsForm.values.spotifyPlaylistId
-                  }
-                  onClick={setPlaylistIdFn(playlist.id)}
-                  playlist={playlist}
-                />
-              );
-            })}
-        </div>
-
+        <PlaylistSelection gameId={gameId} onSelect={onPlaylistSelect} selectedPlaylist={gameOptionsForm.values.spotifyPlaylistId} />
         <h2 className="text-3xl md:text-5xl pt-7">{t("gameOptionsHeadline")}</h2>
         <div className="mt-7">
           <Label>
@@ -151,18 +88,19 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
           <div className="hidden md:block">
             <input
               className="bg-pink-500 p-2 px-4 rounded-lg"
+              readOnly
               value={getGameUrl(gameId)}
             />
           </div>
           <div className="flex justify-end items-center">
-            {gameOptionsForm.isSubmitting && (
-              <span className="hidden md:inline-block text-white opacity-80 mr-2">
-                {t("startGameHint")}
-              </span>
-            )}
+            <span className="hidden md:inline-block text-white opacity-80 mr-4">
+              {gameOptionsForm.isSubmitting && t("startGameHint")}
+              {!gameOptionsForm.isValid && Object.values(gameOptionsForm.errors)[0]}
+            </span>
             <button
+              disabled={!gameOptionsForm.isValid}
               type="submit"
-              className="bg-pink-700 relative px-4 p-2 rounded-lg font-bold disabled:opacity-50 w-full md:w-auto"
+              className={`bg-pink-700 relative px-4 p-2 rounded-lg font-bold disabled:opacity-50 w-full md:w-auto transform transition ${gameOptionsForm.isValid ? 'hover:scale-110' : ''}`}
             >
               <div
                 className={`flex items-center justify-center ${

@@ -50,8 +50,8 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
       try {
         audioRef.current.play();
       } catch (error) {
+        console.log('Error caught during playback', error);
         if (error instanceof Error && error.message) {
-          console.warn('Error caught during playback', error);
           if (error.name === 'NotAllowedError') {
             setPlaybackFailure(true)
           }

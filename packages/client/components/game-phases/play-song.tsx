@@ -153,7 +153,10 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
               {playbackFailure && (
                 <>
                   <div className="flex justify-center">
-                    <button onClick={() => audioRef.current.play()} className="text-3xl text-white bg-pink-600 p-10 rounded-full mb-5 transform transition hover:scale-110">
+                    <button onClick={() => {
+                      audioRef.current.play()
+                      setPlaybackFailure(false)
+                    }} className="text-3xl text-white bg-pink-600 p-10 rounded-full mb-5 transform transition hover:scale-110">
                       <FaPlay />
                     </button>
                   </div>

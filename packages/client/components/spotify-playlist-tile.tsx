@@ -16,8 +16,8 @@ const SpotifyPlaylistTile: FC<SpotifyPlaylistTile> = ({
     <button
       type="button"
       onClick={() => onClick?.(playlist.id)}
-      className={`aspect-w-1 aspect-h-1 rounded-lg overflow-hidden relative transition transform hover:scale-110 border-green-500 ${
-        selected ? "border-4" : "border-0"
+      className={`aspect-w-1 aspect-h-1 rounded-lg overflow-hidden relative transition transform hover:scale-110 ${
+        selected ? "ring-green-500 ring-4" : "ring-transparent ring-0"
       }`}
       key={playlist.id}
     >

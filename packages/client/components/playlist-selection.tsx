@@ -20,6 +20,7 @@ const queryPresets = [
   "copyright free",
 ];
 
+
 const PlaylistSelection: FC<PlaylistSelectionProps> = ({ gameId, onSelect, selectedPlaylist }) => {
   const {t} = useTranslation('gameOptions')
   const [query, setQuery] = useState('')
@@ -34,6 +35,11 @@ const PlaylistSelection: FC<PlaylistSelectionProps> = ({ gameId, onSelect, selec
   useEffect(() => {
     debouncedSetSearchQuery(query)
   }, [query])
+
+  const skeleton = []
+  for (let i = 0; i < 12; i++) {
+    skeleton.push(<div key={i} className="aspect-w-1 aspect-h-1 animate-pulse bg-white bg-opacity-10 rounded-lg" />)
+  }
 
   return <>
     <div className="flex mt-7">
@@ -60,6 +66,7 @@ const PlaylistSelection: FC<PlaylistSelectionProps> = ({ gameId, onSelect, selec
       ))}
     </ul>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-7">
+      {playlistsQuery.isLoading && skeleton}
       {playlistsQuery.isSuccess &&
         playlistsQuery.data.playlists.items.map((playlist) => {
           return (

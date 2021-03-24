@@ -2,7 +2,7 @@ import { Domain, SocketClient } from "@sonq/api";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import useSpotifyTrackSearch from "../../hooks/use-spotify-track-search";
 import Input from "../input";
-import { FaCheck, FaInfo, FaStopwatch, FaTimes } from "react-icons/fa";
+import { FaCheck, FaExclamationTriangle, FaInfo, FaPlay, FaStopwatch, FaTimes } from "react-icons/fa";
 import { debounce } from "lodash";
 import useCountdown from "../../hooks/use-countdown";
 import { useTranslation } from "react-i18next";
@@ -19,6 +19,7 @@ interface PlaySongProps {
 const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   const { t } = useTranslation("game");
   const [canGuess, setCanGuess] = useState(true);
+  const [playbackFailure, setPlaybackFailure] = useState(false);
   const [showSearchHelp, setShowSearchHelp] = useState(
     typeof window !== "undefined" &&
       localStorage.getItem(HIDESONGSEARCHHELP) !== "true"
@@ -46,7 +47,16 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       audioRef.current.volume = volume / 10;
-      audioRef.current.play();
+      try {
+        audioRef.current.play();
+      } catch (error) {
+        if (error instanceof Error && error.message) {
+          console.warn('Error caught during playback', error);
+          if (error.name === 'NotAllowedError') {
+            setPlaybackFailure(true)
+          }
+        }
+      }
     }, phaseData.phaseStart);
     return () => clearTimeout(timeout);
   }, [phaseData.previewUrl]);
@@ -139,6 +149,22 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
                 >
                   {t("playSong.searchSongHelperText")}
                 </Alert>
+              )}
+              {playbackFailure && (
+                <>
+                  <div className="flex justify-center">
+                    <button onClick={() => audioRef.current.play()} className="text-3xl text-white bg-pink-600 p-10 rounded-full mb-5 transform transition hover:scale-110">
+                      <FaPlay />
+                    </button>
+                  </div>
+                  <Alert
+                    type="warning"
+                    icon={<FaExclamationTriangle/>}
+                    className="mb-4"
+                    >
+                    {t("playSong.playbackFailureHelperText")}
+                  </Alert>
+                </>
               )}
               <Input
                 className="w-full"

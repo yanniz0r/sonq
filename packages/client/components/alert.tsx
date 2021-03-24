@@ -3,7 +3,7 @@ import { FaTimes } from "react-icons/fa";
 
 interface AlertProps {
   icon?: ReactNode;
-  type?: "info" | "error";
+  type?: "info" | "error" | "warning";
   className?: string;
   onClose?(): void;
 }
@@ -20,6 +20,9 @@ const Alert: FC<AlertProps> = ({
   switch (type) {
     case "error":
       backgroundColor = "bg-red-500";
+      break;
+    case "warning":
+      backgroundColor = "bg-yellow-500";
       break;
     default:
       backgroundColor = "bg-blue-500";

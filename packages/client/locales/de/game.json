@@ -8,6 +8,7 @@
     "shareText": "Tritt meinem Sonq Spiel bei!"
   },
   "playSong": {
+    "playbackFailureHelperText": "Huch! Es sieht aus als wenn dein Browser Autoplay nicht mag... Leider musst du einmal manuell auf den Butten oben klicken.",
     "cooldown": "Antwortcooldown",
     "roundStartHeadline": "Der Song startet in {{count}} Sekunde",
     "roundStartHeadline_plural": "Der Song startet in {{count}} Sekunden",

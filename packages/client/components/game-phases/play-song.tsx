@@ -45,10 +45,10 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   }, [phaseData.phaseEnd]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    const timeout = setTimeout(async () => {
       audioRef.current.volume = volume / 10;
       try {
-        audioRef.current.play();
+        await audioRef.current.play();
       } catch (error) {
         console.log('Error caught during playback', error);
         if (error instanceof Error && error.message) {
@@ -66,7 +66,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   const debouncedSetSongQuery = useMemo(() => debounce(setSongQuery, 500), [
     setSongQuery,
   ]);
-
+y
   useEffect(() => {
     debouncedSetSongQuery(songQueryInput);
   }, [songQueryInput]);

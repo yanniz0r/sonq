@@ -33,7 +33,32 @@
   "summary": {
     "headline": "And the winner is...",
     "startNextRound": "Start next round",
-    "options": "Change game settings"
+    "options": "Change game settings",
+    "noData": {
+      "headline": "Statistics",
+      "value": "No data",
+      "caption": "We do not have data for this statistic"
+    },
+    "mostEffort": {
+      "headline": "Most effort",
+      "caption": "{{player}} \"only\" missed one time",
+      "caption_plural": "{{player}} \"only\" missed {{count}} times"
+    },
+    "closestCall": {
+      "headline": "Closest call",
+      "caption": "{{player}} answered only {{count}} second before end of the round",
+      "caption_plural": "{{player}} answered only {{count}} seconds before end of the round"
+    },
+    "mostPrecise": {
+      "headline": "Most precise",
+      "caption": "{{player}} submitted only {{count}} wrong guess",
+      "caption_plural": "{{player}} submitted only {{count}} wrong guesses"
+    },
+    "fastestAnswer": {
+      "headline": "Fastest answer",
+      "caption": "{{player}} answered in just {{count}} second",
+      "caption_plural": "{{player}} answered in just {{count}} seconds"
+    }
   },
   "joinGameModalHeadline": "Hello!",
   "joinGameModalJoinButton": "Join",

@@ -13,7 +13,7 @@ class GuessSongHandler implements SocketHandler {
   public event = SocketClient.Events.GuessSong;
 
   handle(session: Session) {
-    return (event: unknown, ack?: SocketClient.GuessSongAck) => {
+    return async (event: unknown, ack?: SocketClient.GuessSongAck) => {
       if (!session.player) {
         logger.error("User not signed in");
         return;
@@ -23,10 +23,10 @@ class GuessSongHandler implements SocketHandler {
         return;
       }
       const guessSongEvent = SocketClient.GuessSongEventSchema.parse(event);
-      const isAnswerCorrect = session.game.checkAnswer(
-        guessSongEvent.songName,
-        guessSongEvent.artistName
-      );
+      const [isAnswerCorrect, songGuess] = await session.game.submitAnswer({
+        ...guessSongEvent,
+        player: session.player
+      })
       if (isAnswerCorrect) {
         const date = new Date();
         logger.debug(
@@ -38,19 +38,7 @@ class GuessSongHandler implements SocketHandler {
         songGuessedCorrectlyEmitter(session.game, session.player);
       } else {
         logger.debug("Player answered incorrectly", session.player.username);
-        session.game.spotify
-          .getTrack(guessSongEvent.spotifyId)
-          .then((track) => {
-            if (!session.player) {
-              logger.error("User not signed in");
-              return;
-            }
-            songGuessedIncorrectlyEmitter(
-              session.game,
-              session.player,
-              track.body
-            );
-          });
+        songGuessedIncorrectlyEmitter(session.game, session.player, songGuess)
       }
       ack?.(isAnswerCorrect);
     };

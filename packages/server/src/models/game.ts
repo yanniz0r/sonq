@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 import { phaseChangeEmitter } from "../socket/emitters/phase-change-emitter";
 import SpotifyPlaylistLoader from "../libraries/spotify-playlist-loader";
 import { v4 } from "uuid";
+import { PlayerStatistic } from "@sonq/api/dist/domain";
 
 const logger = new Logger({ name: "Game" });
 
@@ -24,6 +25,11 @@ class Game {
   @observable
   public score = new ObservableMap<Player, number>();
   public songs: SpotifyApi.TrackObjectFull[] = [];
+
+  public guessedSongs: SpotifyApi.TrackObjectFull[] = [];
+  public wrongAnswerCounter: Map<Player, number> = new ObservableMap()
+  public closestCall?: PlayerStatistic;
+  public fastestAnswer?: PlayerStatistic;
 
   public playlistLoader: SpotifyPlaylistLoader;
   public currentSong?: SpotifyApi.TrackObjectFull;
@@ -95,6 +101,43 @@ class Game {
         }
       }
     );
+  }
+
+  public async submitAnswer(answer: {player: Player, artistName: string, songName: string, spotifyId: string}): Promise<[boolean, SpotifyApi.TrackObjectFull]> {
+    if (
+      this.currentSong &&
+      this.currentSong.name === answer.songName &&
+      answer.artistName === this.currentSong.artists[0].name
+    ) {
+      const timeUntilRoundEnd = dayjs(new Date()).diff(this.phaseStarted, "s");
+      if (!this.closestCall || this.closestCall.value > timeUntilRoundEnd) {
+        this.closestCall = {
+          player: answer.player,
+          value: timeUntilRoundEnd
+        }
+      }
+
+      return [true, this.currentSong];
+    }
+    this.wrongGuesses.push({
+      artistName: answer.artistName,
+      songName: answer.songName,
+    });
+    this.addWrongAnswerToStatistic(answer.player)
+    return this.spotify
+      .getTrack(answer.spotifyId)
+      .then((track) => {
+        return [false, track.body];
+      });
+  }
+
+  private addWrongAnswerToStatistic(player: Player) {
+    const wrongAnswersForPlayer = this.wrongAnswerCounter.get(player);
+    if (!wrongAnswersForPlayer) {
+      this.wrongAnswerCounter.set(player, 1)
+    } else {
+      this.wrongAnswerCounter.set(player, wrongAnswersForPlayer + 1)
+    }
   }
 
   public checkAnswer(songName: string, artistName: string) {
@@ -187,10 +230,32 @@ class Game {
   }
 
   public transitionToSummary() {
+    let mostWrongAnswers: PlayerStatistic | undefined = undefined;
+    let leastWrongAnswers: PlayerStatistic | undefined = undefined;
+    this.wrongAnswerCounter.forEach((wrongAnswers, player) => {
+      if (!mostWrongAnswers || mostWrongAnswers.value < wrongAnswers) {
+        mostWrongAnswers = {
+          player,
+          value: wrongAnswers
+        }
+      }
+      if (!leastWrongAnswers || leastWrongAnswers.value > wrongAnswers) {
+        leastWrongAnswers = {
+          player,
+          value: wrongAnswers
+        }
+      }
+    })
+
     this.phase = {
       type: Domain.GamePhaseType.Summary,
       data: {
+        mostWrongAnswers,
+        leastWrongAnswers,
+        fastestAnswer: this.fastestAnswer,
+        closestCall: this.closestCall,
         answers: this.getReviewAnswers(),
+        songs: this.guessedSongs,
         score: this.getPlayerScores(),
         track: this.currentSong!,
       },
@@ -218,6 +283,7 @@ class Game {
     logger.debug(
       `Playing "${this.currentSong.name}" from "${this.currentSong.artists[0].name}"`
     );
+    this.guessedSongs.push(this.currentSong)
     this.roundsLeft -= 1;
     this.answers.clear();
   }

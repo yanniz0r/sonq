@@ -60,8 +60,19 @@ export interface ReviewGamePhaseData {
   popularityBonus: number;
 }
 
+export interface PlayerStatistic {
+  value: number;
+  player: Player;
+}
+
 export interface SummaryGamePhaseData {
+  closestCall?: PlayerStatistic;
+  mostWrongAnswers?: PlayerStatistic;
+  leastWrongAnswers?: PlayerStatistic;
+  mostPrecise?: PlayerStatistic;
+  fastestAnswer?: PlayerStatistic;
   answers: ReviewGamePhaseAnswer[];
+  songs: SpotifyApi.TrackObjectFull[];
   score: PlayerScore[];
 }
 

@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import LoadingSpinner from "../../../components/loading-spinner";
 import GameSideBar from "../../../components/game-side-bar";
 import GuessBubbles from "../../../components/guess-bubbles";
+import Head from "next/head";
 
 const config = getConfig();
 
@@ -96,6 +97,9 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
 
   return (
     <div className="bg-gray-900">
+      <Head>
+        <title>Sonq - {gameId}</title>
+      </Head>
       {gameQuery.isLoading ? (
         <div className="p-20 flex justify-center text-white">
           <LoadingSpinner />

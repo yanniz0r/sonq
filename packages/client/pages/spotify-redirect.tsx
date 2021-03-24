@@ -6,8 +6,8 @@ import { Rest } from "@sonq/api";
 import { ADMINKEY } from "../constants/local-storage";
 import getConfig from "next/config";
 import { useTranslation } from 'react-i18next'
-import { FaCog } from "react-icons/fa";
 import LoadingSpinner from "../components/loading-spinner";
+import Head from "next/head";
 
 const config = getConfig();
 
@@ -44,6 +44,9 @@ const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-900">
+      <Head>
+        <title>Sonq - {t('creatingGame')}</title>
+      </Head>
       <div className="flex flex-col items-center">
         <div className="text-pink-600 text-6xl mb-12">
           <LoadingSpinner />

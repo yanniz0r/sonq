@@ -1,4 +1,5 @@
 import { NextPage, NextPageContext } from "next";
+import Head from "next/head"
 import { FaCogs, FaGamepad, FaInfo, FaShare, FaSpotify, FaTimes } from "react-icons/fa";
 
 import * as zod from "zod";
@@ -19,6 +20,9 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
   const { t } = useTranslation("landingPage");
   return (
     <div>
+      <Head>
+        <title>Sonq - {t("landing.logoSubtitle")}</title>
+      </Head>
       <div className="bg-gray-900 relative">
         <div className="absolute w-full h-full bg-center bg-fixed bg-cover opacity-20" style={{ backgroundImage: "url('/images/landingpage-header.jpg')" }}/>
         <div className="text-white">

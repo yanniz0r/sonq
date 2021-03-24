@@ -13,6 +13,7 @@ import useGame from "../../../hooks/use-game";
 import useIsAdmin from "../../../hooks/use-is-admin";
 import getGameUrl from "../../../helpers/get-game-url";
 import PlaylistSelection from "../../../components/playlist-selection";
+import Head from "next/head";
 
 interface GameOptionsProps {
   gameId: string;
@@ -88,6 +89,9 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
       className="min-w-screen min-h-screen bg-gray-900 text-white"
       onSubmit={gameOptionsForm.handleSubmit}
     >
+      <Head>
+        <title>Sonq - {gameId}</title>
+      </Head>
       <div className="max-w-screen-lg mx-auto px-5 pb-32">
         <h2 className="text-3xl md:text-5xl pt-7">{t("selectPlaylist")}</h2>
         <PlaylistSelection gameId={gameId} onSelect={onPlaylistSelect} selectedPlaylist={gameOptionsForm.values.spotifyPlaylistId} />

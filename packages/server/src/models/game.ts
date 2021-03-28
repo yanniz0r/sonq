@@ -203,6 +203,10 @@ class Game {
     return playerScores;
   }
 
+  private getWrongAnswersForPlayer(player: Player) {
+    return this.wrongAnswerCounter.get(player) ?? 0;
+  }
+
   public transitionToReviewPhase() {
     if (this.phase.type !== Domain.GamePhaseType.PlaySong) {
       logger.error(
@@ -238,7 +242,8 @@ class Game {
   public transitionToSummary() {
     let mostWrongAnswers: PlayerStatistic | undefined = undefined;
     let leastWrongAnswers: PlayerStatistic | undefined = undefined;
-    this.wrongAnswerCounter.forEach((wrongAnswers, player) => {
+    this.players.forEach((player) => {
+      const wrongAnswers = this.getWrongAnswersForPlayer(player);
       if (!mostWrongAnswers || mostWrongAnswers.value < wrongAnswers) {
         mostWrongAnswers = {
           player,

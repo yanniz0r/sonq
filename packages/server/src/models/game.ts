@@ -109,7 +109,7 @@ class Game {
       this.currentSong.name === answer.songName &&
       answer.artistName === this.currentSong.artists[0].name
     ) {
-      const timeUntilRoundEnd = dayjs(new Date()).diff(this.phaseStarted, "s");
+      const timeUntilRoundEnd = (this.playSongTime / 1000) - dayjs(new Date()).diff(this.phaseStarted, "s");
       const answerTime = (this.playSongTime / 1000) - timeUntilRoundEnd;
       if (!this.closestCall || this.closestCall.value > timeUntilRoundEnd) {
         this.closestCall = {

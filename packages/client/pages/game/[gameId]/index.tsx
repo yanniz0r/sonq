@@ -11,12 +11,17 @@ import Review from "../../../components/game-phases/review";
 import Summary from "../../../components/game-phases/summary";
 import { ADMINKEY } from "../../../constants/local-storage";
 import getConfig from "next/config";
-import VolumeControl from "../../../components/volume-control";
 import { useRouter } from "next/router";
 import LoadingSpinner from "../../../components/loading-spinner";
 import GameSideBar from "../../../components/game-side-bar";
 import GuessBubbles from "../../../components/guess-bubbles";
 import Head from "next/head";
+import { Toolbar } from "../../../components/toolbar";
+import useIsAdmin from "../../../hooks/use-is-admin";
+import { useTranslation } from "react-i18next";
+import { GamePhaseType } from "@sonq/api/dist/domain";
+import Link from "next/link";
+import getGameUrl from "../../../helpers/get-game-url";
 
 const config = getConfig();
 
@@ -25,7 +30,9 @@ interface GamePageProps {
 }
 
 const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
+  const {t} = useTranslation('game');
   const [volume, setVolume] = useState(5);
+  const isAdmin = useIsAdmin(gameId)
   const [joinedGame, setJoinedGame] = useState(false);
   const router = useRouter();
   const gameQuery = useGame(gameId, {
@@ -64,6 +71,10 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
       },
     });
   }, [gameId]);
+
+  const continueGame = useCallback(() => {
+    io.emit(SocketClient.Events.Continue)
+  }, [io])
 
   useOn(
     io,
@@ -105,38 +116,70 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="flex min-h-screen">
+        <div className="flex h-screen">
           <GameSideBar
             players={players}
             setVolume={setVolume}
             io={io}
             phase={gamePhase.type}
           />
-          <div className="flex-grow relative">
+          <div className="flex flex-col flex-grow max-h-full relative">
             <GuessBubbles io={io} />
             <JoinGameModal open={!joinedGame} onJoin={joinGame} />
             {/* {gamePhase.type !== Domain.GamePhaseType.Lobby &&
               <Players players={players} io={io} phase={gamePhase.type} />
             } */}
-            <div className="max-w-screen-lg mx-auto relative z-10">
-              {gamePhase.type === Domain.GamePhaseType.Lobby && (
-                <Lobby io={io} gameId={gameId} players={players} />
-              )}
-              {gamePhase.type === Domain.GamePhaseType.PlaySong && (
-                <PlaySong
-                  volume={volume}
-                  io={io}
-                  phaseData={gamePhase.data}
-                  gameId={gameId}
-                />
-              )}
-              {gamePhase.type === Domain.GamePhaseType.Review && (
-                <Review io={io} phaseData={gamePhase.data} gameId={gameId} />
-              )}
-              {gamePhase.type === Domain.GamePhaseType.Summary && (
-                <Summary io={io} gameId={gameId} phaseData={gamePhase.data} />
-              )}
+            <div className="flex-grow overflow-y-auto relative z-10">
+              <div className="max-w-screen-lg mx-auto">
+                {gamePhase.type === Domain.GamePhaseType.Lobby && (
+                  <Lobby io={io} gameId={gameId} players={players} />
+                )}
+                {gamePhase.type === Domain.GamePhaseType.PlaySong && (
+                  <PlaySong
+                    volume={volume}
+                    io={io}
+                    phaseData={gamePhase.data}
+                    gameId={gameId}
+                  />
+                )}
+                {gamePhase.type === Domain.GamePhaseType.Review && (
+                  <Review io={io} phaseData={gamePhase.data} gameId={gameId} />
+                )}
+                {gamePhase.type === Domain.GamePhaseType.Summary && (
+                  <Summary io={io} gameId={gameId} phaseData={gamePhase.data} />
+                )}
+              </div>
             </div>
+            {isAdmin && gamePhase.type !== GamePhaseType.PlaySong &&
+              <div className="z-10">
+                <Toolbar>
+                  <div className="flex justify-between">
+                    {gamePhase.type === GamePhaseType.Lobby &&
+                      <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                        {t('toolbar.startGame')}
+                      </button>
+                    }
+                    {gamePhase.type === GamePhaseType.Review &&
+                      <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                        {t('toolbar.nextRound')}
+                      </button>
+                    }
+                    {gamePhase.type === GamePhaseType.Summary &&
+                      <>
+                        <Link href={getGameUrl(gameId) + '/options'} passHref>
+                          <a onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                            {t('toolbar.settings')}
+                          </a>
+                        </Link>
+                        <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                          {t('toolbar.startAgain')}
+                        </button>
+                      </>
+                    }
+                  </div>
+                </Toolbar>
+              </div>
+            }
           </div>
         </div>
       )}

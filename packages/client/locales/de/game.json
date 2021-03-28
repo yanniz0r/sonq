@@ -1,6 +1,5 @@
 {
   "lobby": {
-    "startGame": "Spiel starten",
     "waitingForPlayers": "Warte auf Spieler",
     "waitingForGameStart": "Warte auf Spielstart...",
     "copied": "Beitrittslink kopiert!",
@@ -27,13 +26,18 @@
     "headline": "Rundenergebnisse",
     "popularityBonusDescriptionLow": "Wow, {{trackName}} scheint wirklich unbekannt zu sein. Wir belohnen dein Wissen mit einem Bonus von {{bonus}}!",
     "popularityBonusDescriptionHigh": "{{trackName}} ist ziemlich Mainstream. Dafür gibt es nur {{bonus}} der Punkte.",
-    "popularityBonusDescriptionAverage": "{{trackName}} ist ein durchschnittlich populärer Song. Wir vergeben für den Track {{bonus}} der Punkte.",
-    "nextRound": "Nächste Runde"
+    "popularityBonusDescriptionAverage": "{{trackName}} ist ein durchschnittlich populärer Song. Wir vergeben für den Track {{bonus}} der Punkte."
   },
   "summary": {
     "headline": "Das Ergebnis steht fest...",
     "startNextRound": "Nächste Runde starten",
     "options": "Spieleinstellungen ändern"
+  },
+  "toolbar": {
+    "startGame": "Spiel starten",
+    "nextRound": "Nächste Runde starten",
+    "settings": "Einstellungen ändern",
+    "startAgain": "Neues Spiel starten"
   },
   "joinGameModalHeadline": "Hallo!",
   "joinGameModalJoinButton": "Beitreten",

@@ -14,6 +14,7 @@ import useIsAdmin from "../../../hooks/use-is-admin";
 import getGameUrl from "../../../helpers/get-game-url";
 import PlaylistSelection from "../../../components/playlist-selection";
 import Head from "next/head";
+import { Toolbar } from "../../../components/toolbar";
 
 interface GameOptionsProps {
   gameId: string;
@@ -108,58 +109,60 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
           </Label>
         </div>
       </div>
-      <div className="fixed bg-pink-600 text-white w-full p-5 shadow-xl bottom-0">
-        <div className="mx-auto max-w-screen-lg grid grid-cols-1 md:grid-cols-2 grid-gap-10 px-5">
-          <div className="hidden md:block">
-          <div>
-            <div className="overflow-hidden rounded-lg transform transition hover:scale-110 relative inline-flex flex-col items-center">
+      <div className="fixed bottom-0 w-full">
+        <Toolbar>
+          <div className="mx-auto max-w-screen-lg grid grid-cols-1 md:grid-cols-2 grid-gap-10 px-5">
+            <div className="hidden md:block">
+            <div>
+              <div className="overflow-hidden rounded-lg transform transition hover:scale-110 relative inline-flex flex-col items-center">
+                <button
+                  onClick={copyGameLink}
+                  type="button"
+                  className="px-3 py-2 text-lg bg-pink-500 text-white rounded-lg"
+                >
+                  {getGameUrl(gameId)}
+                </button>
+                {justCopied && (
+                  <div className="absolute bg-pink-700 text-white font-bold h-full w-full flex justify-center items-center">
+                    {t("game:copied")}
+                  </div>
+                )}
+              </div>
+            </div>
+            </div>
+            <div className="flex justify-end items-center">
+              <span className="hidden md:inline-block text-white opacity-80 mr-4">
+                {gameOptionsForm.isSubmitting && t("startGameHint")}
+                {!gameOptionsForm.isValid && Object.values(gameOptionsForm.errors)[0]}
+              </span>
               <button
-                onClick={copyGameLink}
-                type="button"
-                className="px-3 py-2 text-lg bg-pink-500 text-white rounded-lg"
+                disabled={!gameOptionsForm.isValid}
+                type="submit"
+                className={`bg-pink-700 relative px-4 p-2 rounded-lg font-bold disabled:opacity-50 w-full md:w-auto transform transition ${gameOptionsForm.isValid ? 'hover:scale-110' : ''}`}
               >
-                {getGameUrl(gameId)}
-              </button>
-              {justCopied && (
-                <div className="absolute bg-pink-700 text-white font-bold h-full w-full flex justify-center items-center">
-                  {t("game:copied")}
+                <div
+                  className={`flex items-center justify-center ${
+                    gameOptionsForm.isSubmitting ? "opacity-0" : "opacity-100"
+                  }`}
+                >
+                  <FaGamepad className="mr-2" />
+                  {t("startGame")}
                 </div>
-              )}
+                {gameOptionsForm.isSubmitting && (
+                  <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
+                    <LoadingSpinner />
+                    <span className="ml-2">
+                      {Math.round(
+                        (gameQuery.data?.playlistDataDownloadProgress ?? 0) * 100
+                      )}
+                      %
+                    </span>
+                  </div>
+                )}
+              </button>
             </div>
           </div>
-          </div>
-          <div className="flex justify-end items-center">
-            <span className="hidden md:inline-block text-white opacity-80 mr-4">
-              {gameOptionsForm.isSubmitting && t("startGameHint")}
-              {!gameOptionsForm.isValid && Object.values(gameOptionsForm.errors)[0]}
-            </span>
-            <button
-              disabled={!gameOptionsForm.isValid}
-              type="submit"
-              className={`bg-pink-700 relative px-4 p-2 rounded-lg font-bold disabled:opacity-50 w-full md:w-auto transform transition ${gameOptionsForm.isValid ? 'hover:scale-110' : ''}`}
-            >
-              <div
-                className={`flex items-center justify-center ${
-                  gameOptionsForm.isSubmitting ? "opacity-0" : "opacity-100"
-                }`}
-              >
-                <FaGamepad className="mr-2" />
-                {t("startGame")}
-              </div>
-              {gameOptionsForm.isSubmitting && (
-                <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
-                  <LoadingSpinner />
-                  <span className="ml-2">
-                    {Math.round(
-                      (gameQuery.data?.playlistDataDownloadProgress ?? 0) * 100
-                    )}
-                    %
-                  </span>
-                </div>
-              )}
-            </button>
-          </div>
-        </div>
+        </Toolbar>
       </div>
     </form>
   );

@@ -110,13 +110,19 @@ class Game {
       answer.artistName === this.currentSong.artists[0].name
     ) {
       const timeUntilRoundEnd = dayjs(new Date()).diff(this.phaseStarted, "s");
+      const answerTime = (this.playSongTime / 1000) - timeUntilRoundEnd;
       if (!this.closestCall || this.closestCall.value > timeUntilRoundEnd) {
         this.closestCall = {
           player: answer.player,
           value: timeUntilRoundEnd
         }
       }
-
+      if (!this.fastestAnswer || this.fastestAnswer.value > answerTime) {
+        this.fastestAnswer = {
+          player: answer.player,
+          value: answerTime,
+        }
+      }
       return [true, this.currentSong];
     }
     this.wrongGuesses.push({

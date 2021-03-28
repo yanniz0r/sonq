@@ -130,7 +130,7 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
               <Players players={players} io={io} phase={gamePhase.type} />
             } */}
             <div className="flex-grow overflow-y-auto relative z-10">
-              <div className="max-w-screen-lg mx-auto">
+              <div className="max-w-screen-lg mx-auto h-full">
                 {gamePhase.type === Domain.GamePhaseType.Lobby && (
                   <Lobby io={io} gameId={gameId} players={players} />
                 )}

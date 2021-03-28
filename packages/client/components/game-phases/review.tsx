@@ -49,17 +49,10 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
           <h2 className="text-2xl text-white font-bold">
             {t("review.scoresHeadline")}
           </h2>
-          <div className="flex-grow">
-            <PlayerScores
-              scores={phaseData.score}
-              answers={phaseData.answers}
-            />
-          </div>
-          {isAdmin && (
-            <Button onClick={continueGame} className="block w-full">
-              {t("review.nextRound")}
-            </Button>
-          )}
+          <PlayerScores
+            scores={phaseData.score}
+            answers={phaseData.answers}
+          />
         </div>
         <div className="rounded-xl overflow-hidden shadow-xl order-2">
           <img src={phaseData.track.album.images[0].url} />

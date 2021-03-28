@@ -56,8 +56,8 @@ const Summary: FC<SummaryProps> = ({ io, phaseData, gameId }) => {
           ))}
         </table>
       </Modal>
-      <div className="p-5">
-        <h1 className="text-3xl font-bold text-gray-200">
+      <div className="p-5 md:py-10">
+        <h1 className="text-gray-200 text-3xl md:text-5xl font-bold mb-10">
           {t("summary.headline")}
         </h1>
         <div className="grid grid-cols-3 grid-rows-4 gap-7">

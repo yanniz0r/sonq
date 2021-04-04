@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 
 export const BasePane: FC = ({ children }) => {
-  return <div className="bg-black bg-opacity-20 aspect-w-1 aspect-h-1 rounded-xl overflow-hidden">
+  return <div className="bg-black bg-opacity-20 h-full w-full rounded-xl overflow-hidden">
     {children}
   </div>
 }
@@ -12,12 +12,17 @@ interface DetailPaneProps {
   tertiaryText: string;
 }
 
-export const DetailPane: FC<DetailPaneProps> = ({primaryText, secondaryText, tertiaryText}) => {
+export const DetailPane: FC<DetailPaneProps> = ({primaryText, secondaryText, tertiaryText, children}) => {
   return <BasePane>
-    <div className="p-10 flex flex-col justify-center">
+    <div className="p-10 w-full h-full flex flex-col justify-center">
       <span className="text-gray-300 text-xl font-bold">{secondaryText}</span>
       <h2 className="text-4xl break-words font-extrabold mb text-pink-600 my-2 line-clamp-3">{primaryText}</h2>
       <p className="text-gray-400 text-xs">{tertiaryText}</p>
+      {children && 
+        <div>
+          {children}
+        </div>
+      }
     </div>
   </BasePane>
 }

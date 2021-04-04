@@ -43,13 +43,13 @@ const GameSideBar: FC<GameSideBarProps> = ({
       <ul className="flex-grow">
         {players.map((player) => {
           return (
-            <li className="flex p-5 py-2">
-              <div className="bg-purple-600 w-12 h-12 flex items-center justify-center rounded-full font-bold text-white">
+            <li className="flex p-5 py-2 items-center flex-nowrap">
+              <div className="flex-shrink-0 bg-purple-600 w-12 h-12 flex items-center justify-center rounded-full font-bold text-white">
                 {player.username[0].toUpperCase()}
               </div>
-              <div className="ml-4 flex flex-col justify-center">
+              <div className="ml-2 flex-grow">
                 <span
-                  className={`block px-2 py-1 rounded-lg font-bold ${
+                  className={`block px-2 py-1 rounded-lg font-bold break-all line-clamp-1 ${
                     playerAnswers.includes(player.id)
                       ? "bg-green-500 text-white"
                       : "text-gray-200"

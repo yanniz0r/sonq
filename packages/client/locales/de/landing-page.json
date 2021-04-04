@@ -3,9 +3,9 @@
     "gameNotFound": "Das Spiel nach dem du suchst konnte nicht gefunden werden."
   },
   "landing": {
-    "logoSubtitle": "Interaktives Song raten",
-    "slogan": "Song Raten in Modern",
-    "spotifyLogin": "Einloggen um zu beginnen!"
+    "headline": "Wie gut kennst du deinen lieblings Musik?",
+    "content": "Fordere deine Freunde bei einem interaktiven Songratequiz heraus. Komplett angetrieben von Spotify.",
+    "spotifyLogin": "Mit Spotify starten!"
   },
   "divider": {
     "title": "Wie gut kennst du dich mit bekannten Songs aus?",

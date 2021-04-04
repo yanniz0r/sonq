@@ -6,6 +6,7 @@ import * as zod from "zod";
 import Alert from "../components/alert";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import Container from "../components/container";
 
 interface HomePageProps {
   error?: string;
@@ -24,7 +25,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
         <title>Sonq - {t("landing.logoSubtitle")}</title>
       </Head>
       <div className="bg-gray-900 relative">
-        <div className="absolute w-full h-full bg-center bg-fixed bg-cover opacity-20" style={{ backgroundImage: "url('/images/landingpage-header.jpg')" }}/>
+        <div className="absolute w-full h-full bg-center bg-fixed bg-cover opacity-10" style={{ backgroundImage: "url('/images/landingpage-header.jpg')" }}/>
         <div className="text-white">
           <div className="flex">
             <div className="p-5">
@@ -51,20 +52,26 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
           </div>
         )}
 
-        <div className="flex py-52 px-5 md:py-80 flex-col items-center justify-center relative">
-          <div className="flex flex-col items-center">
-            <h1 className="text-6xl text-gray-200">
-              {t("landing.slogan")}
-            </h1>
-            <a
-              href="/api/spotify-login"
-              style={{ background: "#1DD05D" }}
-              className="text-white p-4 px-5 inline-flex items-center font-bold rounded-full mt-10 transform transition hover:scale-110"
-            >
-              <FaSpotify className="mr-2 text-xl" />
-              {t("landing.spotifyLogin")}
-            </a>
-          </div>
+        <div className="py-48 px-5 md:py-60 relative">
+          <Container>
+            <div className="grid grid-cols-1 gap-7 md:grid-cols-2 items-center">
+              <div>
+                <h1 className="text-5xl text-pink-600 font-bold leading-none">{t('landing.headline')}</h1>
+                <p className="mt-5 text-gray-200 text-xl">{t('landing.content')}</p>
+                <a
+                  href="/api/spotify-login"
+                  style={{ background: "#1DD05D" }}
+                  className="text-white p-4 px-5 inline-flex items-center font-bold rounded-full mt-10 transform transition hover:scale-110"
+                >
+                  <FaSpotify className="mr-2 text-xl" />
+                  {t("landing.spotifyLogin")}
+                </a>
+              </div>
+              <div className="hidden md:block">
+                <img src="/images/game-mockup.png" />
+              </div>
+            </div>
+          </Container>
         </div>
       </div>
       <div className="bg-pink-600 px-5 py-10 md:py-20 text-white">

@@ -31,7 +31,32 @@
   "summary": {
     "headline": "Das Ergebnis steht fest...",
     "startNextRound": "Nächste Runde starten",
-    "options": "Spieleinstellungen ändern"
+    "options": "Spieleinstellungen ändern",
+    "noData": {
+      "headline": "Statistik",
+      "value": "Keine Daten",
+      "caption": "Wir haben nicht genug Informationen für diese Statistik"
+    },
+    "mostEffort": {
+      "headline": "Stets bemüht",
+      "caption": "{{player}} lag \"nur\" einmal daneben",
+      "caption_plural": "{{player}} lag \"nur\" {{count}} mal daneben"
+    },
+    "closestCall": {
+      "headline": "Knappe Kiste",
+      "caption": "{{player}} antwortete nur eine Sekunde vor Rundenende",
+      "caption_plural": "{{player}} antwortete {{count}} Sekunden vor Rundenende"
+    },
+    "mostPrecise": {
+      "headline": "Höchste Präzision",
+      "caption": "{{player}} antworte einmal falsch",
+      "caption_plural": "{{player}} antwortete {{count}} mal falsch"
+    },
+    "fastestAnswer": {
+      "headline": "Schnellste Antwort",
+      "caption": "{{player}} antwortete in nur einer Sekunde",
+      "caption_plural": "{{player}} antwortete in nur {{count}} Sekunden"
+    }
   },
   "toolbar": {
     "startGame": "Spiel starten",

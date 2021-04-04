@@ -19,7 +19,9 @@ class SpotifyCache {
   static getInstance(): SpotifyCache {
     if (!SpotifyCache.instance) {
       try {
-        const redisClient = createClient()
+        const redisClient = createClient({
+          url: process.env.REDIS_URL ?? 'redis://localhost:6379'
+        })
         SpotifyCache.instance = new SpotifyCache(redisClient)
       } catch(e) {
         if (!SpotifyCache.loggedMissingRedis) {

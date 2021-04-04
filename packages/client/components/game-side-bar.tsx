@@ -47,7 +47,7 @@ const GameSideBar: FC<GameSideBarProps> = ({
               <div className="flex-shrink-0 bg-purple-600 w-12 h-12 flex items-center justify-center rounded-full font-bold text-white">
                 {player.username[0].toUpperCase()}
               </div>
-              <div className="ml-2 flex-grow">
+              <div className="ml-2">
                 <span
                   className={`inline-block px-2 py-1 rounded-lg font-bold break-all line-clamp-1 ${
                     playerAnswers.includes(player.id)

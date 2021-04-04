@@ -298,6 +298,21 @@ class Game {
     this.roundsLeft -= 1;
     this.answers.clear();
   }
+
+  public transitionToLobby() {
+    this.wrongAnswerCounter.clear()
+    this.currentSong = undefined
+    this.phase = {
+      type: Domain.GamePhaseType.Lobby,
+      data: undefined,
+    }
+    this.answers.clear()
+    this.closestCall = undefined
+    this.fastestAnswer = undefined
+    this.roundsLeft = this.options.rounds ?? 15
+    this.score.clear()
+  }
+
 }
 
 export default Game;

@@ -167,7 +167,7 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
                   {gamePhase.type === GamePhaseType.Summary &&
                     <div className="flex justify-between">
                       <Link href={getGameUrl(gameId) + '/options'}>
-                        <ToolbarButton onClick={continueGame}>
+                        <ToolbarButton>
                           {t('toolbar.settings')}
                         </ToolbarButton>
                       </Link>

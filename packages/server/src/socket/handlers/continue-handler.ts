@@ -25,6 +25,8 @@ class ContinueHandler implements SocketHandler {
         } else {
           game.transitionToSummary();
         }
+      }else if (game.phase.type === Domain.GamePhaseType.Summary) {
+        game.transitionToLobby()
       }
     };
   }

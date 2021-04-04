@@ -1,5 +1,6 @@
 import SpotifyWebApi from "spotify-web-api-node";
 import { Logger } from "tslog";
+import SpotifyCache from "./spotify-cache";
 
 const logger = new Logger({ name: "SpotifyPlaylistLoader" });
 
@@ -9,6 +10,12 @@ class SpotifyPlaylistLoader {
   constructor(private spotify: SpotifyWebApi) {}
 
   async load(playlistId: string) {
+    const cachedTracks = await SpotifyCache.getInstance().getPlaylistTracks(playlistId)
+
+    if (cachedTracks) {
+      return cachedTracks
+    }
+
     this.progress = 0;
     const songs: SpotifyApi.TrackObjectFull[] = [];
     const limit = 20;
@@ -40,6 +47,9 @@ class SpotifyPlaylistLoader {
         logger.debug("Loaded tracks", limit, offset);
         offset += limit;
       } while (!loaded);
+
+      await SpotifyCache.getInstance().setPlaylistTracks(playlistId, songs)
+
       return songs;
     } catch (e) {
       logger.error(

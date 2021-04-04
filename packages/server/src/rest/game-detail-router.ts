@@ -5,6 +5,7 @@ import * as zod from "zod";
 import { Domain, Rest } from "@sonq/api";
 import Game from "../models/game";
 import SpotifyPlaylistLoader from "../libraries/spotify-playlist-loader";
+import SpotifyCache from "../libraries/spotify-cache";
 
 const ParamsSchema = zod.object({
   gameId: zod.string(),
@@ -88,11 +89,16 @@ class GameDetailRouter {
     const QuerySchema = zod.object({
       query: zod.string(),
     });
-    const query = QuerySchema.parse(request.query);
+    const {query} = QuerySchema.parse(request.query);
 
-    const tracks = await this.game.spotify.searchTracks(query.query, {
+    const cachedResult = await SpotifyCache.getInstance().getSearchTracks(this.game.id, query)
+    if (cachedResult) {
+      return cachedResult
+    }
+    const tracks = await this.game.spotify.searchTracks(query, {
       limit: 4,
     });
+    SpotifyCache.getInstance().setSearchTracks(this.game.id, query, tracks.body)
     response.status(200).json(tracks.body);
   };
 

@@ -16,7 +16,7 @@ import LoadingSpinner from "../../../components/loading-spinner";
 import GameSideBar from "../../../components/game-side-bar";
 import GuessBubbles from "../../../components/guess-bubbles";
 import Head from "next/head";
-import { Toolbar } from "../../../components/toolbar";
+import { Toolbar, ToolbarButton } from "../../../components/toolbar";
 import useIsAdmin from "../../../hooks/use-is-admin";
 import { useTranslation } from "react-i18next";
 import { GamePhaseType } from "@sonq/api/dist/domain";
@@ -155,25 +155,25 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
               <div className="z-10">
                 <Toolbar>
                   {gamePhase.type === GamePhaseType.Lobby &&
-                    <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                    <ToolbarButton onClick={continueGame}>
                       {t('toolbar.startGame')}
-                    </button>
+                    </ToolbarButton>
                   }
                   {gamePhase.type === GamePhaseType.Review &&
-                    <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                    <ToolbarButton onClick={continueGame}>
                       {t('toolbar.nextRound')}
-                    </button>
+                    </ToolbarButton>
                   }
                   {gamePhase.type === GamePhaseType.Summary &&
                     <div className="flex justify-between">
-                      <Link href={getGameUrl(gameId) + '/options'} passHref>
-                        <a onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                      <Link href={getGameUrl(gameId) + '/options'}>
+                        <ToolbarButton onClick={continueGame}>
                           {t('toolbar.settings')}
-                        </a>
+                        </ToolbarButton>
                       </Link>
-                      <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                      <ToolbarButton onClick={continueGame}>
                         {t('toolbar.startAgain')}
-                      </button>
+                      </ToolbarButton>
                     </div>
                   }
                 </Toolbar>

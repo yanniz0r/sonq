@@ -14,7 +14,7 @@ import useIsAdmin from "../../../hooks/use-is-admin";
 import getGameUrl from "../../../helpers/get-game-url";
 import PlaylistSelection from "../../../components/playlist-selection";
 import Head from "next/head";
-import { Toolbar } from "../../../components/toolbar";
+import { Toolbar, ToolbarButton } from "../../../components/toolbar";
 import Container from "../../../components/container";
 
 interface GameOptionsProps {
@@ -88,7 +88,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
 
   return (
     <form
-      className="min-w-screen min-h-screen bg-gray-900 text-white"
+      className="min-w-screen min-h-screen bg-gray-900 text-white pb-36"
       onSubmit={gameOptionsForm.handleSubmit}
     >
       <Head>
@@ -136,31 +136,14 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
                 {gameOptionsForm.isSubmitting && t("startGameHint")}
                 {!gameOptionsForm.isValid && Object.values(gameOptionsForm.errors)[0]}
               </span>
-              <button
-                disabled={!gameOptionsForm.isValid}
-                type="submit"
-                className={`bg-pink-700 relative px-4 p-2 rounded-lg font-bold disabled:opacity-50 w-full md:w-auto transform transition ${gameOptionsForm.isValid ? 'hover:scale-110' : ''}`}
+              <ToolbarButton
+                loadingText={`${Math.round((gameQuery.data?.playlistDataDownloadProgress ?? 0) * 100)}%`}
+                loading={gameOptionsForm.isSubmitting}
+                disableHover={!gameOptionsForm.isValid}
+                icon={<FaGamepad className="mr-2" />}
               >
-                <div
-                  className={`flex items-center justify-center ${
-                    gameOptionsForm.isSubmitting ? "opacity-0" : "opacity-100"
-                  }`}
-                >
-                  <FaGamepad className="mr-2" />
-                  {t("startGame")}
-                </div>
-                {gameOptionsForm.isSubmitting && (
-                  <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
-                    <LoadingSpinner />
-                    <span className="ml-2">
-                      {Math.round(
-                        (gameQuery.data?.playlistDataDownloadProgress ?? 0) * 100
-                      )}
-                      %
-                    </span>
-                  </div>
-                )}
-              </button>
+                {t("startGame")}
+              </ToolbarButton>
             </div>
           </div>
         </Toolbar>

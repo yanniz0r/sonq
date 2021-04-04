@@ -49,7 +49,7 @@ const GameSideBar: FC<GameSideBarProps> = ({
               </div>
               <div className="ml-2 flex-grow">
                 <span
-                  className={`block px-2 py-1 rounded-lg font-bold break-all line-clamp-1 ${
+                  className={`inline-block px-2 py-1 rounded-lg font-bold break-all line-clamp-1 ${
                     playerAnswers.includes(player.id)
                       ? "bg-green-500 text-white"
                       : "text-gray-200"

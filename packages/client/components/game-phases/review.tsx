@@ -40,7 +40,7 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
   }
 
   return (
-    <div className="py-20 px-5">
+    <div className="py-20">
       <h1 className="text-gray-200 text-3xl md:text-5xl font-bold mb-10">
         {t("review.headline")}
       </h1>

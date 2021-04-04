@@ -15,6 +15,7 @@ import getGameUrl from "../../../helpers/get-game-url";
 import PlaylistSelection from "../../../components/playlist-selection";
 import Head from "next/head";
 import { Toolbar } from "../../../components/toolbar";
+import Container from "../../../components/container";
 
 interface GameOptionsProps {
   gameId: string;
@@ -93,7 +94,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
       <Head>
         <title>Sonq - {gameId}</title>
       </Head>
-      <div className="max-w-screen-lg mx-auto px-5 pb-32">
+      <Container>
         <h2 className="text-3xl md:text-5xl pt-7">{t("selectPlaylist")}</h2>
         <PlaylistSelection gameId={gameId} onSelect={onPlaylistSelect} selectedPlaylist={gameOptionsForm.values.spotifyPlaylistId} />
         <h2 className="text-3xl md:text-5xl pt-7">{t("gameOptionsHeadline")}</h2>
@@ -108,10 +109,10 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
             />
           </Label>
         </div>
-      </div>
+      </Container>
       <div className="fixed bottom-0 w-full">
         <Toolbar>
-          <div className="mx-auto max-w-screen-lg grid grid-cols-1 md:grid-cols-2 grid-gap-10 px-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 grid-gap-10">
             <div className="hidden md:block">
             <div>
               <div className="overflow-hidden rounded-lg transform transition hover:scale-110 relative inline-flex flex-col items-center">

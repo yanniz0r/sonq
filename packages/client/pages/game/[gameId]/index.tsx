@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next";
 import { GamePhaseType } from "@sonq/api/dist/domain";
 import Link from "next/link";
 import getGameUrl from "../../../helpers/get-game-url";
+import Container from "../../../components/container";
 
 const config = getConfig();
 
@@ -130,7 +131,7 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
               <Players players={players} io={io} phase={gamePhase.type} />
             } */}
             <div className="flex-grow overflow-y-auto relative z-10">
-              <div className="max-w-screen-lg mx-auto h-full">
+              <Container>
                 {gamePhase.type === Domain.GamePhaseType.Lobby && (
                   <Lobby io={io} gameId={gameId} players={players} />
                 )}
@@ -148,35 +149,33 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
                 {gamePhase.type === Domain.GamePhaseType.Summary && (
                   <Summary io={io} gameId={gameId} phaseData={gamePhase.data} />
                 )}
-              </div>
+              </Container>
             </div>
             {isAdmin && gamePhase.type !== GamePhaseType.PlaySong &&
               <div className="z-10">
                 <Toolbar>
-                  <div className="flex justify-between">
-                    {gamePhase.type === GamePhaseType.Lobby &&
+                  {gamePhase.type === GamePhaseType.Lobby &&
+                    <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                      {t('toolbar.startGame')}
+                    </button>
+                  }
+                  {gamePhase.type === GamePhaseType.Review &&
+                    <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                      {t('toolbar.nextRound')}
+                    </button>
+                  }
+                  {gamePhase.type === GamePhaseType.Summary &&
+                    <div className="flex justify-between">
+                      <Link href={getGameUrl(gameId) + '/options'} passHref>
+                        <a onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
+                          {t('toolbar.settings')}
+                        </a>
+                      </Link>
                       <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
-                        {t('toolbar.startGame')}
+                        {t('toolbar.startAgain')}
                       </button>
-                    }
-                    {gamePhase.type === GamePhaseType.Review &&
-                      <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
-                        {t('toolbar.nextRound')}
-                      </button>
-                    }
-                    {gamePhase.type === GamePhaseType.Summary &&
-                      <>
-                        <Link href={getGameUrl(gameId) + '/options'} passHref>
-                          <a onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
-                            {t('toolbar.settings')}
-                          </a>
-                        </Link>
-                        <button onClick={continueGame} className="bg-pink-700 px-3 py-2 text-white rounded-lg font-bold">
-                          {t('toolbar.startAgain')}
-                        </button>
-                      </>
-                    }
-                  </div>
+                    </div>
+                  }
                 </Toolbar>
               </div>
             }

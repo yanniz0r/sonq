@@ -3,12 +3,9 @@ import { FC, useCallback, useState } from "react";
 import PlayerScores from "../player-scores";
 import { useTranslation } from "react-i18next";
 import useIsAdmin from "../../hooks/use-is-admin";
-import Link from "next/link";
-import { BasePane, DetailPane, PaneButton, PlaylistPane } from "../grid";
-import { FaCogs, FaPlay, FaSpotify } from "react-icons/fa";
+import { BasePane, DetailPane, PlaylistPane } from "../grid";
+import { FaSpotify } from "react-icons/fa";
 import Modal from "../modal";
-import { Button } from "../button";
-import { Toolbar } from "../toolbar";
 
 interface SummaryProps {
   io: SocketIOClient.Socket;

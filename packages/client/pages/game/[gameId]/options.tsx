@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaGamepad } from "react-icons/fa";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
@@ -27,6 +27,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const isAdmin = useIsAdmin(gameId);
   const { t } = useTranslation("gameOptions");
   const router = useRouter();
+  const formInitiallyPopulatedRef = useRef(false)
   const [justCopied, setJustCopied] = useState(false);
 
   const copyGameLink = useCallback(() => {
@@ -59,7 +60,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   const gameOptionsForm = useFormik<Domain.GameOptions>({
     validateOnMount: true,
     initialValues: {
-      rounds: 15,
+      rounds: 10,
       spotifyPlaylistId: undefined,
     },
     validationSchema: yup.object({
@@ -82,9 +83,18 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   }, [])
 
   const gameQuery = useGame(gameId, {
-    enabled: gameOptionsForm.isSubmitting,
     refetchInterval: gameOptionsForm.isSubmitting ? 750 : undefined,
   });
+
+  useEffect(() => {
+    if (gameQuery.isSuccess && !formInitiallyPopulatedRef.current) {
+      gameOptionsForm.setValues({
+        rounds: gameQuery.data.options.rounds,
+        spotifyPlaylistId: gameQuery.data.options.spotifyPlaylistId,
+      })
+      formInitiallyPopulatedRef.current = true
+    }
+  }, [gameQuery, gameOptionsForm])
 
   return (
     <form

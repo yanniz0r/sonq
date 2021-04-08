@@ -47,7 +47,7 @@ const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
       <Head>
         <title>Sonq - {t('creatingGame')}</title>
       </Head>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center p-5">
         <div className="text-pink-600 text-6xl mb-12">
           <LoadingSpinner />
         </div>

@@ -52,7 +52,7 @@ const Summary: FC<SummaryProps> = ({ phaseData }) => {
         <h1 className="text-gray-200 text-3xl md:text-5xl font-bold mb-10">
           {t("summary.headline")}
         </h1>
-        <div className="grid grid-cols-3 grid-rows-4 gap-7">
+        <div className="grid grid-cols-1 md:grid-cols-3 grid-rows-4 gap-7">
           <div className="col-span-2 row-span-2">
             <BasePane>
               <div className="p-10">

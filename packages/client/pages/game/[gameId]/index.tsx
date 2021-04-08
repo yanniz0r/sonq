@@ -127,10 +127,7 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
           <div className="flex flex-col flex-grow max-h-full relative">
             <GuessBubbles io={io} />
             <JoinGameModal open={!joinedGame} onJoin={joinGame} />
-            {/* {gamePhase.type !== Domain.GamePhaseType.Lobby &&
-              <Players players={players} io={io} phase={gamePhase.type} />
-            } */}
-            <div className="flex-grow overflow-y-auto relative z-10 p-5">
+            <div className="flex-grow overflow-y-auto relative z-10 p-5 md:pt-14 pb-24">
               <Container>
                 {gamePhase.type === Domain.GamePhaseType.Lobby && (
                   <Lobby io={io} gameId={gameId} players={players} />

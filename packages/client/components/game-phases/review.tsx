@@ -1,6 +1,5 @@
-import { Domain, SocketClient } from "@sonq/api";
-import { FC, useCallback } from "react";
-import useIsAdmin from "../../hooks/use-is-admin";
+import { Domain } from "@sonq/api";
+import { FC } from "react";
 import PlayerScores from "../player-scores";
 import { useTranslation } from "react-i18next";
 import { FaSpotify } from "react-icons/fa";
@@ -12,12 +11,8 @@ interface ReviewProps {
   gameId: string;
 }
 
-const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
+const Review: FC<ReviewProps> = ({ phaseData }) => {
   const { t } = useTranslation("game");
-  const continueGame = useCallback(() => {
-    io.emit(SocketClient.Events.Continue);
-  }, [io]);
-  const isAdmin = useIsAdmin(gameId);
 
   const bonusInterpolation = {
     trackName: phaseData.track.name,
@@ -40,7 +35,7 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
   }
 
   return (
-    <div className="py-20">
+    <div>
       <h1 className="text-gray-200 text-3xl md:text-5xl font-bold mb-10">
         {t("review.headline")}
       </h1>
@@ -67,7 +62,7 @@ const Review: FC<ReviewProps> = ({ io, phaseData, gameId }) => {
           tertiaryText={phaseData.track.album.name}
         >
           <a
-            href={`https://open.spotify.com/track/${phaseData.track.id}`}
+            href={phaseData.track.external_urls.spotify}
             target="_blank"
             className="mt-5 py-2 px-3 font-bold text-sm text-white inline-flex items-center rounded-full"
             style={{ backgroundColor: "#1DD05D" }}

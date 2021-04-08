@@ -1,8 +1,7 @@
-import { Domain, SocketClient } from "@sonq/api";
+import { Domain } from "@sonq/api";
 import { FC, useCallback, useState } from "react";
 import PlayerScores from "../player-scores";
 import { useTranslation } from "react-i18next";
-import useIsAdmin from "../../hooks/use-is-admin";
 import { BasePane, DetailPane, PlaylistPane } from "../grid";
 import { FaSpotify } from "react-icons/fa";
 import Modal from "../modal";
@@ -13,13 +12,9 @@ interface SummaryProps {
   gameId: string;
 }
 
-const Summary: FC<SummaryProps> = ({ io, phaseData, gameId }) => {
+const Summary: FC<SummaryProps> = ({ phaseData }) => {
   const { t } = useTranslation("game");
-  const isAdmin = useIsAdmin(gameId);
   const [showSongList, setShowSongList] = useState(false)
-  const continueGame = useCallback(() => {
-    io.emit(SocketClient.Events.Continue);
-  }, [io]);
   const onSongListClose = useCallback(() => {
     setShowSongList(false)
   }, [])

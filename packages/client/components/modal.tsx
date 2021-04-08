@@ -31,12 +31,14 @@ const Modal: FC<ModalProps> = ({ children, close, open }) => {
       } flex justify-center items-center`}
       onClick={close}
     >
-      <div
-        className={`bg-gray-900 max-w-screen-md p-5 rounded-lg  text-white transform transition ${
-          visible ? "scale-100" : "scale-0"
-        }`}
-      >
-        {children}
+      <div className="p-5 max-w-full">
+        <div
+          className={`bg-gray-900 max-w-screen-md p-5 rounded-lg  text-white transform transition ${
+            visible ? "scale-100" : "scale-0"
+          }`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -137,7 +137,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
       <div className="py-10 md:py-20 px-5 bg-pink-50">
         <div className="max-w-screen-lg mx-auto">
           <h2 className="text-center text-4xl font-bold">How does it work?</h2>
-          <p className="text-pink-600 font-bold text-center text-lg">Get started with Sonq in X easy steps</p>
+          <p className="text-pink-600 font-bold text-center text-lg">Get started with Sonq in 4 easy steps</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-10">
             <div className="relative bg-gray-800 text-gray-200 shadow-sm rounded-lg p-10">
               <div className="z-10 relative">

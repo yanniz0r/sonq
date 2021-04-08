@@ -9,7 +9,7 @@ export const BasePane: FC = ({ children }) => {
 interface DetailPaneProps {
   primaryText: string;
   secondaryText: string;
-  tertiaryText: string;
+  tertiaryText?: string;
 }
 
 export const DetailPane: FC<DetailPaneProps> = ({primaryText, secondaryText, tertiaryText, children}) => {
@@ -17,7 +17,7 @@ export const DetailPane: FC<DetailPaneProps> = ({primaryText, secondaryText, ter
     <div className="p-10 w-full h-full flex flex-col justify-center">
       <span className="text-gray-300 text-xl font-bold">{secondaryText}</span>
       <h2 className="text-4xl break-words font-extrabold mb text-pink-600 my-2 line-clamp-3">{primaryText}</h2>
-      <p className="text-gray-400 text-xs">{tertiaryText}</p>
+      {tertiaryText && <p className="text-gray-400 text-xs">{tertiaryText}</p>}
       {children && 
         <div>
           {children}

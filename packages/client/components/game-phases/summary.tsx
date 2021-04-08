@@ -22,12 +22,6 @@ const Summary: FC<SummaryProps> = ({ phaseData }) => {
     setShowSongList(true)
   }, [])
 
-  const noData = <DetailPane
-    secondaryText={t('summary.noData.headline')}
-    primaryText={t('summary.noData.value')}
-    tertiaryText={t('summary.noData.caption')}
-  />
-
   return (
     <div>
       <Modal open={showSongList} close={onSongListClose}>
@@ -66,7 +60,10 @@ const Summary: FC<SummaryProps> = ({ phaseData }) => {
                 primaryText={phaseData.fastestAnswer.player.username}
                 tertiaryText={t('summary.fastestAnswer.caption', { count: phaseData.fastestAnswer?.value, player: phaseData.fastestAnswer?.player.username })}
               />
-            : noData
+            : <DetailPane 
+                secondaryText={t('summary.fastestAnswer.headline')}
+                primaryText={t('summary.noData')}
+              />
           }
           {phaseData.leastWrongAnswers
             ? <DetailPane 
@@ -74,7 +71,10 @@ const Summary: FC<SummaryProps> = ({ phaseData }) => {
                 primaryText={phaseData.leastWrongAnswers.player.username}
                 tertiaryText={t('summary.mostPrecise.caption', { count: phaseData.leastWrongAnswers.value, player: phaseData.leastWrongAnswers.player.username })}
               />
-            : noData
+            : <DetailPane 
+                secondaryText={t('summary.mostPrecise.headline')}
+                primaryText={t('summary.noData')}
+              />
           }
           {phaseData.mostWrongAnswers
             ? <DetailPane 
@@ -82,7 +82,10 @@ const Summary: FC<SummaryProps> = ({ phaseData }) => {
                 primaryText={phaseData.mostWrongAnswers.player.username}
                 tertiaryText={t('summary.mostEffort.caption', { count: phaseData.mostWrongAnswers.value, player: phaseData.mostWrongAnswers.player.username })}
               />
-            : noData
+            : <DetailPane 
+                secondaryText={t('summary.mostEffort.headline')}
+                primaryText={t('summary.noData')}
+              />
           }
           {phaseData.closestCall
             ? <DetailPane 
@@ -90,7 +93,10 @@ const Summary: FC<SummaryProps> = ({ phaseData }) => {
                 primaryText={phaseData.closestCall ? phaseData.closestCall.player.username : t('summary.noData')}
                 tertiaryText={t('summary.closestCall.caption', { count: phaseData.closestCall.value, player: phaseData.closestCall.player.username })}
               />
-            : noData
+            : <DetailPane 
+                secondaryText={t('summary.closestCall.headline')}
+                primaryText={t('summary.noData')}
+              />
           }
           <PlaylistPane songs={phaseData.songs} onClick={onSongListOpen} />
         </div>

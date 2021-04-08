@@ -26,15 +26,23 @@ import Container from "../../../components/container";
 
 const config = getConfig();
 
+declare global {
+  interface Window {
+    sonqSocketConnection?: SocketIOClient.Socket
+  }
+}
+
 interface GamePageProps {
   gameId: string;
 }
+
+const isClient = typeof window !== 'undefined'
 
 const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
   const {t} = useTranslation('game');
   const [volume, setVolume] = useState(5);
   const isAdmin = useIsAdmin(gameId)
-  const [joinedGame, setJoinedGame] = useState(false);
+  const [joinedGame, setJoinedGame] = useState(isClient ? Boolean(window.sonqSocketConnection) : false);
   const router = useRouter();
   const gameQuery = useGame(gameId, {
     retry(_errorCount, error) {
@@ -65,12 +73,15 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
       return;
     }
 
-    return socketio(config.publicRuntimeConfig.serverUrl, {
-      query: {
-        game: gameId,
-        adminKey: localStorage.getItem(ADMINKEY(gameId)),
-      },
-    });
+    if (!window.sonqSocketConnection) {
+      window.sonqSocketConnection = socketio(config.publicRuntimeConfig.serverUrl, {
+        query: {
+          game: gameId,
+          adminKey: localStorage.getItem(ADMINKEY(gameId)),
+        },
+      });
+    }
+    return window.sonqSocketConnection
   }, [gameId]);
 
   const continueGame = useCallback(() => {

@@ -8,7 +8,8 @@
     "dev": "tsc -w"
   },
   "devDependencies": {
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "spotify-web-api-node": "^5.0.2"
   },
   "dependencies": {
     "zod": "^3.11.6"

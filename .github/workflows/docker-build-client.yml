@@ -1,4 +1,4 @@
-name: Build Server Docker Image
+name: Build Client Docker Image
 
 on:
   push:

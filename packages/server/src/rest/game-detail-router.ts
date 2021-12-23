@@ -91,14 +91,15 @@ class GameDetailRouter {
     });
     const {query} = QuerySchema.parse(request.query);
 
-    const cachedResult = await SpotifyCache.getInstance().getSearchTracks(this.game.id, query)
+    const spotifyCache = await SpotifyCache.getInstance()
+    const cachedResult = await spotifyCache.getSearchTracks(this.game.id, query)
     if (cachedResult) {
-      return cachedResult
+      response.status(200).json(cachedResult);
     }
     const tracks = await this.game.spotify.searchTracks(query, {
       limit: 4,
     });
-    SpotifyCache.getInstance().setSearchTracks(this.game.id, query, tracks.body)
+    spotifyCache.setSearchTracks(this.game.id, query, tracks.body)
     response.status(200).json(tracks.body);
   };
 

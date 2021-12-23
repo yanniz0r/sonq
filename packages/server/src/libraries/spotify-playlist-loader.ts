@@ -10,7 +10,8 @@ class SpotifyPlaylistLoader {
   constructor(private spotify: SpotifyWebApi) {}
 
   async load(playlistId: string) {
-    const cachedTracks = await SpotifyCache.getInstance().getPlaylistTracks(playlistId)
+    const spotifyCache = await SpotifyCache.getInstance()
+    const cachedTracks = await spotifyCache.getPlaylistTracks(playlistId)
 
     if (cachedTracks) {
       return cachedTracks
@@ -48,7 +49,8 @@ class SpotifyPlaylistLoader {
         offset += limit;
       } while (!loaded);
 
-      await SpotifyCache.getInstance().setPlaylistTracks(playlistId, songs)
+      const spotifyCache = await SpotifyCache.getInstance()
+      await spotifyCache.setPlaylistTracks(playlistId, songs)
 
       return songs;
     } catch (e) {

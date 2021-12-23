@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { RedisClient, createClient } from 'redis'
+import { createClient, RedisClientType } from 'redis'
 import { Logger } from 'tslog'
 
 dotenv.config()
@@ -14,14 +14,15 @@ class SpotifyCache {
   private static instance: SpotifyCache
   private static loggedMissingRedis = false
 
-  constructor(private redisClient: RedisClient) {}
+  constructor(private redisClient: RedisClientType<any>) {}
 
-  static getInstance(): SpotifyCache {
+  static async getInstance(): Promise<SpotifyCache> {
     if (!SpotifyCache.instance) {
       try {
         const redisClient = createClient({
           url: process.env.REDIS_URL ?? 'redis://localhost:6379'
         })
+        await redisClient.connect()
         SpotifyCache.instance = new SpotifyCache(redisClient)
       } catch(e) {
         if (!SpotifyCache.loggedMissingRedis) {
@@ -34,15 +35,15 @@ class SpotifyCache {
   }
 
   async getPlaylistTracks(playlistId: string): Promise<SpotifyApi.TrackObjectFull[] | null> {
-    return this.redisGet(playlistTracksKey(playlistId))
+    return this.redisGetJSON(playlistTracksKey(playlistId))
   }
 
   setPlaylistTracks(playlistId: string, tracks: SpotifyApi.TrackObjectFull[]) {
-    this.redisSet(playlistTracksKey(playlistId), tracks)
+    return this.redisSet(playlistTracksKey(playlistId), tracks)
   }
 
   async getSearchTracks(gameId: string, query: string, ): Promise<SpotifyApi.SearchResponse | null> {
-    return this.redisGet(searchTracksKey(gameId, query))
+    return this.redisGetJSON(searchTracksKey(gameId, query))
   }
 
   setSearchTracks(gameId: string, query: string, tracks: SpotifyApi.SearchResponse) {
@@ -50,21 +51,13 @@ class SpotifyCache {
   }
 
   private redisSet(key: string, value: object, ttl = 60 * 60 * 12) {
-    this.redisClient.setex(key, ttl, JSON.stringify(value))
+    this.redisClient.setEx(key, ttl, JSON.stringify(value))
   }
 
-  private redisGet<T>(key: string) {
-    return new Promise<T | null>((resolve, reject) => {
-      this.redisClient.get(key, (error, reply) => {
-        if (error) {
-          reject(error)
-        } else if (reply) {
-          resolve(JSON.parse(reply))
-        } else {
-          resolve(null)
-        }
-      })
-    })
+  private async redisGetJSON<T>(key: string): Promise<T | null> {
+    const stringValue = await this.redisClient.get(key)
+    if (!stringValue) return null
+    return JSON.parse(stringValue) as T
   }
 
 }

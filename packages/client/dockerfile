@@ -2,11 +2,11 @@ FROM node:alpine
 
 WORKDIR "/app"
 
-COPY ../../package.json ./
-COPY ../../yarn.lock ./
+COPY ./package.json ./
+COPY ./yarn.lock ./
 
-COPY ../../packages/api ./packages/api
-COPY ../../packages/client ./packages/client
+COPY ./packages/api ./packages/api
+COPY ./packages/client ./packages/client
 
 RUN yarn install
 

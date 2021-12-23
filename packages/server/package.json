@@ -15,7 +15,6 @@
     "express": "^4.17.2",
     "i18next": "^21.6.3",
     "mobx": "^6.3.10",
-    "react-i18next": "^11.15.1",
     "redis": "^4.0.1",
     "socket.io": "4.4.0",
     "spotify-web-api-node": "^5.0.2",

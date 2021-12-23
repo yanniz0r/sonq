@@ -8,9 +8,10 @@ import useCountdown from "../../hooks/use-countdown";
 import { useTranslation } from "react-i18next";
 import Alert from "../alert";
 import { HIDESONGSEARCHHELP } from "../../constants/local-storage";
+import { Socket } from "socket.io-client";
 
 interface PlaySongProps {
-  io: SocketIOClient.Socket;
+  io: Socket;
   phaseData: Domain.PlaySongGamePhaseData;
   gameId: string;
   volume: number;

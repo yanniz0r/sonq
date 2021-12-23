@@ -1,7 +1,8 @@
 import { useEffect } from "react";
+import { Socket } from "socket.io-client";
 
 const useOn = <P>(
-  io: SocketIOClient.Socket,
+  io: Socket,
   event: string,
   handler: (payload: P) => void
 ) => {

@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useOn from "../../../hooks/use-on";
-import socketio from "socket.io-client";
+import socketio, { Socket } from "socket.io-client";
 import JoinGameModal from "../../../components/join-game-modal";
 import { Domain, SocketClient, SocketServer } from "@sonq/api";
 import useGame, { GameNotFoundError } from "../../../hooks/use-game";
@@ -28,7 +28,7 @@ const config = getConfig();
 
 declare global {
   interface Window {
-    sonqSocketConnection?: SocketIOClient.Socket
+    sonqSocketConnection?: Socket
   }
 }
 

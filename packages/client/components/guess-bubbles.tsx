@@ -2,6 +2,7 @@ import { SocketServer } from "@sonq/api";
 import { FC, useLayoutEffect, useRef, useState } from "react";
 import useOn from "../hooks/use-on";
 import { shuffle } from "lodash";
+import { Socket } from "socket.io-client";
 
 interface PlayerAnwswer {
   id: number;
@@ -38,7 +39,7 @@ const Bubble: FC<BubbleProps> = ({ horizontalPosition, answer }) => {
 };
 
 interface GuessBubblesProps {
-  io: SocketIOClient.Socket;
+  io: Socket;
 }
 
 const totalPositions = 12;

@@ -1,12 +1,12 @@
-import { Domain, SocketClient } from "@sonq/api";
+import { Domain } from "@sonq/api";
 import { FC, useCallback, useEffect, useState } from "react";
 import useIsAdmin from "../../hooks/use-is-admin";
-import { Button } from "../button";
 import { useTranslation } from "react-i18next";
 import getGameUrl from "../../helpers/get-game-url";
+import { Socket } from "socket.io-client";
 
 interface LobbyProps {
-  io: SocketIOClient.Socket;
+  io: Socket;
   gameId: string;
   players: Domain.Player[];
 }

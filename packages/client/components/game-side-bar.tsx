@@ -1,6 +1,7 @@
 import { Domain, SocketServer } from "@sonq/api";
 import { FC, useEffect, useState } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { Socket } from "socket.io-client";
 import useOn from "../hooks/use-on";
 import VolumeControl from "./volume-control";
 
@@ -8,7 +9,7 @@ interface GameSideBarProps {
   players: Domain.Player[];
   setVolume(volume: number);
   phase: Domain.GamePhaseType;
-  io: SocketIOClient.Socket;
+  io: Socket;
 }
 
 const GameSideBar: FC<GameSideBarProps> = ({

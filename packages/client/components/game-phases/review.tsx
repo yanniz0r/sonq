@@ -4,9 +4,10 @@ import PlayerScores from "../player-scores";
 import { useTranslation } from "react-i18next";
 import { FaSpotify } from "react-icons/fa";
 import { BasePane, DetailPane } from "../grid";
+import { Socket } from "socket.io-client";
 
 interface ReviewProps {
-  io: SocketIOClient.Socket;
+  io: Socket;
   phaseData: Domain.ReviewGamePhaseData;
   gameId: string;
 }

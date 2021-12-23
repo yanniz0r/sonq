@@ -5,9 +5,10 @@ import { useTranslation } from "react-i18next";
 import { BasePane, DetailPane, PlaylistPane } from "../grid";
 import { FaSpotify } from "react-icons/fa";
 import Modal from "../modal";
+import { Socket } from "socket.io-client";
 
 interface SummaryProps {
-  io: SocketIOClient.Socket;
+  io: Socket;
   phaseData: Domain.SummaryGamePhaseData;
   gameId: string;
 }

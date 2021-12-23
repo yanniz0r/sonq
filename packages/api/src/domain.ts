@@ -1,4 +1,5 @@
 import * as zod from "zod";
+import SpotifyApi from 'spotify-web-api-node'
 
 export const GameOptionsSchema = zod.object({
   spotifyPlaylistId: zod.string().optional(),

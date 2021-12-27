@@ -44,7 +44,7 @@ const GameSideBar: FC<GameSideBarProps> = ({
       <ul className="flex-grow">
         {players.map((player) => {
           return (
-            <li className="flex p-5 py-2 items-center flex-nowrap">
+            <li className="flex p-5 py-2 items-center flex-nowrap" key={player.id}>
               <div className="flex-shrink-0 bg-purple-600 w-12 h-12 flex items-center justify-center rounded-full font-bold text-white">
                 {player.username[0].toUpperCase()}
               </div>

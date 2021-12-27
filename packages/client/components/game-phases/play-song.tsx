@@ -179,6 +179,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mt-7">
                 {trackSearchQuery.data?.tracks.items.map((item) => (
                   <button
+                    key={item.id}
                     onClick={submitGuessFn(item.id, item)}
                     className="bg-pink-600 relative rounded-lg overflow-hidden transform transition hover:scale-110 flex flex-col"
                   >

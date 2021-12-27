@@ -44,7 +44,7 @@ const Lobby: FC<LobbyProps> = ({ io, gameId, players }) => {
         </h1>
         <div className="flex flex-row">
           {players.map((player) => (
-            <div className="p-5 text-white flex flex-col items-center">
+            <div className="p-5 text-white flex flex-col items-center" key={player.id}>
               <div className="h-16 w-16 rounded-full font-bold flex items-center justify-center bg-pink-600">
                 {player.username[0].toUpperCase()}
               </div>

@@ -33,7 +33,7 @@ const PlayerScores: FC<PlayerScoresProps> = ({
         const answeredInText =
           answerTime && `answered in ${answerTime} seconds`;
         return (
-          <div className="my-5">
+          <div className="my-5" key={playerScore.player.id}>
             <h3 className="font-bold text-gray-200 flex items-baseline">
               {index + 1}: {playerScore.player.username} ({playerScore.score})
               <small className="ml-2">{answeredInText}</small>

@@ -3,12 +3,26 @@ import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
 import "../locales";
 import queryClient from "../config/query-client";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
+import { I18nextProvider } from "react-i18next";
+import initI18n from "../locales";
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter()
+
+  const language = router.locale ?? router.defaultLocale ?? 'de'
+
+  console.log(router)
+
+  const i18n = useMemo(() => initI18n(language), [language])
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
-    </QueryClientProvider>
+    <I18nextProvider i18n={i18n}>
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+      </QueryClientProvider>
+    </I18nextProvider>
   );
 }
 

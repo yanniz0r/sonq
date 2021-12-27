@@ -5,4 +5,8 @@ module.exports = {
     serverUrl: process.env.SERVER_URL ?? "http://localhost:4000",
     clientUrl: process.env.CLIENT_URL ?? "http://localhost:3000",
   },
+  i18n: {
+    locales: ['en', 'de'],
+    defaultLocale: 'de',
+  }
 };

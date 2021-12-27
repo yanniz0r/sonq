@@ -15,6 +15,7 @@ import PlaylistSelection from "../../../components/playlist-selection";
 import Head from "next/head";
 import { Toolbar, ToolbarButton } from "../../../components/toolbar";
 import Container from "../../../components/container";
+import { useMemo } from "react";
 
 interface GameOptionsProps {
   gameId: string;
@@ -57,7 +58,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   }, [isAdmin]);
 
   const gameOptionsForm = useFormik<Domain.GameOptions>({
-    validateOnMount: true,
+    // validateOnMount: true,
     initialValues: {
       rounds: 10,
       spotifyPlaylistId: undefined,
@@ -95,6 +96,14 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
     }
   }, [gameQuery, gameOptionsForm])
 
+  const formError = useMemo(
+    () => {
+      return !gameOptionsForm.isValid && Object.values(gameOptionsForm.errors)[0]
+    }, [gameOptionsForm.errors, gameOptionsForm.isValid]
+  )
+
+  console.log(gameOptionsForm)
+
   return (
     <form
       className="min-w-screen min-h-screen bg-gray-900 text-white pb-36"
@@ -114,7 +123,10 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
               type="number"
               value={gameOptionsForm.values.rounds}
               name="rounds"
-              onChange={gameOptionsForm.handleChange}
+              onChange={(e) => {
+                console.log("DID CHANGE")
+                gameOptionsForm.handleChange(e)
+              }}
             />
           </Label>
         </div>
@@ -143,7 +155,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
             <div className="flex justify-end items-center">
               <span className="hidden md:inline-block text-white opacity-80 mr-4">
                 {gameOptionsForm.isSubmitting && t("startGameHint")}
-                {!gameOptionsForm.isValid && Object.values(gameOptionsForm.errors)[0]}
+                {formError}
               </span>
               <ToolbarButton
                 loadingText={`${Math.round((gameQuery.data?.playlistDataDownloadProgress ?? 0) * 100)}%`}

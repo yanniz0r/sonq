@@ -2,6 +2,7 @@ import * as k8s from "@pulumi/kubernetes";
 import { Config } from "@pulumi/pulumi";
 import { base64 } from './helper'
 import createClient from './client'
+import createServer from './server'
 
 const config = new Config()
 
@@ -39,3 +40,4 @@ const imagePullSecret = new k8s.core.v1.Secret(
 );
 
 createClient(namespaceName, imagePullSecretName)
+createServer(namespaceName, imagePullSecretName)

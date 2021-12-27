@@ -40,11 +40,11 @@ export default function createClient(namespace: string, imagePullSecretName: str
               env: [
                 {
                   name: 'SERVER_URL',
-                  value: 'http://sonq.de'
+                  value: 'https://server.sonq.de'
                 },
                 {
                   name: 'CLIENT_URL',
-                  value: 'http://backend.sonq.de'
+                  value: 'https://sonq.de'
                 },
                 {
                   name: 'SPOTIFY_CLIENT_ID',
@@ -72,6 +72,47 @@ export default function createClient(namespace: string, imagePullSecretName: str
         {
           port: 3000,
           targetPort: 3000,
+        }
+      ]
+    }
+  })
+
+
+  new k8s.networking.v1.Ingress('client-ingress', {
+    metadata: {
+      name: 'client-ingress',
+      namespace,
+      annotations: {
+        'kubernetes.io/ingress.class': "nginx",
+        'cert-manager.io/issuer': "letsencrypt-issuer"
+      }
+    },
+    spec: {
+      tls: [
+        {
+          hosts: ['sonq.de'],
+          secretName: 'letsencrypt-client-certificate'
+        }
+      ],
+      rules: [
+        {
+          host: 'sonq.de',
+          http: {
+            paths: [
+              {
+                path: '/',
+                pathType: 'Prefix',
+                backend: {
+                  service: {
+                    name: 'client-service',
+                    port: {
+                      number: 3000,
+                    }
+                  }
+                }
+              }
+            ]
+          }
         }
       ]
     }

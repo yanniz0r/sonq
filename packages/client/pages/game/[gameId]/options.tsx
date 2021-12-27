@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import useMutateGameOptions from "../../../hooks/use-mutate-game-options";
 import Input, { Label } from "../../../components/input";
 import { Domain } from "@sonq/api";
-import LoadingSpinner from "../../../components/loading-spinner";
 import { useRouter } from "next/router";
 import useGame from "../../../hooks/use-game";
 import useIsAdmin from "../../../hooks/use-is-admin";
@@ -79,7 +78,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
     gameOptionsForm.setValues((oldValues) => ({
       ...oldValues,
       spotifyPlaylistId,
-    }))
+    }), true)
   }, [])
 
   const gameQuery = useGame(gameId, {

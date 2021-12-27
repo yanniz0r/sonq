@@ -5,7 +5,8 @@
   "landing": {
     "headline": "How good do you know your favorite music?",
     "content": "Challenge your friends with an interactive online song quiz. All powered by spotify.",
-    "spotifyLogin": "Login to start!"
+    "spotifyLogin": "Login to start!",
+    "logoSubtitle": "Interactive song quiz!"
   },
   "divider": {
     "title": "How good do you know popular songs?",

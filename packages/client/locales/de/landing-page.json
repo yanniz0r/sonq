@@ -5,7 +5,8 @@
   "landing": {
     "headline": "Wie gut kennst du deinen lieblings Musik?",
     "content": "Fordere deine Freunde bei einem interaktiven Songratequiz heraus. Komplett angetrieben von Spotify.",
-    "spotifyLogin": "Mit Spotify starten!"
+    "spotifyLogin": "Mit Spotify starten!",
+    "logoSubtitle": "Interaktives Songraten!"
   },
   "divider": {
     "title": "Wie gut kennst du dich mit bekannten Songs aus?",

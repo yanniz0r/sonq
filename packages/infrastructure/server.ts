@@ -21,7 +21,28 @@ export default function createServer(namespace: string, imagePullSecretName: str
     }
   })
 
-  const serverDeployment = new k8s.apps.v1.Deployment('server', {
+  const serverServiceName = 'server-service'
+
+  new k8s.core.v1.Service(serverServiceName, {
+    metadata: {
+      name: serverServiceName,
+      namespace,
+    },
+    spec: {
+      type: 'ClusterIP',
+      selector: {
+        ...serverLabels,
+      },
+      ports: [
+        {
+          port: 4000,
+          targetPort: 4000,
+        }
+      ]
+    }
+  })
+
+  new k8s.apps.v1.StatefulSet('server', {
     metadata: {
       name: 'server',
       namespace,
@@ -33,6 +54,7 @@ export default function createServer(namespace: string, imagePullSecretName: str
           ...serverLabels,
         }
       },
+      serviceName: serverServiceName,
       template: {
         metadata: {
           labels: {
@@ -79,30 +101,34 @@ export default function createServer(namespace: string, imagePullSecretName: str
             }
           ]
         }
-      } 
+      }
     }
   })
 
-  new k8s.core.v1.Service('server-service', {
+  const redisServiceName = 'redis-service'
+
+  new k8s.core.v1.Service(redisServiceName, {
     metadata: {
-      name: 'server-service',
       namespace,
+      name: redisServiceName,
+      labels: {
+        app: 'redis'
+      },
     },
     spec: {
-      type: 'ClusterIP',
-      selector: {
-        ...serverLabels,
-      },
       ports: [
         {
-          port: 4000,
-          targetPort: 4000,
+          port: 6379,
+          targetPort: 6379,
         }
-      ]
+      ],
+      selector: {
+        app: 'redis'
+      }
     }
   })
 
-  new k8s.apps.v1.Deployment('redis', {
+  new k8s.apps.v1.StatefulSet('redis', {
     metadata: {
       namespace,
       labels: {
@@ -110,6 +136,7 @@ export default function createServer(namespace: string, imagePullSecretName: str
       }
     },
     spec: {
+      serviceName: redisServiceName,
       replicas: 1,
       selector: {
         matchLabels: {
@@ -136,27 +163,6 @@ export default function createServer(namespace: string, imagePullSecretName: str
             }
           ]
         }
-      }
-    }
-  })
-
-  new k8s.core.v1.Service('redis-service', {
-    metadata: {
-      namespace,
-      name: 'redis-service',
-      labels: {
-        app: 'redis'
-      },
-    },
-    spec: {
-      ports: [
-        {
-          port: 6379,
-          targetPort: 6379,
-        }
-      ],
-      selector: {
-        app: 'redis'
       }
     }
   })

@@ -94,7 +94,7 @@ class GameDetailRouter {
     const spotifyCache = await SpotifyCache.getInstance()
     const cachedResult = await spotifyCache.getSearchTracks(this.game.id, query)
     if (cachedResult) {
-      response.status(200).json(cachedResult);
+      return response.status(200).json(cachedResult);
     }
     const tracks = await this.game.spotify.searchTracks(query, {
       limit: 4,

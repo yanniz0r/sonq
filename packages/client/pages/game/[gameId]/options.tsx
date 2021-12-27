@@ -58,7 +58,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
   }, [isAdmin]);
 
   const gameOptionsForm = useFormik<Domain.GameOptions>({
-    // validateOnMount: true,
+    validateOnMount: true,
     initialValues: {
       rounds: 10,
       spotifyPlaylistId: undefined,
@@ -88,10 +88,13 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
 
   useEffect(() => {
     if (gameQuery.isSuccess && !formInitiallyPopulatedRef.current) {
-      gameOptionsForm.setValues({
-        rounds: gameQuery.data.options.rounds,
-        spotifyPlaylistId: gameQuery.data.options.spotifyPlaylistId,
-      })
+      const { rounds, spotifyPlaylistId } = gameQuery.data.options
+      if (rounds) {
+        gameOptionsForm.setFieldValue('rounds', rounds)
+      }
+      if (spotifyPlaylistId) {
+        gameOptionsForm.setFieldValue('spotifyPlaylistId', spotifyPlaylistId)
+      }
       formInitiallyPopulatedRef.current = true
     }
   }, [gameQuery, gameOptionsForm])
@@ -101,8 +104,6 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
       return !gameOptionsForm.isValid && Object.values(gameOptionsForm.errors)[0]
     }, [gameOptionsForm.errors, gameOptionsForm.isValid]
   )
-
-  console.log(gameOptionsForm)
 
   return (
     <form
@@ -123,10 +124,7 @@ const GameOptionsPage: NextPage<GameOptionsProps> = ({ gameId }) => {
               type="number"
               value={gameOptionsForm.values.rounds}
               name="rounds"
-              onChange={(e) => {
-                console.log("DID CHANGE")
-                gameOptionsForm.handleChange(e)
-              }}
+              onChange={gameOptionsForm.handleChange}
             />
           </Label>
         </div>

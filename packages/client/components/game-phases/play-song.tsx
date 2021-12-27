@@ -17,6 +17,10 @@ interface PlaySongProps {
   volume: number;
 }
 
+function applyVolumeOnAudioElement(audio: HTMLAudioElement, volume: number) {
+  audio.volume = volume / 10;
+}
+
 const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
   const { t } = useTranslation("game");
   const [canGuess, setCanGuess] = useState(true);
@@ -34,7 +38,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = volume / 10;
+      applyVolumeOnAudioElement(audioRef.current, volume)
     }
   }, [volume]);
 
@@ -47,8 +51,9 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
-      audioRef.current.volume = volume / 10;
+      audioRef.current
       try {
+        applyVolumeOnAudioElement(audioRef.current, volume)
         await audioRef.current.play();
       } catch (error) {
         console.log('Error caught during playback', error);

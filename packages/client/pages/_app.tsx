@@ -13,16 +13,17 @@ function MyApp({ Component, pageProps }) {
 
   const language = router.locale ?? router.defaultLocale ?? 'de'
 
-  console.log(router)
-
   const i18n = useMemo(() => initI18n(language), [language])
 
   return (
-    <I18nextProvider i18n={i18n}>
-      <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-      </QueryClientProvider>
-    </I18nextProvider>
+    <>
+      <script defer data-domain="sonq.de" src="https://analytics.coolify.inseldu.de/js/script.js"></script>
+      <I18nextProvider i18n={i18n}>
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
+      </I18nextProvider>
+    </>
   );
 }
 

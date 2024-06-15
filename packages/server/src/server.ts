@@ -30,9 +30,7 @@ const io = new Server(server, {
 app.use(json());
 
 app.use(
-  cors({
-    origin: "*",
-  })
+  cors()
 );
 
 const gameStorage = new GameStorage();

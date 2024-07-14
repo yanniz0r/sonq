@@ -3,7 +3,7 @@ FROM node:alpine
 WORKDIR "/app"
 
 COPY ./package.json ./
-COPY ./lerna.json ./
+COPY ./turbo.json ./
 COPY ./yarn.lock ./
 
 COPY ./packages/api ./packages/api

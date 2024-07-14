@@ -24,7 +24,7 @@ class SpotifyCache {
           url: process.env.REDIS_URL ?? 'redis://localhost:6379'
         })
         await redisClient.connect()
-        SpotifyCache.instance = new SpotifyCache(redisClient)
+        SpotifyCache.instance = new SpotifyCache(redisClient as any) // FIXME: Type this
       } catch(e) {
         if (!SpotifyCache.loggedMissingRedis) {
           logger.warn('Could not get redis instance', e)

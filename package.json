@@ -12,9 +12,7 @@
     "typecheck": "turbo run typecheck"
   },
   "workspaces": [
-    "packages/api",
-    "packages/client",
-    "packages/server"
+    "./packages/*"
   ],
   "devDependencies": {
     "prettier": "^2.5.1",

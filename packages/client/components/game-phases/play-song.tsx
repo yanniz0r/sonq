@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import Alert from "../alert";
 import { HIDESONGSEARCHHELP } from "../../constants/local-storage";
 import { Socket } from "socket.io-client";
+import { Track } from "@spotify/web-api-ts-sdk";
 
 interface PlaySongProps {
   io: Socket;
@@ -89,7 +90,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
 
   const submitGuessFn = (
     id: string,
-    track: SpotifyApi.TrackObjectFull
+    track: Track,
   ) => () => {
     if (!canGuess) return;
 
@@ -182,7 +183,7 @@ const PlaySong: FC<PlaySongProps> = ({ gameId, phaseData, io, volume }) => {
                 placeholder="Search for your song guess"
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mt-7">
-                {trackSearchQuery.data?.tracks.items.map((item) => (
+                {trackSearchQuery.data?.items.map((item) => (
                   <button
                     key={item.id}
                     onClick={submitGuessFn(item.id, item)}

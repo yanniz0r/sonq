@@ -1,5 +1,5 @@
+import { Track } from "@spotify/web-api-ts-sdk";
 import * as zod from "zod";
-import type SpotifyApi from 'spotify-web-api-node'
 
 export const GameOptionsSchema = zod.object({
   spotifyPlaylistId: zod.string().optional(),
@@ -54,7 +54,7 @@ export interface SongGuess {
 }
 
 export interface ReviewGamePhaseData {
-  track: SpotifyApi.TrackObjectFull;
+  track: Track;
   answers: ReviewGamePhaseAnswer[];
   score: PlayerScore[];
   wrongGuesses: SongGuess[];
@@ -73,7 +73,7 @@ export interface SummaryGamePhaseData {
   mostPrecise?: PlayerStatistic;
   fastestAnswer?: PlayerStatistic;
   answers: ReviewGamePhaseAnswer[];
-  songs: SpotifyApi.TrackObjectFull[];
+  songs: Track[];
   score: PlayerScore[];
 }
 

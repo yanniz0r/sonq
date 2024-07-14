@@ -6,10 +6,12 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
-    "dev": "ts-node-dev src/server.ts"
+    "dev": "ts-node-dev src/server.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@sonq/api": "1.0.0",
+    "@spotify/web-api-ts-sdk": "^1.2.0",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
@@ -17,7 +19,6 @@
     "mobx": "^6.3.10",
     "redis": "^4.0.1",
     "socket.io": "4.4.0",
-    "spotify-web-api-node": "^5.0.2",
     "tslog": "^3.3.0",
     "uuid": "^8.3.2",
     "zod": "^3.11.6"
@@ -27,9 +28,8 @@
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
     "@types/redis": "^4.0.11",
-    "@types/spotify-web-api-node": "^5.0.4",
     "@types/uuid": "^8.3.3",
-    "ts-node-dev": "^1.1.8",
-    "typescript": "^4.5.4"
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
   }
 }

@@ -11,7 +11,7 @@ const useSpotifyTrackSearch = (gameId: string, query: string) =>
         `${config.publicRuntimeConfig.serverUrl}/game/${gameId}/spotify/track?query=${query}`
       );
       const json = await response.json();
-      return json as SpotifyApi.SearchResponse;
+      return json
     },
     {
       enabled: query.length >= 2,

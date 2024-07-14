@@ -41,6 +41,8 @@ const PlaylistSelection: FC<PlaylistSelectionProps> = ({ gameId, onSelect, selec
     skeleton.push(<div key={i} className="aspect-w-1 aspect-h-1 animate-pulse bg-white bg-opacity-10 rounded-lg" />)
   }
 
+  console.log(playlistsQuery.data)
+
   return <>
     <div className="flex mt-7">
       <Input
@@ -68,7 +70,7 @@ const PlaylistSelection: FC<PlaylistSelectionProps> = ({ gameId, onSelect, selec
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-7">
       {playlistsQuery.isLoading && skeleton}
       {playlistsQuery.isSuccess &&
-        playlistsQuery.data.playlists.items.map((playlist) => {
+        playlistsQuery.data.map((playlist) => {
           return (
             <SpotifyPlaylistTile
               key={playlist.id}

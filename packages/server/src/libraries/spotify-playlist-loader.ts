@@ -1,13 +1,13 @@
-import SpotifyWebApi from "spotify-web-api-node";
 import { Logger } from "tslog";
 import SpotifyCache from "./spotify-cache";
+import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk";
 
 const logger = new Logger({ name: "SpotifyPlaylistLoader" });
 
 class SpotifyPlaylistLoader {
   public progress = 0;
 
-  constructor(private spotify: SpotifyWebApi) {}
+  constructor(private spotify: SpotifyApi) {}
 
   async load(playlistId: string) {
     const spotifyCache = await SpotifyCache.getInstance()
@@ -18,31 +18,31 @@ class SpotifyPlaylistLoader {
     }
 
     this.progress = 0;
-    const songs: SpotifyApi.TrackObjectFull[] = [];
+    const songs: Track[] = [];
     const limit = 20;
     let offset = 0;
     let loaded = false;
 
     try {
       do {
-        const playlistTracks = await this.spotify.getPlaylistTracks(
+        const playlistTracks = await this.spotify.playlists.getPlaylistItems(
           playlistId,
-          {
-            limit,
-            offset,
-          }
+          undefined,
+          undefined,
+          limit,
+          offset,
         );
-        if (playlistTracks.body.items.length < limit) {
+        if (playlistTracks.items.length < limit) {
           loaded = true;
         }
 
-        for (let item of playlistTracks.body.items) {
+        for (let item of playlistTracks.items) {
           if (item.track.preview_url) {
             songs.push(item.track);
           }
         }
 
-        this.progress = songs.length / playlistTracks.body.total;
+        this.progress = songs.length / playlistTracks.total;
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
         logger.debug("Loaded tracks", limit, offset);

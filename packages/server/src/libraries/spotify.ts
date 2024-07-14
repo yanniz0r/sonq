@@ -1,12 +1,11 @@
-import SpotifyWebApi from "spotify-web-api-node";
+import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const spotify = new SpotifyWebApi({
-  clientId: process.env.SPOTIFY_CLIENT_ID,
-  clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  redirectUri: process.env.SPOTIFY_REDIRECT_URI,
-});
+const spotify = SpotifyApi.withClientCredentials(
+  process.env.SPOTIFY_CLIENT_ID!,
+  process.env.SPOTIFY_CLIENT_SECRET!,
+);
 
 export default spotify;

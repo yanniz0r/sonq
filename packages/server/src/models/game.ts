@@ -1,4 +1,3 @@
-import SpotifyWebApi from "spotify-web-api-node";
 import { Domain } from "@sonq/api";
 import Player from "./player";
 import dayjs from "dayjs";
@@ -8,7 +7,7 @@ import { Server } from "socket.io";
 import { phaseChangeEmitter } from "../socket/emitters/phase-change-emitter";
 import SpotifyPlaylistLoader from "../libraries/spotify-playlist-loader";
 import { v4 } from "uuid";
-import { PlayerStatistic } from "@sonq/api/dist/domain";
+import { AccessToken, SpotifyApi, Track } from "@spotify/web-api-ts-sdk";
 
 const logger = new Logger({ name: "Game" });
 
@@ -24,15 +23,15 @@ class Game {
   };
   @observable
   public score = new ObservableMap<Player, number>();
-  public songs: SpotifyApi.TrackObjectFull[] = [];
+  public songs: Track[] = [];
 
-  public guessedSongs: SpotifyApi.TrackObjectFull[] = [];
+  public guessedSongs: Track[] = [];
   public wrongAnswerCounter: Map<Player, number> = new ObservableMap()
-  public closestCall?: PlayerStatistic;
-  public fastestAnswer?: PlayerStatistic;
+  public closestCall?: Domain.PlayerStatistic;
+  public fastestAnswer?: Domain.PlayerStatistic;
 
-  public playlistLoader: SpotifyPlaylistLoader;
-  public currentSong?: SpotifyApi.TrackObjectFull;
+  public playlistLoader?: SpotifyPlaylistLoader;
+  public currentSong?: Track;
   public answers: Map<Player, Date> = new ObservableMap();
   public wrongGuesses: Domain.SongGuess[] = [];
   public phaseStarted = new Date();
@@ -51,14 +50,13 @@ class Game {
    */
   public adminKey = v4();
 
+  public spotify?: SpotifyApi
+
   constructor(
     public io: Server,
     public id: string,
-    public spotify: SpotifyWebApi
   ) {
     makeObservable(this);
-
-    this.playlistLoader = new SpotifyPlaylistLoader(spotify);
 
     reaction(
       () => this.phase,
@@ -103,7 +101,17 @@ class Game {
     );
   }
 
-  public async submitAnswer(answer: {player: Player, artistName: string, songName: string, spotifyId: string}): Promise<[boolean, SpotifyApi.TrackObjectFull]> {
+  public authenticateSpotify(accessToken: AccessToken) {
+    console.log(accessToken)
+    this.spotify = SpotifyApi.withAccessToken(
+      process.env.SPOTIFY_CLIENT_ID!,
+      accessToken,
+    );
+
+    this.playlistLoader = new SpotifyPlaylistLoader(this.spotify);
+  }
+
+  public async submitAnswer(answer: {player: Player, artistName: string, songName: string, spotifyId: string}): Promise<[boolean, Track]> {
     if (
       this.currentSong &&
       this.currentSong.name === answer.songName &&
@@ -130,10 +138,11 @@ class Game {
       songName: answer.songName,
     });
     this.addWrongAnswerToStatistic(answer.player)
-    return this.spotify
-      .getTrack(answer.spotifyId)
+    return this.spotify!
+      .tracks
+      .get(answer.spotifyId)
       .then((track) => {
-        return [false, track.body];
+        return [false, track];
       });
   }
 
@@ -240,8 +249,8 @@ class Game {
   }
 
   public transitionToSummary() {
-    let mostWrongAnswers: PlayerStatistic | undefined = undefined;
-    let leastWrongAnswers: PlayerStatistic | undefined = undefined;
+    let mostWrongAnswers: Domain.PlayerStatistic | undefined = undefined;
+    let leastWrongAnswers: Domain.PlayerStatistic | undefined = undefined;
     this.players.forEach((player) => {
       const wrongAnswers = this.getWrongAnswersForPlayer(player);
       if (!mostWrongAnswers || mostWrongAnswers.value < wrongAnswers) {
@@ -268,7 +277,6 @@ class Game {
         answers: this.getReviewAnswers(),
         songs: this.guessedSongs,
         score: this.getPlayerScores(),
-        track: this.currentSong!,
       },
     };
   }

@@ -7,6 +7,8 @@ import Alert from "../components/alert";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import Container from "../components/container";
+import getConfig from "next/config";
+import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
 interface HomePageProps {
   error?: string;
@@ -59,7 +61,7 @@ const Home: NextPage<HomePageProps> = ({ error }) => {
                 <h1 className="text-5xl text-pink-600 font-bold leading-none">{t('landing.headline')}</h1>
                 <p className="mt-5 text-gray-200 text-xl">{t('landing.content')}</p>
                 <a
-                  href="/api/spotify-login"
+                  href="/spotify-redirect"
                   style={{ background: "#1DD05D" }}
                   className="text-white p-4 px-5 inline-flex items-center font-bold rounded-full mt-10 transform transition hover:scale-110"
                 >

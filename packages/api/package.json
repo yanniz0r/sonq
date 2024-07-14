@@ -4,14 +4,14 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "typescript": "^4.5.4"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "zod": "^3.11.6",
-    "@types/spotify-web-api-node": "^5.0.4"
+    "@spotify/web-api-ts-sdk": "^1.2.0",
+    "zod": "^3.11.6"
   }
 }

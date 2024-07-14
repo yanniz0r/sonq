@@ -1,11 +1,12 @@
 import { SocketServer } from "@sonq/api";
 import Game from "../../models/game";
 import Player from "../../models/player";
+import { Track } from "@spotify/web-api-ts-sdk";
 
 export const songGuessedIncorrectlyEmitter = (
   game: Game,
   player: Player,
-  track: SpotifyApi.TrackObjectFull
+  track: Track
 ) => {
   const data: SocketServer.SongGuessedEvent = {
     player,

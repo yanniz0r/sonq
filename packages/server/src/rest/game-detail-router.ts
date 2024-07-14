@@ -4,7 +4,6 @@ import GameStorage from "../storage/game-storage";
 import * as zod from "zod";
 import { Domain, Rest } from "@sonq/api";
 import Game from "../models/game";
-import SpotifyPlaylistLoader from "../libraries/spotify-playlist-loader";
 import SpotifyCache from "../libraries/spotify-cache";
 
 const ParamsSchema = zod.object({
@@ -42,7 +41,7 @@ class GameDetailRouter {
   private get: RequestHandler = (request, response) => {
     const payload: Rest.GetGame = {
       options: this.game.options,
-      playlistDataDownloadProgress: this.game.playlistLoader.progress,
+      playlistDataDownloadProgress: this.game.playlistLoader!.progress,
       phase: this.game.phase,
       players: this.game.players,
     };
@@ -60,7 +59,7 @@ class GameDetailRouter {
       this.game.options.spotifyPlaylistId !== body.spotifyPlaylistId
     ) {
       this.game.options.spotifyPlaylistId = body.spotifyPlaylistId;
-      const songs = await this.game.playlistLoader.load(body.spotifyPlaylistId);
+      const songs = await this.game.playlistLoader!.load(body.spotifyPlaylistId);
       this.game.songs = songs;
     }
     if (body.rounds) {
@@ -78,11 +77,14 @@ class GameDetailRouter {
     const QuerySchema = zod.object({
       query: zod.string().optional(),
     });
-    const query = QuerySchema.parse(request.query);
-    const playlists = query.query
-      ? await this.game.spotify.searchPlaylists(query.query)
-      : await this.game.spotify.getFeaturedPlaylists();
-    response.send(playlists.body);
+    const { query } = QuerySchema.parse(request.query);
+    
+    if (query) {
+      const searchResult = await this.game.spotify!.search(query, ['playlist'])
+      return response.status(200).json(searchResult.playlists.items);
+    } else {
+      response.send([])
+    }
   };
 
   private getSpotifyTrack: RequestHandler = async (request, response) => {
@@ -96,11 +98,9 @@ class GameDetailRouter {
     if (cachedResult) {
       return response.status(200).json(cachedResult);
     }
-    const tracks = await this.game.spotify.searchTracks(query, {
-      limit: 4,
-    });
-    spotifyCache.setSearchTracks(this.game.id, query, tracks.body)
-    response.status(200).json(tracks.body);
+    const { tracks } = await this.game.spotify!.search(query, ['track'], undefined, 4);
+    spotifyCache.setSearchTracks(this.game.id, query, tracks.items)
+    response.status(200).json(tracks);
   };
 
   private authorize(authorizationHeader?: string) {

@@ -19,7 +19,6 @@ import Head from "next/head";
 import { Toolbar, ToolbarButton } from "../../../components/toolbar";
 import useIsAdmin from "../../../hooks/use-is-admin";
 import { useTranslation } from "react-i18next";
-import { GamePhaseType } from "@sonq/api/dist/domain";
 import Link from "next/link";
 import getGameUrl from "../../../helpers/get-game-url";
 import Container from "../../../components/container";
@@ -159,20 +158,20 @@ const GamePage: NextPage<GamePageProps> = ({ gameId }) => {
                 )}
               </Container>
             </div>
-            {isAdmin && gamePhase.type !== GamePhaseType.PlaySong &&
+            {isAdmin && gamePhase.type !== Domain.GamePhaseType.PlaySong &&
               <div className="z-10">
                 <Toolbar>
-                  {gamePhase.type === GamePhaseType.Lobby &&
+                  {gamePhase.type === Domain.GamePhaseType.Lobby &&
                     <ToolbarButton onClick={continueGame}>
                       {t('toolbar.startGame')}
                     </ToolbarButton>
                   }
-                  {gamePhase.type === GamePhaseType.Review &&
+                  {gamePhase.type === Domain.GamePhaseType.Review &&
                     <ToolbarButton onClick={continueGame}>
                       {t('toolbar.nextRound')}
                     </ToolbarButton>
                   }
-                  {gamePhase.type === GamePhaseType.Summary &&
+                  {gamePhase.type === Domain.GamePhaseType.Summary &&
                     <div className="flex justify-between">
                       <Link href={getGameUrl(gameId) + '/options'}>
                         <ToolbarButton>

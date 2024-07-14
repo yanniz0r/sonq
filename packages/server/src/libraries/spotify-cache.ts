@@ -1,3 +1,4 @@
+import { Track } from '@spotify/web-api-ts-sdk'
 import dotenv from 'dotenv'
 import { createClient, RedisClientType } from 'redis'
 import { Logger } from 'tslog'
@@ -34,19 +35,19 @@ class SpotifyCache {
     return SpotifyCache.instance
   }
 
-  async getPlaylistTracks(playlistId: string): Promise<SpotifyApi.TrackObjectFull[] | null> {
+  async getPlaylistTracks(playlistId: string): Promise<Track[] | null> {
     return this.redisGetJSON(playlistTracksKey(playlistId))
   }
 
-  setPlaylistTracks(playlistId: string, tracks: SpotifyApi.TrackObjectFull[]) {
+  setPlaylistTracks(playlistId: string, tracks: Track[]) {
     return this.redisSet(playlistTracksKey(playlistId), tracks)
   }
 
-  async getSearchTracks(gameId: string, query: string, ): Promise<SpotifyApi.SearchResponse | null> {
+  async getSearchTracks(gameId: string, query: string, ): Promise<any | null> {
     return this.redisGetJSON(searchTracksKey(gameId, query))
   }
 
-  setSearchTracks(gameId: string, query: string, tracks: SpotifyApi.SearchResponse) {
+  setSearchTracks(gameId: string, query: string, tracks: any[]) {
     this.redisSet(searchTracksKey(gameId, query), tracks)
   }
 

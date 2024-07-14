@@ -11,7 +11,6 @@ COPY ./packages/server ./packages/server
 
 RUN yarn install
 
-RUN yarn turbo run --filter=@sonq/api
 RUN yarn turbo run --filter=@sonq/server
 
 CMD ["yarn", "workspace", "@sonq/server", "start"]

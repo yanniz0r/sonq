@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w",
+    "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

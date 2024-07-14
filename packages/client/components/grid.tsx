@@ -28,7 +28,7 @@ export const DetailPane: FC<DetailPaneProps> = ({primaryText, secondaryText, ter
 }
 
 interface PlaylistGridProps {
-  songs: SpotifyApi.TrackObjectFull[]
+  songs: any[] // FIXME: Type this
   onClick?(): void;
 }
 

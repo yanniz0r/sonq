@@ -4,7 +4,7 @@ interface SpotifyPlaylistTile {
   onClick?(playlistId): void;
   selected?: boolean;
   downloading?: boolean;
-  playlist: SpotifyApi.PlaylistBaseObject;
+  playlist: any; // FIXME: Type this
 }
 
 const SpotifyPlaylistTile: FC<SpotifyPlaylistTile> = ({

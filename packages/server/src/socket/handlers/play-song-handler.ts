@@ -1,13 +1,8 @@
 import { Logger } from "tslog";
 import Session from "../../models/session";
 import SocketHandler from "../socket-handler";
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-
-const logger = new Logger({ name: "PlaySongHandler" });
 
 class PlaySongHandler implements SocketHandler {
-  constructor(private spotify: SpotifyApi) {}
-
   public event = "play-next-song";
 
   handle(session: Session) {

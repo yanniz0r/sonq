@@ -11,7 +11,7 @@ const useSpotifyPlaylistSearch = (gameId: string, query: string) =>
       }/game/${gameId}/spotify/playlist?query=${encodeURI(query)}`
     );
     const json = await response.json();
-    return json as SpotifyApi.ListOfFeaturedPlaylistsResponse;
+    return json as any; // FIXME: Type this
   });
 
 export default useSpotifyPlaylistSearch;

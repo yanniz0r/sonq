@@ -62,7 +62,7 @@ io.on("connection", (socket: Socket) => {
   const isAdmin = parsedQuery.data.adminKey === game.adminKey;
 
   const socketController = new SocketController(game, socket, isAdmin);
-  socketController.addHandler(new PlaySongHandler(spotify));
+  socketController.addHandler(new PlaySongHandler());
   socketController.addHandler(new JoinHandler());
   socketController.addHandler(new ContinueHandler());
   socketController.addHandler(new GuessSongHandler());

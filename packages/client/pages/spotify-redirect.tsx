@@ -1,14 +1,14 @@
-import { NextPage } from "next";
-import { useEffect } from "react";
-import { useMutation } from "react-query";
-import { useRouter } from "next/router";
 import { Rest } from "@sonq/api";
-import { ADMINKEY } from "../constants/local-storage";
+import { SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { NextPage } from "next";
 import getConfig from "next/config";
-import { useTranslation } from 'react-i18next'
-import LoadingSpinner from "../components/loading-spinner";
 import Head from "next/head";
-import { AuthorizationCodeWithPKCEStrategy, SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useTranslation } from 'react-i18next';
+import { useMutation } from "react-query";
+import LoadingSpinner from "../components/loading-spinner";
+import { ADMINKEY } from "../constants/local-storage";
 
 const config = getConfig();
 

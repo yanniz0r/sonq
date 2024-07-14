@@ -7,8 +7,6 @@ import Alert from "../components/alert";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import Container from "../components/container";
-import getConfig from "next/config";
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
 interface HomePageProps {
   error?: string;

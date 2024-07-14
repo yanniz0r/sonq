@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sonq/api": "1.0.0",
+    "@sonq/api": "*",
     "@spotify/web-api-ts-sdk": "^1.2.0",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",

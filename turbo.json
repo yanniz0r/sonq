@@ -3,7 +3,12 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "CLIENT_URL",
+        "SERVER_URL",
+        "SPOTIFY_CLIENT_ID"
+      ]
     },
     "typecheck": {
       "dependsOn": ["^typecheck"]

@@ -40,7 +40,7 @@ const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
     createGameMutation.mutateAsync().then(async (game) => {
       const authenticationResponse = await SpotifyApi.performUserAuthorization(
         clientId,
-        '/spotify-redirect',
+        `${config.publicRuntimeConfig.clientUrl}/spotify-redirect`,
         [],
         `${config.publicRuntimeConfig.serverUrl}/game/${game.gameId}/spotify-auth`,
       )

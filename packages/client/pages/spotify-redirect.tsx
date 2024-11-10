@@ -17,7 +17,6 @@ interface SpotifyRedirectPageProps {
 }
 
 const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
-  console.log(props)
   const {t} = useTranslation('gameOptions')
   const createGameMutation = useMutation(async () => {
     const response = await fetch(
@@ -41,9 +40,9 @@ const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
     createGameMutation.mutateAsync().then(async (game) => {
       const authenticationResponse = await SpotifyApi.performUserAuthorization(
         clientId,
-        'http://localhost:3000/spotify-redirect',
+        '/spotify-redirect',
         [],
-        `http://localhost:4000/game/${game.gameId}/spotify-auth`,
+        `${config.publicRuntimeConfig.serverUrl}/game/${game.gameId}/spotify-auth`,
       )
       if (authenticationResponse.authenticated) {
         localStorage.setItem(ADMINKEY(game.gameId), game.adminKey);
@@ -51,13 +50,6 @@ const SpotifyRedirectPage: NextPage<SpotifyRedirectPageProps> = (props) => {
       }
     })
   }, [])
-
-  // useEffect(() => {
-  //   createGameMutation.mutateAsync(props.code).then((data) => {
-  //     localStorage.setItem(ADMINKEY(data.gameId), data.adminKey);
-  //     router.push(`/game/${data.gameId}/options`);
-  //   });
-  // }, [props.code]);
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-900">

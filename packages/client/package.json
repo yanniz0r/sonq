@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sonq/api": "workspace:*",
+    "@sonq/api": "*",
     "@spotify/web-api-ts-sdk": "^1.2.0",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/line-clamp": "^0.3.0",

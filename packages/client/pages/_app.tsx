@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <script defer data-domain="sonq.de" src="https://analytics.coolify.inseldu.de/js/script.js"></script>
+      <script defer src="https://umami.inselmann.online/script.js" data-website-id="c257cd0b-8174-439a-8dd3-db3937df0327"></script>
       <I18nextProvider i18n={i18n}>
         <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />

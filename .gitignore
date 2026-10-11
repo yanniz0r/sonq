@@ -1,4 +1,12 @@
 node_modules
 dist
 .env
+.env.local
 .turbo
+.output
+.nitro
+.tanstack
+.vinxi
+test-results
+playwright-report
+.DS_Store

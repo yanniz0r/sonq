@@ -1,21 +1,27 @@
 {
   "name": "sonq",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
   "private": true,
-  "packageManager": "yarn@1.22.22",
-  "scripts": {
-    "dev": "turbo run dev",
-    "start": "yarn workspace @sonq/server run start",
-    "build": "turbo run build",
-    "typecheck": "turbo run typecheck"
-  },
+  "type": "module",
+  "packageManager": "bun@1.4.0",
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start --filter=@sonq/web",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "check": "prettier --check ."
+  },
   "devDependencies": {
-    "prettier": "^2.5.1",
-    "turbo": "^2.2.3"
+    "@tanstack/eslint-config": "^0.4.0",
+    "eslint": "^9.39.5",
+    "prettier": "^3.8.1",
+    "turbo": "^2.6.0",
+    "typescript": "^6.0.3"
   }
 }

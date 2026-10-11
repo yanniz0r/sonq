@@ -1,0 +1,113 @@
+{
+  "id": 3155776842,
+  "title": "Top Worldwide",
+  "description": "",
+  "duration": 20190,
+  "public": true,
+  "is_loved_track": false,
+  "collaborative": false,
+  "nb_tracks": 100,
+  "fans": 878401,
+  "link": "https://www.deezer.com/playlist/3155776842",
+  "share": "https://www.deezer.com/playlist/3155776842?utm_source=deezer&utm_content=playlist-3155776842&utm_term=0_1791717932&utm_medium=web",
+  "picture": "https://api.deezer.com/playlist/3155776842/image",
+  "picture_small": "https://cdn-images.dzcdn.net/images/playlist/0b92c2f9e94a1a3650f0de769c4fc07c/56x56-000000-80-0-0.jpg",
+  "picture_medium": "https://cdn-images.dzcdn.net/images/playlist/0b92c2f9e94a1a3650f0de769c4fc07c/250x250-000000-80-0-0.jpg",
+  "picture_big": "https://cdn-images.dzcdn.net/images/playlist/0b92c2f9e94a1a3650f0de769c4fc07c/500x500-000000-80-0-0.jpg",
+  "picture_xl": "https://cdn-images.dzcdn.net/images/playlist/0b92c2f9e94a1a3650f0de769c4fc07c/1000x1000-000000-80-0-0.jpg",
+  "checksum": "e351a9c767eaaf7286051fb0c0d046e6",
+  "tracklist": "https://api.deezer.com/playlist/3155776842/tracks",
+  "creation_date": "2017-05-23 07:29:35",
+  "add_date": "2026-10-11 10:26:10",
+  "mod_date": "2026-10-11 10:26:10",
+  "md5_image": "0b92c2f9e94a1a3650f0de769c4fc07c",
+  "picture_type": "playlist",
+  "creator": {
+    "id": 637006841,
+    "name": "Deezer Charts",
+    "tracklist": "https://api.deezer.com/user/637006841/flow",
+    "type": "user"
+  },
+  "type": "playlist",
+  "tracks": {
+    "data": [
+      {
+        "id": 3602074142,
+        "readable": true,
+        "title": "Choosin' Texas",
+        "title_short": "Choosin' Texas",
+        "title_version": "",
+        "isrc": "USSM12504190",
+        "link": "https://www.deezer.com/track/3602074142",
+        "duration": 232,
+        "rank": 978085,
+        "explicit_lyrics": false,
+        "explicit_content_lyrics": 0,
+        "explicit_content_cover": 2,
+        "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/b/5/0/5b539e49bdb2bbf9dd4bc00361ed7ca9.mp3?hdnea=exp=1791718832~acl=/api/1/1/5/b/5/0/5b539e49bdb2bbf9dd4bc00361ed7ca9.mp3*~data=user_id=0,application_id=42~hmac=bc83856dc3f5a0943ca4f3a01bebf02c64ec58aaa50cb92d9d626097f2c37f75",
+        "md5_image": "749ad2ad7609ec768e342bec41078095",
+        "time_add": 1768393209,
+        "artist": {
+          "id": 14867123,
+          "name": "Ella Langley",
+          "link": "https://www.deezer.com/artist/14867123",
+          "tracklist": "https://api.deezer.com/artist/14867123/top?limit=50",
+          "type": "artist"
+        },
+        "album": {
+          "id": 837881302,
+          "title": "Choosin' Texas",
+          "upc": "196873638690",
+          "cover": "https://api.deezer.com/album/837881302/image",
+          "cover_small": "https://cdn-images.dzcdn.net/images/cover/749ad2ad7609ec768e342bec41078095/56x56-000000-80-0-0.jpg",
+          "cover_medium": "https://cdn-images.dzcdn.net/images/cover/749ad2ad7609ec768e342bec41078095/250x250-000000-80-0-0.jpg",
+          "cover_big": "https://cdn-images.dzcdn.net/images/cover/749ad2ad7609ec768e342bec41078095/500x500-000000-80-0-0.jpg",
+          "cover_xl": "https://cdn-images.dzcdn.net/images/cover/749ad2ad7609ec768e342bec41078095/1000x1000-000000-80-0-0.jpg",
+          "md5_image": "749ad2ad7609ec768e342bec41078095",
+          "tracklist": "https://api.deezer.com/album/837881302/tracks",
+          "type": "album"
+        },
+        "type": "track"
+      },
+      {
+        "id": 3895241341,
+        "readable": true,
+        "title": "Boston",
+        "title_short": "Boston",
+        "title_version": "",
+        "isrc": "QZJ842603468",
+        "link": "https://www.deezer.com/track/3895241341",
+        "duration": 170,
+        "rank": 873262,
+        "explicit_lyrics": false,
+        "explicit_content_lyrics": 0,
+        "explicit_content_cover": 2,
+        "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/d/f/0/adf281db3129088dd0e88c58e64a3ca3.mp3?hdnea=exp=1791718832~acl=/api/1/1/a/d/f/0/adf281db3129088dd0e88c58e64a3ca3.mp3*~data=user_id=0,application_id=42~hmac=7fe0c23323420b3fe00722a041323fbe81371fd0d76f26f217c01b6930c35e67",
+        "md5_image": "66d6baca9df5092af22a710ce10d39cf",
+        "time_add": 1778758210,
+        "artist": {
+          "id": 181157207,
+          "name": "STELLA LEFTY",
+          "link": "https://www.deezer.com/artist/181157207",
+          "tracklist": "https://api.deezer.com/artist/181157207/top?limit=50",
+          "type": "artist"
+        },
+        "album": {
+          "id": 937796461,
+          "title": "Boston",
+          "upc": "810129961546",
+          "cover": "https://api.deezer.com/album/937796461/image",
+          "cover_small": "https://cdn-images.dzcdn.net/images/cover/66d6baca9df5092af22a710ce10d39cf/56x56-000000-80-0-0.jpg",
+          "cover_medium": "https://cdn-images.dzcdn.net/images/cover/66d6baca9df5092af22a710ce10d39cf/250x250-000000-80-0-0.jpg",
+          "cover_big": "https://cdn-images.dzcdn.net/images/cover/66d6baca9df5092af22a710ce10d39cf/500x500-000000-80-0-0.jpg",
+          "cover_xl": "https://cdn-images.dzcdn.net/images/cover/66d6baca9df5092af22a710ce10d39cf/1000x1000-000000-80-0-0.jpg",
+          "md5_image": "66d6baca9df5092af22a710ce10d39cf",
+          "tracklist": "https://api.deezer.com/album/937796461/tracks",
+          "type": "album"
+        },
+        "type": "track"
+      }
+    ],
+    "checksum": "e351a9c767eaaf7286051fb0c0d046e6"
+  }
+}

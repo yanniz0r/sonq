@@ -1,0 +1,9 @@
+**/node_modules
+**/.output
+**/.nitro
+**/.tanstack
+**/.turbo
+**/test-results
+**/playwright-report
+legacy
+.git

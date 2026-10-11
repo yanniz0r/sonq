@@ -1,0 +1,8 @@
+{
+  "name": "@sonq/tsconfig",
+  "private": true,
+  "files": [
+    "base.json",
+    "react.json"
+  ]
+}

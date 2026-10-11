@@ -1,19 +1,22 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"],
-      "env": [
-        "CLIENT_URL",
-        "SERVER_URL",
-        "SPOTIFY_CLIENT_ID"
-      ]
+      "outputs": [".output/**", "dist/**"]
     },
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
+    "test": {},
+    "lint": {},
     "dev": {
+      "persistent": true,
+      "cache": false
+    },
+    "start": {
+      "dependsOn": ["build"],
       "persistent": true,
       "cache": false
     }

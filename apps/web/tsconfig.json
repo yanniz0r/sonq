@@ -1,0 +1,10 @@
+{
+  "extends": "@sonq/tsconfig/react.json",
+  "compilerOptions": {
+    "types": ["vite/client", "bun"],
+    "paths": {
+      "#/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "e2e", "vite.config.ts", "playwright.config.ts"]
+}

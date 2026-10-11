@@ -1,0 +1,84 @@
+{
+  "data": [
+    {
+      "id": 9010394402,
+      "title": "90's Jazz",
+      "public": true,
+      "nb_tracks": 30,
+      "link": "https://www.deezer.com/playlist/9010394402",
+      "picture": "https://api.deezer.com/playlist/9010394402/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/playlist/85c6f48bf3689c411d4618ca00a1465e/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/playlist/85c6f48bf3689c411d4618ca00a1465e/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/playlist/85c6f48bf3689c411d4618ca00a1465e/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/playlist/85c6f48bf3689c411d4618ca00a1465e/1000x1000-000000-80-0-0.jpg",
+      "checksum": "1b00bd36810449fbcdb11fa5873c6c8f",
+      "tracklist": "https://api.deezer.com/playlist/9010394402/tracks",
+      "creation_date": "2021-04-29 16:22:02",
+      "add_date": "2021-05-04 12:21:20",
+      "mod_date": "2023-11-07 18:39:02",
+      "md5_image": "85c6f48bf3689c411d4618ca00a1465e",
+      "picture_type": "playlist",
+      "user": {
+        "id": 902801015,
+        "name": "Yannick - Deezer Jazz & Blues Editor",
+        "tracklist": "https://api.deezer.com/user/902801015/flow",
+        "type": "user"
+      },
+      "type": "playlist"
+    },
+    {
+      "id": 3829647662,
+      "title": "90er Party Hits",
+      "public": true,
+      "nb_tracks": 100,
+      "link": "https://www.deezer.com/playlist/3829647662",
+      "picture": "https://api.deezer.com/playlist/3829647662/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/playlist/5c81c0f30c0b28407321a03a3ef9476a/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/playlist/5c81c0f30c0b28407321a03a3ef9476a/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/playlist/5c81c0f30c0b28407321a03a3ef9476a/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/playlist/5c81c0f30c0b28407321a03a3ef9476a/1000x1000-000000-80-0-0.jpg",
+      "checksum": "96135aeedef32a563052141dc6426d80",
+      "tracklist": "https://api.deezer.com/playlist/3829647662/tracks",
+      "creation_date": "2017-11-22 11:14:26",
+      "add_date": "2026-09-05 05:00:49",
+      "mod_date": "2026-10-03 04:58:10",
+      "md5_image": "5c81c0f30c0b28407321a03a3ef9476a",
+      "picture_type": "playlist",
+      "user": {
+        "id": 374224155,
+        "name": "Yannick - Deezer Deutschland Editor",
+        "tracklist": "https://api.deezer.com/user/374224155/flow",
+        "type": "user"
+      },
+      "type": "playlist"
+    },
+    {
+      "id": 2322259622,
+      "title": "90s Party Hits",
+      "public": true,
+      "nb_tracks": 70,
+      "link": "https://www.deezer.com/playlist/2322259622",
+      "picture": "https://api.deezer.com/playlist/2322259622/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/playlist/0a48845ab1211fedc58ca3be886558a0/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/playlist/0a48845ab1211fedc58ca3be886558a0/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/playlist/0a48845ab1211fedc58ca3be886558a0/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/playlist/0a48845ab1211fedc58ca3be886558a0/1000x1000-000000-80-0-0.jpg",
+      "checksum": "9ab7e1c4c11c89f6b982bf295f2713a7",
+      "tracklist": "https://api.deezer.com/playlist/2322259622/tracks",
+      "creation_date": "2016-10-13 14:57:47",
+      "add_date": "2026-10-03 04:36:54",
+      "mod_date": "2026-10-03 04:36:54",
+      "md5_image": "0a48845ab1211fedc58ca3be886558a0",
+      "picture_type": "playlist",
+      "user": {
+        "id": 753546365,
+        "name": "Laeti - Deezer Pop Editor",
+        "tracklist": "https://api.deezer.com/user/753546365/flow",
+        "type": "user"
+      },
+      "type": "playlist"
+    }
+  ],
+  "total": 152,
+  "next": "https://api.deezer.com/search/playlist?q=90s&limit=3&index=3"
+}

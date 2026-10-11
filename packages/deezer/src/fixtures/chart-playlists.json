@@ -1,0 +1,83 @@
+{
+  "data": [
+    {
+      "id": 3829647662,
+      "title": "90er Party Hits",
+      "public": true,
+      "nb_tracks": 100,
+      "link": "https://www.deezer.com/playlist/3829647662",
+      "picture": "https://api.deezer.com/playlist/3829647662/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/playlist/5c81c0f30c0b28407321a03a3ef9476a/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/playlist/5c81c0f30c0b28407321a03a3ef9476a/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/playlist/5c81c0f30c0b28407321a03a3ef9476a/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/playlist/5c81c0f30c0b28407321a03a3ef9476a/1000x1000-000000-80-0-0.jpg",
+      "checksum": "96135aeedef32a563052141dc6426d80",
+      "tracklist": "https://api.deezer.com/playlist/3829647662/tracks",
+      "creation_date": "2017-11-22 11:14:26",
+      "add_date": "0000-00-00 00:00:00",
+      "mod_date": "0000-00-00 00:00:00",
+      "md5_image": "5c81c0f30c0b28407321a03a3ef9476a",
+      "picture_type": "playlist",
+      "user": {
+        "id": 374224155,
+        "name": "Yannick - Deezer Deutschland Editor",
+        "tracklist": "https://api.deezer.com/user/374224155/flow",
+        "type": "user"
+      },
+      "type": "playlist"
+    },
+    {
+      "id": 335504805,
+      "title": "Chill Out Musik",
+      "public": true,
+      "nb_tracks": 120,
+      "link": "https://www.deezer.com/playlist/335504805",
+      "picture": "https://api.deezer.com/playlist/335504805/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/playlist/30a18604349cdb099db0fad84822195c/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/playlist/30a18604349cdb099db0fad84822195c/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/playlist/30a18604349cdb099db0fad84822195c/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/playlist/30a18604349cdb099db0fad84822195c/1000x1000-000000-80-0-0.jpg",
+      "checksum": "63751042b90254874ee9cc5ba07837eb",
+      "tracklist": "https://api.deezer.com/playlist/335504805/tracks",
+      "creation_date": "2017-06-13 17:52:43",
+      "add_date": "0000-00-00 00:00:00",
+      "mod_date": "0000-00-00 00:00:00",
+      "md5_image": "30a18604349cdb099db0fad84822195c",
+      "picture_type": "playlist",
+      "user": {
+        "id": 374224155,
+        "name": "Yannick - Deezer Deutschland Editor",
+        "tracklist": "https://api.deezer.com/user/374224155/flow",
+        "type": "user"
+      },
+      "type": "playlist"
+    },
+    {
+      "id": 1043463931,
+      "title": "Freitag alles neu",
+      "public": true,
+      "nb_tracks": 74,
+      "link": "https://www.deezer.com/playlist/1043463931",
+      "picture": "https://api.deezer.com/playlist/1043463931/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/playlist/c9de7934a774494fc042fe4c88f750d3/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/playlist/c9de7934a774494fc042fe4c88f750d3/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/playlist/c9de7934a774494fc042fe4c88f750d3/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/playlist/c9de7934a774494fc042fe4c88f750d3/1000x1000-000000-80-0-0.jpg",
+      "checksum": "2a4d63815e8e40e09b8eac12fef089c3",
+      "tracklist": "https://api.deezer.com/playlist/1043463931/tracks",
+      "creation_date": "2014-11-12 13:04:57",
+      "add_date": "0000-00-00 00:00:00",
+      "mod_date": "0000-00-00 00:00:00",
+      "md5_image": "c9de7934a774494fc042fe4c88f750d3",
+      "picture_type": "playlist",
+      "user": {
+        "id": 374224155,
+        "name": "Yannick - Deezer Deutschland Editor",
+        "tracklist": "https://api.deezer.com/user/374224155/flow",
+        "type": "user"
+      },
+      "type": "playlist"
+    }
+  ],
+  "total": 3
+}

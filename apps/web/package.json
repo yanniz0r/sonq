@@ -1,0 +1,43 @@
+{
+  "name": "@sonq/web",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "scripts": {
+    "dev": "vite dev --port 3000",
+    "build": "vite build",
+    "start": "bun .output/server/index.mjs",
+    "preview": "vite preview",
+    "generate-routes": "tsr generate",
+    "typecheck": "tsr generate && tsc --noEmit",
+    "test": "bun test",
+    "lint": "eslint .",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@sonq/deezer": "workspace:*",
+    "@sonq/game": "workspace:*",
+    "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/react-query": "^5.102.8",
+    "@tanstack/react-router": "^1.170.33",
+    "@tanstack/react-start": "^1.168.50",
+    "nitro": "3.0.260610-beta",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@sonq/tsconfig": "workspace:*",
+    "@tanstack/router-cli": "^1.167.34",
+    "@types/bun": "^1.4.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.2.2"
+  }
+}

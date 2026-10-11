@@ -1,0 +1,3 @@
+legacy
+bun.lock
+**/routeTree.gen.ts

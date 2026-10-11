@@ -1,0 +1,7 @@
+{
+  "extends": "@sonq/tsconfig/base.json",
+  "compilerOptions": {
+    "types": ["bun"]
+  },
+  "include": ["src"]
+}

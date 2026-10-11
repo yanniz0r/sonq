@@ -10,13 +10,7 @@
 import { isSameSong } from './match'
 import { correctGuess } from './scoring'
 import { totalRounds } from './selectors'
-import {
-  COUNTDOWN_MS,
-  GUESS_COOLDOWN_MS,
-  MAX_PLAYERS,
-  REVEAL_MS,
-  ROUND_MS,
-} from './types'
+import { GUESS_COOLDOWN_MS, MAX_PLAYERS } from './types'
 import type {
   Action,
   Deps,
@@ -130,8 +124,9 @@ function guess(
   room: Room,
   by: PlayerId,
   command: Extract<Command, { type: 'guess' }>,
-  { now }: Deps,
+  deps: Deps,
 ): ReduceResult {
+  const { now } = deps
   const { phase } = room
   if (phase.kind !== 'round') return fail('wrong_phase')
   const { round } = phase
@@ -155,21 +150,24 @@ function guess(
     guesses: { ...round.guesses, [by]: [...mine, entry] },
   }
   return done(
-    autoReveal({ ...room, phase: { kind: 'round', round: next } }, { now }),
+    autoReveal({ ...room, phase: { kind: 'round', round: next } }, deps),
   )
 }
 
 function onDeadline(room: Room, deps: Deps): Room {
   const { phase } = room
   if (phase.kind === 'round' && deps.now >= phase.round.endsAt)
-    return reveal(room, phase.round, deps.now)
+    return reveal(room, phase.round, deps)
   if (phase.kind === 'reveal' && deps.now >= phase.endsAt)
     return advance(room, phase.round, deps)
   return room
 }
 
-function reveal(room: Room, round: Round, now: number): Room {
-  return { ...room, phase: { kind: 'reveal', round, endsAt: now + REVEAL_MS } }
+function reveal(room: Room, round: Round, { now, timings }: Deps): Room {
+  return {
+    ...room,
+    phase: { kind: 'reveal', round, endsAt: now + timings.revealMs },
+  }
 }
 
 // Archives the revealed round, then deals the next one or ends the game.
@@ -182,11 +180,11 @@ function advance(room: Room, round: Round, deps: Deps): Room {
 
 function deal(room: Room, playlist: Playlist, deps: Deps): Room {
   const { track, played } = pickTrack(playlist.tracks, room.played, deps)
-  const startsAt = deps.now + COUNTDOWN_MS
+  const startsAt = deps.now + deps.timings.countdownMs
   const round: Round = {
     track,
     startsAt,
-    endsAt: startsAt + ROUND_MS,
+    endsAt: startsAt + deps.timings.roundMs,
     guesses: {},
   }
   return { ...room, played, phase: { kind: 'round', round } }
@@ -208,14 +206,14 @@ function pickTrack(
 }
 
 // Reveals early once every connected player has found the song.
-function autoReveal(room: Room, { now }: Pick<Deps, 'now'>): Room {
+function autoReveal(room: Room, deps: Deps): Room {
   const { phase } = room
   if (phase.kind !== 'round') return room
   const connected = room.players.filter((p) => p.connected)
   const allCorrect =
     connected.length > 0 &&
     connected.every((p) => correctGuess(phase.round, p.id))
-  return allCorrect ? reveal(room, phase.round, now) : room
+  return allCorrect ? reveal(room, phase.round, deps) : room
 }
 
 function removePlayer(

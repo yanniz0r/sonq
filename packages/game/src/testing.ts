@@ -2,7 +2,7 @@
 import { expect } from 'bun:test'
 
 import { reduce } from './reducer'
-import { DEFAULT_ROUNDS } from './types'
+import { DEFAULT_ROUNDS, DEFAULT_TIMINGS } from './types'
 import type { Command, GameError } from './protocol'
 import type {
   Action,
@@ -65,7 +65,11 @@ export function makeRoom(overrides: Partial<Room> = {}): Room {
   }
 }
 
-export const deps = (now = T0, random = () => 0): Deps => ({ now, random })
+export const deps = (now = T0, random = () => 0): Deps => ({
+  now,
+  random,
+  timings: DEFAULT_TIMINGS,
+})
 
 export const command = (by: PlayerId, cmd: Command): Action => ({
   type: 'command',

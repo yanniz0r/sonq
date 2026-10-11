@@ -1,11 +1,16 @@
 import { beforeEach, describe, expect, test } from 'bun:test'
-import { COUNTDOWN_MS, REVEAL_MS, ROUND_MS } from '@sonq/game'
 import type { Playlist, RoomEvent, RoomView, Track } from '@sonq/game'
 
 import { createLogger } from './log.server'
-import { createRoomStore } from './rooms.server'
+import {
+  DEFAULT_STORE_TIMINGS,
+  FAST_STORE_TIMINGS,
+  createRoomStore,
+} from './rooms.server'
 import type { Clock, RoomStore } from './rooms.server'
 import type { Credentials } from '#/lib/credentials'
+
+const { countdownMs, roundMs, revealMs } = DEFAULT_STORE_TIMINGS
 
 // A clock whose timers only run when the test advances time.
 function fakeClock() {
@@ -145,11 +150,11 @@ describe('room store', () => {
     // Just the deadline: both players are connected, so no other timers.
     expect(time.pending()).toBe(1)
 
-    time.advance(COUNTDOWN_MS + ROUND_MS)
+    time.advance(countdownMs + roundMs)
     expect(stream.latest()?.phase).toMatchObject({ kind: 'reveal', index: 0 })
     expect(time.pending()).toBe(1)
 
-    time.advance(REVEAL_MS)
+    time.advance(revealMs)
     expect(stream.latest()?.phase).toMatchObject({ kind: 'round', index: 1 })
   })
 
@@ -159,7 +164,7 @@ describe('room store', () => {
     listen(store, guest)
     expectOk(store.setPlaylist(host, playlist))
     expectOk(store.runCommand(host, { type: 'start' }))
-    time.advance(COUNTDOWN_MS)
+    time.advance(countdownMs)
 
     const answer = store.trackOfRound(host, 0)
     if (!answer) throw new Error('no track in round 0')
@@ -174,7 +179,7 @@ describe('room store', () => {
     expect(stream.latest()?.phase.kind).toBe('reveal')
     expect(time.pending()).toBe(1)
 
-    time.advance(REVEAL_MS)
+    time.advance(revealMs)
     expect(stream.latest()?.phase).toMatchObject({ kind: 'round', index: 1 })
   })
 
@@ -243,7 +248,7 @@ describe('room store', () => {
     listen(store, host)
     expectOk(store.setPlaylist(host, playlist))
     expectOk(store.runCommand(host, { type: 'start' }))
-    time.advance(COUNTDOWN_MS)
+    time.advance(countdownMs)
     expectOk(
       store.runCommand(guest, {
         type: 'guess',
@@ -264,5 +269,22 @@ describe('room store', () => {
     expect(log).toContain('game ended')
     expect(log).not.toContain(host.secret)
     expect(log).not.toContain(guest.secret)
+  })
+
+  test('runs on the timings it is given', () => {
+    const fast = createRoomStore({
+      clock: time.clock,
+      random: () => 0,
+      timings: FAST_STORE_TIMINGS,
+    })
+    const host = expectOk(fast.createRoom('Host'))
+    const stream = listen(fast, host)
+    expectOk(fast.setPlaylist(host, playlist))
+    expectOk(fast.runCommand(host, { type: 'start' }))
+
+    time.advance(FAST_STORE_TIMINGS.countdownMs + FAST_STORE_TIMINGS.roundMs)
+    expect(stream.latest()?.phase.kind).toBe('reveal')
+    time.advance(FAST_STORE_TIMINGS.revealMs)
+    expect(stream.latest()?.phase).toMatchObject({ kind: 'round', index: 1 })
   })
 })

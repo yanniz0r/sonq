@@ -5,6 +5,7 @@
 // handoff. All of it lives in this process, so sonq runs as one instance.
 import {
   DEFAULT_ROUNDS,
+  DEFAULT_TIMINGS,
   ROOM_CODE_ALPHABET,
   ROOM_CODE_LENGTH,
   deadlineOf,
@@ -20,6 +21,7 @@ import type {
   Result,
   Room,
   RoomEvent,
+  Timings,
   Track,
 } from '@sonq/game'
 
@@ -27,10 +29,31 @@ import { createLogger } from './log.server'
 import type { LogFields, Logger } from './log.server'
 import type { Credentials } from '#/lib/credentials'
 
-// A reload or a brief network blip shouldn't make a player flicker offline.
-const DISCONNECT_GRACE_MS = 10_000
-// A host gone this long hands the room to someone still here.
-const HOST_TIMEOUT_MS = 60_000
+export interface StoreTimings extends Timings {
+  // A reload or a brief network blip shouldn't make a player flicker
+  // offline, so a closed stream counts only after this long.
+  disconnectGraceMs: number
+  // A host gone this long hands the room to someone still here.
+  hostTimeoutMs: number
+}
+
+export const DEFAULT_STORE_TIMINGS: StoreTimings = {
+  ...DEFAULT_TIMINGS,
+  disconnectGraceMs: 10_000,
+  hostTimeoutMs: 60_000,
+}
+
+// SONQ_FAST_TIMERS=1, for e2e tests: games that end by themselves finish in
+// seconds. The round still leaves time for a wrong guess, the cooldown and
+// a right one.
+export const FAST_STORE_TIMINGS: StoreTimings = {
+  countdownMs: 1_000,
+  roundMs: 10_000,
+  revealMs: 3_000,
+  disconnectGraceMs: 1_000,
+  hostTimeoutMs: 2_000,
+}
+
 const IDLE_ROOM_MS = 2 * 60 * 60_000
 const MAX_ROOMS = 1000
 const HUES = [330, 200, 150, 40, 270, 90, 20, 180, 300, 60, 240, 120]
@@ -87,7 +110,13 @@ export function createRoomStore({
   clock = systemClock,
   random = Math.random,
   log = createLogger('rooms'),
-}: { clock?: Clock; random?: () => number; log?: Logger } = {}): RoomStore {
+  timings = DEFAULT_STORE_TIMINGS,
+}: {
+  clock?: Clock
+  random?: () => number
+  log?: Logger
+  timings?: StoreTimings
+} = {}): RoomStore {
   const entries = new Map<string, Entry>()
 
   function dispatch(code: string, action: Action): Result<{ room: Room }> {
@@ -103,7 +132,7 @@ export function createRoomStore({
 
     const before = entry.room
     const now = clock.now()
-    const result = reduce(before, action, { now, random })
+    const result = reduce(before, action, { now, random, timings })
     if (!result.ok) {
       log.debug('rejected', {
         code,
@@ -226,7 +255,7 @@ export function createRoomStore({
       entry.hostTimer = clock.schedule(() => {
         entry.hostTimer = null
         dispatch(room.code, { type: 'hostTimeout' })
-      }, HOST_TIMEOUT_MS)
+      }, timings.hostTimeoutMs)
     }
   }
 
@@ -244,7 +273,7 @@ export function createRoomStore({
           playerId,
           connected: false,
         })
-      }, DISCONNECT_GRACE_MS),
+      }, timings.disconnectGraceMs),
     )
   }
 
@@ -470,4 +499,15 @@ function randomHex(byteCount: number) {
 // One store per process, shared by the server-fn bundle and the SSE route,
 // and kept across Vite's SSR hot reloads.
 const g = globalThis as typeof globalThis & { __sonqRooms?: RoomStore }
-export const rooms: RoomStore = (g.__sonqRooms ??= createRoomStore())
+export const rooms: RoomStore = (g.__sonqRooms ??= createSharedStore())
+
+function createSharedStore(): RoomStore {
+  const log = createLogger('rooms')
+  const fast = process.env.SONQ_FAST_TIMERS === '1'
+  if (fast)
+    log.warn('fast timers enabled, for tests only', { ...FAST_STORE_TIMINGS })
+  return createRoomStore({
+    log,
+    timings: fast ? FAST_STORE_TIMINGS : DEFAULT_STORE_TIMINGS,
+  })
+}

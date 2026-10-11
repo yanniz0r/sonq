@@ -11,11 +11,13 @@ import {
   makeRoom,
   wrongGuess,
 } from './testing'
-import { COUNTDOWN_MS, ROUND_MS } from './types'
+import { DEFAULT_TIMINGS } from './types'
 import { project } from './view'
 import type { Room } from './types'
 
-const START = T0 + COUNTDOWN_MS
+const { countdownMs, roundMs } = DEFAULT_TIMINGS
+
+const START = T0 + countdownMs
 
 // Projects for a viewer and checks the result against the wire schema, so
 // the implementation and the schema can't drift apart.
@@ -56,7 +58,7 @@ describe('project', () => {
       index: 0,
       total: 10,
       startsAt: START,
-      endsAt: START + ROUND_MS,
+      endsAt: START + roundMs,
       correctIds: ['h'],
       myGuesses: [{ title: 'Nope', artist: 'Nobody', correct: false }],
     })
@@ -70,7 +72,7 @@ describe('project', () => {
   test('reveal shows the track, results and updated scores', () => {
     const room = playedRound()
     const { track } = currentRound(room)
-    const revealed = apply(room, { type: 'deadline' }, START + ROUND_MS)
+    const revealed = apply(room, { type: 'deadline' }, START + roundMs)
     const projected = view(revealed)
 
     expect(projected.phase).toMatchObject({
@@ -80,19 +82,22 @@ describe('project', () => {
       results: [
         {
           playerId: 'h',
-          points: pointsFor(3000),
+          points: pointsFor(3000, roundMs),
           elapsedMs: 3000,
           wrongGuesses: 0,
         },
         { playerId: 'p', points: null, elapsedMs: null, wrongGuesses: 1 },
       ],
     })
-    expect(projected.players.map((p) => p.score)).toEqual([pointsFor(3000), 0])
+    expect(projected.players.map((p) => p.score)).toEqual([
+      pointsFor(3000, roundMs),
+      0,
+    ])
   })
 
   test('ended lists the songs with how many players found them', () => {
     const room = playedRound()
-    const revealed = apply(room, { type: 'deadline' }, START + ROUND_MS)
+    const revealed = apply(room, { type: 'deadline' }, START + roundMs)
     const ended = apply(revealed, command('h', { type: 'end' }))
     const projected = view(ended)
 
@@ -105,6 +110,6 @@ describe('project', () => {
         },
       ],
     })
-    expect(projected.players[0]?.score).toBe(pointsFor(3000))
+    expect(projected.players[0]?.score).toBe(pointsFor(3000, roundMs))
   })
 })

@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 
 import { pointsFor, roundResult, totalScore } from './scoring'
-import { ROUND_MS } from './types'
+import { DEFAULT_TIMINGS } from './types'
 import type { Guess, Round } from './types'
+
+const { roundMs } = DEFAULT_TIMINGS
 
 const guess = (at: number, correct: boolean): Guess => ({
   at,
@@ -22,26 +24,26 @@ const round = (guesses: Round['guesses']): Round => ({
     cover: '',
   },
   startsAt: 1000,
-  endsAt: 1000 + ROUND_MS,
+  endsAt: 1000 + roundMs,
   guesses,
 })
 
 describe('pointsFor', () => {
   test('gives the maximum for an instant answer', () => {
-    expect(pointsFor(0)).toBe(1000)
+    expect(pointsFor(0, roundMs)).toBe(1000)
   })
 
   test('decreases linearly over the round', () => {
-    expect(pointsFor(ROUND_MS / 2)).toBe(550)
+    expect(pointsFor(roundMs / 2, roundMs)).toBe(550)
   })
 
   test('never drops below the minimum', () => {
-    expect(pointsFor(ROUND_MS)).toBe(100)
-    expect(pointsFor(ROUND_MS * 2)).toBe(100)
+    expect(pointsFor(roundMs, roundMs)).toBe(100)
+    expect(pointsFor(roundMs * 2, roundMs)).toBe(100)
   })
 
   test('clamps negative elapsed time', () => {
-    expect(pointsFor(-500)).toBe(1000)
+    expect(pointsFor(-500, roundMs)).toBe(1000)
   })
 })
 
@@ -51,7 +53,7 @@ describe('roundResult', () => {
       a: [guess(2000, false), guess(4000, false), guess(1000 + 3000, true)],
     })
     expect(roundResult(r, 'a')).toEqual({
-      points: pointsFor(3000),
+      points: pointsFor(3000, roundMs),
       elapsedMs: 3000,
       wrongGuesses: 2,
     })
@@ -70,6 +72,15 @@ describe('roundResult', () => {
       wrongGuesses: 0,
     })
   })
+
+  test('scales with the length of the round', () => {
+    const short: Round = {
+      ...round({ a: [guess(1000 + 5000, true)] }),
+      endsAt: 1000 + 10_000,
+    }
+    expect(roundResult(short, 'a').points).toBe(pointsFor(5000, 10_000))
+    expect(roundResult(short, 'a').points).toBe(550)
+  })
 })
 
 describe('totalScore', () => {
@@ -77,7 +88,7 @@ describe('totalScore', () => {
     const rounds = [
       round({ a: [guess(1000, true)] }),
       round({ a: [guess(2000, false)] }),
-      round({ a: [guess(1000 + ROUND_MS / 2, true)] }),
+      round({ a: [guess(1000 + roundMs / 2, true)] }),
     ]
     expect(totalScore(rounds, 'a')).toBe(1000 + 550)
     expect(totalScore(rounds, 'b')).toBe(0)

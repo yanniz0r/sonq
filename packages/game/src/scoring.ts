@@ -1,6 +1,5 @@
 // Points are never stored: they are derived from guess timestamps whenever
 // someone needs a score.
-import { ROUND_MS } from './types'
 import type { Guess, PlayerId, Round } from './types'
 
 const MAX_POINTS = 1000
@@ -8,8 +7,8 @@ const MIN_POINTS = 100
 
 // Linear from MAX_POINTS at the first moment of the round down to
 // MIN_POINTS at its very end.
-export function pointsFor(elapsedMs: number): number {
-  const progress = Math.min(Math.max(elapsedMs / ROUND_MS, 0), 1)
+export function pointsFor(elapsedMs: number, roundMs: number): number {
+  const progress = Math.min(Math.max(elapsedMs / roundMs, 0), 1)
   return Math.round(MIN_POINTS + (MAX_POINTS - MIN_POINTS) * (1 - progress))
 }
 
@@ -32,7 +31,8 @@ export function roundResult(round: Round, playerId: PlayerId): RoundResult {
   const wrongGuesses = guesses.filter((g) => !g.correct).length
   if (!correct) return { points: null, elapsedMs: null, wrongGuesses }
   const elapsedMs = correct.at - round.startsAt
-  return { points: pointsFor(elapsedMs), elapsedMs, wrongGuesses }
+  const roundMs = round.endsAt - round.startsAt
+  return { points: pointsFor(elapsedMs, roundMs), elapsedMs, wrongGuesses }
 }
 
 export function totalScore(rounds: Array<Round>, playerId: PlayerId): number {

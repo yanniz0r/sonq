@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
+import { reduce } from './reducer'
 import {
   T0,
   apply,
@@ -13,16 +14,12 @@ import {
   phaseOf,
   wrongGuess,
 } from './testing'
-import {
-  COUNTDOWN_MS,
-  GUESS_COOLDOWN_MS,
-  MAX_PLAYERS,
-  REVEAL_MS,
-  ROUND_MS,
-} from './types'
+import { DEFAULT_TIMINGS, GUESS_COOLDOWN_MS, MAX_PLAYERS } from './types'
 import type { Room } from './types'
 
-const START = T0 + COUNTDOWN_MS // the moment round 0 opens for guesses
+const { countdownMs, roundMs, revealMs } = DEFAULT_TIMINGS
+
+const START = T0 + countdownMs // the moment round 0 opens for guesses
 const start = (room = makeRoom()) =>
   apply(room, command('h', { type: 'start' }))
 const deadline = (room: Room, now: number) =>
@@ -80,8 +77,8 @@ describe('start', () => {
   test('deals the first round after a countdown', () => {
     const room = start()
     const round = currentRound(room)
-    expect(round.startsAt).toBe(T0 + COUNTDOWN_MS)
-    expect(round.endsAt).toBe(T0 + COUNTDOWN_MS + ROUND_MS)
+    expect(round.startsAt).toBe(T0 + countdownMs)
+    expect(round.endsAt).toBe(T0 + countdownMs + roundMs)
     expect(round.guesses).toEqual({})
     expect(room.played).toEqual([round.track.id])
   })
@@ -97,6 +94,24 @@ describe('start', () => {
   test('only the host, only in the lobby', () => {
     expectError(makeRoom(), command('p', { type: 'start' }), 'not_host')
     expectError(start(), command('h', { type: 'start' }), 'wrong_phase')
+  })
+
+  test('paces the game with the timings from deps', () => {
+    const timings = { countdownMs: 100, roundMs: 1000, revealMs: 500 }
+    const run = (
+      room: Room,
+      now: number,
+      action = command('h', { type: 'start' }),
+    ) => {
+      const result = reduce(room, action, { now, random: () => 0, timings })
+      if (!result.ok) throw new Error(result.error)
+      return result.room
+    }
+    const round = currentRound(run(makeRoom(), T0))
+    expect([round.startsAt, round.endsAt]).toEqual([T0 + 100, T0 + 1100])
+
+    const revealed = run(run(makeRoom(), T0), T0 + 1100, { type: 'deadline' })
+    expect(phaseOf(revealed, 'reveal').endsAt).toBe(T0 + 1600)
   })
 
   test('works solo', () => {
@@ -142,7 +157,7 @@ describe('guess', () => {
   test('is rejected during the countdown and after the round', () => {
     const room = start()
     expectError(room, command('p', wrongGuess), 'too_early', START - 1)
-    expectError(room, command('p', wrongGuess), 'too_late', START + ROUND_MS)
+    expectError(room, command('p', wrongGuess), 'too_late', START + roundMs)
   })
 
   test('enforces a cooldown after a wrong guess', () => {
@@ -186,7 +201,7 @@ describe('auto-reveal', () => {
 
     const both = apply(one, command('p', guess), START + 1000)
     const reveal = phaseOf(both, 'reveal')
-    expect(reveal.endsAt).toBe(START + 1000 + REVEAL_MS)
+    expect(reveal.endsAt).toBe(START + 1000 + revealMs)
     expect(reveal.round.guesses.p).toHaveLength(1)
   })
 
@@ -232,7 +247,7 @@ describe('auto-reveal', () => {
 describe('deadline', () => {
   test('does nothing before the deadline', () => {
     const room = start()
-    expect(deadline(room, START + ROUND_MS - 1)).toBe(room)
+    expect(deadline(room, START + roundMs - 1)).toBe(room)
   })
 
   test('does nothing in phases without a deadline', () => {
@@ -241,21 +256,21 @@ describe('deadline', () => {
   })
 
   test('reveals a round when its time is up', () => {
-    const end = START + ROUND_MS
+    const end = START + roundMs
     const reveal = phaseOf(deadline(start(), end), 'reveal')
-    expect(reveal.endsAt).toBe(end + REVEAL_MS)
+    expect(reveal.endsAt).toBe(end + revealMs)
   })
 
   test('deals the next round when the reveal is over', () => {
-    const end = START + ROUND_MS
+    const end = START + roundMs
     const revealed = deadline(start(), end)
     const first = phaseOf(revealed, 'reveal').round
 
-    const next = deadline(revealed, end + REVEAL_MS)
+    const next = deadline(revealed, end + revealMs)
     const round = currentRound(next)
     expect(next.history).toEqual([first])
     expect(round.track.id).not.toBe(first.track.id)
-    expect(round.startsAt).toBe(end + REVEAL_MS + COUNTDOWN_MS)
+    expect(round.startsAt).toBe(end + revealMs + countdownMs)
     expect(next.played).toEqual([first.track.id, round.track.id])
   })
 
@@ -283,18 +298,18 @@ describe('deadline', () => {
 
 describe('next', () => {
   test('host skips the rest of the reveal', () => {
-    const revealed = deadline(start(), START + ROUND_MS)
+    const revealed = deadline(start(), START + roundMs)
     const next = apply(
       revealed,
       command('h', { type: 'next' }),
-      START + ROUND_MS + 1,
+      START + roundMs + 1,
     )
     expect(next.history).toHaveLength(1)
     expect(next.phase.kind).toBe('round')
   })
 
   test('only the host, only during the reveal', () => {
-    const revealed = deadline(start(), START + ROUND_MS)
+    const revealed = deadline(start(), START + roundMs)
     expectError(revealed, command('p', { type: 'next' }), 'not_host')
     expectError(start(), command('h', { type: 'next' }), 'wrong_phase')
   })
@@ -308,7 +323,7 @@ describe('end', () => {
   })
 
   test('keeps the round that is being revealed', () => {
-    const revealed = deadline(start(), START + ROUND_MS)
+    const revealed = deadline(start(), START + roundMs)
     const room = apply(revealed, command('h', { type: 'end' }))
     expect(room.phase.kind).toBe('ended')
     expect(room.history).toHaveLength(1)

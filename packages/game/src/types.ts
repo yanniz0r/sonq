@@ -4,9 +4,22 @@
 // shapes defined in protocol.ts.
 import type { Command, GameError } from './protocol'
 
-export const COUNTDOWN_MS = 3_000
-export const ROUND_MS = 30_000
-export const REVEAL_MS = 8_000
+// How long each timed part of a game lasts. They come in through `Deps`, so
+// tests can run games faster; DEFAULT_TIMINGS is what players get. A round
+// must not outlast Deezer's 30 s previews.
+export interface Timings {
+  countdownMs: number
+  roundMs: number
+  revealMs: number
+}
+
+export const DEFAULT_TIMINGS: Timings = {
+  countdownMs: 3_000,
+  roundMs: 30_000,
+  revealMs: 8_000,
+}
+
+// A game rule rather than pacing, so it isn't part of `Timings`.
 export const GUESS_COOLDOWN_MS = 2_000
 export const MAX_PLAYERS = 16
 export const ROUND_OPTIONS = [5, 10, 15] as const
@@ -104,6 +117,7 @@ export interface Deps {
   now: number
   // Returns a float in [0, 1), like Math.random.
   random: () => number
+  timings: Timings
 }
 
 export type Result<T extends object = object> =

@@ -12,11 +12,15 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     trace: 'retain-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
+    // Phones are the main way people play.
+    { name: 'mobile', use: { ...devices['Pixel 7'] } },
+  ],
   webServer: {
     command: `bunx vite dev --port ${PORT} --strictPort`,
     url: `http://localhost:${PORT}/health`,
-    env: { DEEZER_FAKE: '1' },
+    env: { DEEZER_FAKE: '1', SONQ_FAST_TIMERS: '1' },
     reuseExistingServer: !process.env.CI,
   },
 })

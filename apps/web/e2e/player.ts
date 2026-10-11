@@ -1,15 +1,10 @@
 // One browser page acting as one player. Specs talk to the game through
 // these methods, so locators live in one place.
 import { expect } from '@playwright/test'
-import type { Browser, Page } from '@playwright/test'
+import type { Page, Response } from '@playwright/test'
 
 export class Player {
-  private constructor(readonly page: Page) {}
-
-  static async open(browser: Browser) {
-    const context = await browser.newContext()
-    return new Player(await context.newPage())
-  }
+  constructor(readonly page: Page) {}
 
   async goto(path: string) {
     await this.page.goto(path)
@@ -46,6 +41,54 @@ export class Player {
   async pickFeaturedPlaylist(title: string) {
     await this.page.getByRole('button', { name: new RegExp(title) }).click()
     await expect(this.page.getByText(/playable songs/)).toBeVisible()
+  }
+
+  // The one field that searches playlists or takes a pasted link.
+  playlistField() {
+    return this.page.getByLabel('Search playlists or paste a Deezer link')
+  }
+
+  toast() {
+    return this.page.getByRole('status')
+  }
+
+  async expectHost(name: string, timeout = 5_000) {
+    await expect(
+      this.page
+        .getByRole('listitem')
+        .filter({ hasText: name })
+        .getByLabel('Host'),
+    ).toBeVisible({ timeout })
+  }
+
+  async expectOffline(name: string) {
+    await expect(
+      this.page.getByRole('listitem').filter({ hasText: `${name} (offline)` }),
+    ).toBeVisible()
+  }
+
+  // Closes the tab, like a player who just walks away.
+  async close() {
+    await this.page.context().close()
+  }
+
+  async leave() {
+    await this.page
+      .getByRole('banner')
+      .getByRole('button', { name: 'Leave' })
+      .click()
+    await this.page.waitForURL((url) => url.pathname === '/')
+  }
+
+  // Resolves with the audio route's response for round `index` (0-based).
+  waitForAudio(code: string, index: number): Promise<Response> {
+    return this.page.waitForResponse((response) => {
+      const url = new URL(response.url())
+      return (
+        url.pathname === `/api/rooms/${code}/audio` &&
+        url.searchParams.get('round') === String(index)
+      )
+    })
   }
 
   async setRounds(rounds: number) {

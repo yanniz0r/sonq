@@ -27,7 +27,7 @@ Run from the repo root. Turbo fans them out to the workspaces.
 - `bun run build` / `bun run start`: production build into `apps/web/.output/` / run it
 - `bun run typecheck` / `bun run test` / `bun run lint`
 - `bun run format` / `bun run check`: Prettier write / check
-- `cd apps/web && bun run test:e2e`: Playwright. It starts its own dev server on port **3100** with `DEEZER_FAKE=1`
+- `cd apps/web && bun run test:e2e`: Playwright, in a `desktop` and a `mobile` (Pixel 7) project. It starts its own dev server on port **3100** with `DEEZER_FAKE=1` and `SONQ_FAST_TIMERS=1`. Locally it reuses a server already running on 3100, so start that one with the same env vars
 - Single workspace: `bunx turbo run test --filter=@sonq/game`, or `bun test` inside the package (`bun test src/reducer.test.ts` for one file)
 
 CI ([.github/workflows/test.yml](.github/workflows/test.yml)) runs typecheck, lint, unit tests and e2e.
@@ -64,6 +64,7 @@ Invariants. Don't break these:
 
 - **The reducer is pure.** No `Date.now()`, no `Math.random()`, no I/O, no throws. Time and randomness come from `deps`. Async work happens in a server function first, then a fully resolved action is dispatched (e.g. `setPlaylist`).
 - **Time is data.** Self-ending phases store their deadline. The store keeps exactly one timer per room for `deadlineOf(phase)` and dispatches `{ type: 'deadline' }`. The reducer re-checks `now`, so a stale or early timer is a no-op. Don't add `setTimeout`s that change state.
+- **Durations are injected, not imported.** Countdown, round and reveal lengths come in as `deps.timings` (`DEFAULT_TIMINGS` in production). The store's `StoreTimings` adds disconnect grace and host timeout, and `SONQ_FAST_TIMERS=1` switches to `FAST_STORE_TIMINGS` for e2e. Code that needs a round's length derives it from the round (`endsAt - startsAt`). Only `GUESS_COOLDOWN_MS` is a constant, because it's a rule rather than pacing.
 - **Derive, don't store.** Scores, round numbers (`history.length`), totals and recap stats are computed from state. A room whose last player left (`players` is empty) is closed by the store; there is no separate effects channel.
 - **Make bad states unrepresentable.** For example, `Playlist.tracks` is a `NonEmptyArray`, so an empty playlist is rejected before it can reach the reducer.
 - **Preview URLs are never stored.** They expire after about 15 minutes; the audio route resolves a fresh one per request.
@@ -89,7 +90,8 @@ To add a room feature: extend `commandSchema` → handle it in the reducer with 
 - Path alias `#/*` → `apps/web/src/*`.
 - Server-only modules use the `*.server.ts` suffix. Client code may only `import type` from them.
 - Fallible operations return `Result<T>` (`{ ok: true, … } | { ok: false, error: GameError }`). `@sonq/deezer` throws `DeezerError`, and the music service turns those into `Result`s. Anything else that throws is a bug.
-- Injectable seams for tests: `Clock` and `random` for the store, `DeezerClient` for music, `fetch` for the Deezer client, `now` for caches.
+- Injectable seams for tests: `Clock`, `random` and `timings` for the store, `DeezerClient` for music, `fetch` for the Deezer client, `now` for caches.
+- [vite.config.ts](apps/web/vite.config.ts) has a dev-only plugin that removes `Sec-Fetch-Dest` from `/api/*` requests. Without it, Nitro's dev server sends `<audio src="/api/…">` requests to Vite's static files and they 404. Keep it registered before `nitro()`.
 - localStorage goes through [storage.ts](apps/web/src/lib/storage.ts) (prefix `sonq:`, try/catch, Zod-validated reads).
 - Commits use Conventional Commits, lowercase, no scope (`feat:`, `fix:`, `chore:`, `test:`, `ci:`). Use the `/commit` skill.
 
@@ -99,4 +101,4 @@ To add a room feature: extend `commandSchema` → handle it in the reducer with 
 - Cover game rules in [reducer.test.ts](packages/game/src/reducer.test.ts) with the builders in [testing.ts](packages/game/src/testing.ts). New game behaviour without a reducer test is incomplete.
 - The store is tested with a fake `Clock` in [rooms.server.test.ts](apps/web/src/server/rooms.server.test.ts), so whole games run without real timers.
 - Deezer tests use the recorded JSON in [packages/deezer/src/fixtures/](packages/deezer/src/fixtures/) and never hit the network.
-- E2E ([apps/web/e2e/](apps/web/e2e/)) runs against the offline catalog in [fake-deezer.server.ts](apps/web/src/server/fake-deezer.server.ts). Every track in it is a version of "Test Song", so any of them is a correct guess, and "Decoy Song" is always wrong. Drive pages through the `Player` helper. Locate elements by role, then label/text, then `data-testid`; never by CSS class.
+- E2E ([apps/web/e2e/](apps/web/e2e/)) runs against the offline catalog in [fake-deezer.server.ts](apps/web/src/server/fake-deezer.server.ts). Every track in it is a version of "Test Song", so any of them is a correct guess, and "Decoy Song" is always wrong. "E2E Hits" has 5 songs; "E2E Duo" has 2, for tests that play a whole game. Import `test`/`expect` from [e2e/fixtures.ts](apps/web/e2e/fixtures.ts), open players with `newPlayer()`, and drive pages through the `Player` helper. Locate elements by role, then label/text, then `data-testid`; never by CSS class.

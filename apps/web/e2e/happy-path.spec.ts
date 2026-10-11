@@ -1,12 +1,10 @@
-import { expect, test } from '@playwright/test'
-
-import { Player } from './player'
+import { expect, test } from './fixtures'
 
 test('two players play a round from lobby to recap and back', async ({
-  browser,
+  newPlayer,
 }) => {
-  const host = await Player.open(browser)
-  const guest = await Player.open(browser)
+  const host = await newPlayer()
+  const guest = await newPlayer()
 
   const code = await host.createRoom('Alice')
   await guest.joinByLink(code, 'Bob')
@@ -47,8 +45,8 @@ test('two players play a round from lobby to recap and back', async ({
   ).toBeVisible()
 })
 
-test('a reload keeps the player in their seat', async ({ browser }) => {
-  const host = await Player.open(browser)
+test('a reload keeps the player in their seat', async ({ newPlayer }) => {
+  const host = await newPlayer()
   const code = await host.createRoom('Alice')
   await host.page.reload()
   await host.page.locator('html[data-hydrated]').waitFor()
@@ -57,9 +55,9 @@ test('a reload keeps the player in their seat', async ({ browser }) => {
 })
 
 test('an unknown room asks for a name, then reports it is gone', async ({
-  browser,
+  newPlayer,
 }) => {
-  const player = await Player.open(browser)
+  const player = await newPlayer()
   await player.joinByLink('ZZZZ', 'Bob')
   await expect(
     player.page.getByText("This room doesn't exist (anymore)."),

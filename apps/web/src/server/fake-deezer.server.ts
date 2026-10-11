@@ -1,5 +1,5 @@
 // An offline stand-in for Deezer, enabled with DEEZER_FAKE=1 (e2e tests,
-// offline development). Every track in its one playlist is a different
+// offline development). Every track in its playlists is a different
 // version of the same song, so a test can guess right without knowing which
 // one is playing; the decoy is always wrong.
 import { DeezerError } from '@sonq/deezer'
@@ -27,14 +27,27 @@ const track = (
 const SONGS = [1, 2, 3, 4, 5].map((id) => track(id, FAKE_SONG))
 const DECOY = track(99, FAKE_DECOY)
 
-const PLAYLIST: DeezerPlaylist = {
-  id: 1,
-  title: 'E2E Hits',
-  nb_tracks: SONGS.length,
-  picture_medium: '',
-  picture_big: '',
-  user: { name: 'sonq' },
-}
+const playlist = (
+  id: number,
+  title: string,
+  tracks: Array<DeezerTrack>,
+): { info: DeezerPlaylist; tracks: Array<DeezerTrack> } => ({
+  info: {
+    id,
+    title,
+    nb_tracks: tracks.length,
+    picture_medium: '',
+    picture_big: '',
+    user: { name: 'sonq' },
+  },
+  tracks,
+})
+
+const PLAYLISTS = [
+  playlist(1, 'E2E Hits', SONGS),
+  // Caps a game at two rounds, for tests that play one to its end.
+  playlist(2, 'E2E Duo', SONGS.slice(0, 2)),
+]
 
 const matches = (query: string, ...texts: Array<string>) =>
   texts.some((t) => t.toLowerCase().includes(query.toLowerCase()))
@@ -44,13 +57,15 @@ export function createFakeDeezerClient(): DeezerClient {
     searchTracks: async (query) =>
       [...SONGS, DECOY].filter((t) => matches(query, t.title, t.artist.name)),
     searchPlaylists: async (query) =>
-      matches(query, PLAYLIST.title) ? [PLAYLIST] : [],
-    chartPlaylists: async () => [PLAYLIST],
+      PLAYLISTS.filter((p) => matches(query, p.info.title)).map((p) => p.info),
+    chartPlaylists: async () => PLAYLISTS.map((p) => p.info),
     getPlaylist: async (id) => {
-      if (id !== PLAYLIST.id) throw new DeezerError('not_found', 'no data')
-      return PLAYLIST
+      const found = PLAYLISTS.find((p) => p.info.id === id)
+      if (!found) throw new DeezerError('not_found', 'no data')
+      return found.info
     },
-    getPlaylistTracks: async (id) => (id === PLAYLIST.id ? SONGS : []),
+    getPlaylistTracks: async (id) =>
+      PLAYLISTS.find((p) => p.info.id === id)?.tracks ?? [],
     getTrack: async (id) => {
       const found = [...SONGS, DECOY].find((t) => t.id === id)
       if (!found) throw new DeezerError('not_found', 'no data')

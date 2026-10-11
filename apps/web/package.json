@@ -11,12 +11,14 @@
     "start": "bun .output/server/index.mjs",
     "preview": "vite preview",
     "generate-routes": "tsr generate",
+    "generate-images": "bun scripts/generate-images.ts",
     "typecheck": "tsr generate && tsc --noEmit",
     "test": "bun test",
     "lint": "eslint .",
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@fontsource-variable/outfit": "^5.3.0",
     "@sonq/deezer": "workspace:*",
     "@sonq/game": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",

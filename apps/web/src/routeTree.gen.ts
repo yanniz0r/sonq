@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HealthRouteImport } from './routes/health'
+import { Route as ManifestDotwebmanifestRouteImport } from './routes/manifest[.]webmanifest'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RCodeRouteImport } from './routes/r/$code'
 import { Route as ApiRoomsCodeAudioRouteImport } from './routes/api/rooms/$code/audio'
 import { Route as ApiRoomsCodeEventsRouteImport } from './routes/api/rooms/$code/events'
@@ -23,6 +26,21 @@ const IndexRoute = IndexRouteImport.update({
 const HealthRoute = HealthRouteImport.update({
   id: '/health',
   path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManifestDotwebmanifestRoute = ManifestDotwebmanifestRouteImport.update({
+  id: '/manifest.webmanifest',
+  path: '/manifest.webmanifest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RCodeRoute = RCodeRouteImport.update({
@@ -44,6 +62,9 @@ const ApiRoomsCodeEventsRoute = ApiRoomsCodeEventsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/health': typeof HealthRoute
+  '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/r/$code': typeof RCodeRoute
   '/api/rooms/$code/audio': typeof ApiRoomsCodeAudioRoute
   '/api/rooms/$code/events': typeof ApiRoomsCodeEventsRoute
@@ -51,6 +72,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/health': typeof HealthRoute
+  '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/r/$code': typeof RCodeRoute
   '/api/rooms/$code/audio': typeof ApiRoomsCodeAudioRoute
   '/api/rooms/$code/events': typeof ApiRoomsCodeEventsRoute
@@ -59,6 +83,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/health': typeof HealthRoute
+  '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/r/$code': typeof RCodeRoute
   '/api/rooms/$code/audio': typeof ApiRoomsCodeAudioRoute
   '/api/rooms/$code/events': typeof ApiRoomsCodeEventsRoute
@@ -68,6 +95,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/health'
+    | '/manifest.webmanifest'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/r/$code'
     | '/api/rooms/$code/audio'
     | '/api/rooms/$code/events'
@@ -75,6 +105,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/health'
+    | '/manifest.webmanifest'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/r/$code'
     | '/api/rooms/$code/audio'
     | '/api/rooms/$code/events'
@@ -82,6 +115,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/health'
+    | '/manifest.webmanifest'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/r/$code'
     | '/api/rooms/$code/audio'
     | '/api/rooms/$code/events'
@@ -90,6 +126,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HealthRoute: typeof HealthRoute
+  ManifestDotwebmanifestRoute: typeof ManifestDotwebmanifestRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   RCodeRoute: typeof RCodeRoute
   ApiRoomsCodeAudioRoute: typeof ApiRoomsCodeAudioRoute
   ApiRoomsCodeEventsRoute: typeof ApiRoomsCodeEventsRoute
@@ -109,6 +148,27 @@ declare module '@tanstack/react-router' {
       path: '/health'
       fullPath: '/health'
       preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manifest.webmanifest': {
+      id: '/manifest.webmanifest'
+      path: '/manifest.webmanifest'
+      fullPath: '/manifest.webmanifest'
+      preLoaderRoute: typeof ManifestDotwebmanifestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/r/$code': {
@@ -138,6 +198,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HealthRoute: HealthRoute,
+  ManifestDotwebmanifestRoute: ManifestDotwebmanifestRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   RCodeRoute: RCodeRoute,
   ApiRoomsCodeAudioRoute: ApiRoomsCodeAudioRoute,
   ApiRoomsCodeEventsRoute: ApiRoomsCodeEventsRoute,

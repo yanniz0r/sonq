@@ -13,15 +13,28 @@ import {
   loadCredentials,
   saveCredentials,
 } from '#/lib/session'
+import { pageMeta } from '#/lib/site'
 import { joinRoomFn } from '#/server/rooms'
 
 // Credentials live in localStorage, so there's nothing useful to render on
-// the server.
+// the server. The head still is: invite links get a preview in chat apps,
+// but rooms are short-lived, so they stay out of search results.
 export const Route = createFileRoute('/r/$code')({
   ssr: false,
-  head: () => ({
-    meta: [{ title: 'Room – sonq' }, { name: 'robots', content: 'noindex' }],
-  }),
+  head: ({ params }) => {
+    const code = normalizeRoomCode(params.code)
+    return {
+      meta: [
+        ...pageMeta({
+          title: `Join room ${code} – sonq`,
+          description:
+            "You're invited to a game of sonq. Pick a name and race your friends to guess the song.",
+          path: `/r/${code}`,
+        }),
+        { name: 'robots', content: 'noindex' },
+      ],
+    }
+  },
   component: RoomPage,
 })
 

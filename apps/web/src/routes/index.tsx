@@ -5,13 +5,78 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { useState } from 'react'
 
+import { About, FAQ } from '#/components/About'
 import { NameForm } from '#/components/NameForm'
 import { ERROR_TEXT, GENERIC_ERROR, Input, Panel, Shell } from '#/components/ui'
 import type { Credentials } from '#/lib/credentials'
 import { saveCredentials } from '#/lib/session'
+import {
+  OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+  absoluteUrl,
+  pageMeta,
+} from '#/lib/site'
 import { createRoomFn, joinRoomFn } from '#/server/rooms'
 
-export const Route = createFileRoute('/')({ component: Home })
+// What sonq is, for search engines: the site, the game as a free web app,
+// and the FAQ that's also rendered on the page.
+const STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: SITE_NAME,
+      url: absoluteUrl('/'),
+      inLanguage: 'en',
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': `${SITE_URL}/#app`,
+      name: SITE_NAME,
+      url: absoluteUrl('/'),
+      description: SITE_DESCRIPTION,
+      image: OG_IMAGE.url,
+      applicationCategory: 'GameApplication',
+      applicationSubCategory: 'Music quiz',
+      genre: ['Music', 'Trivia', 'Party game'],
+      operatingSystem: 'Any',
+      browserRequirements: 'Requires JavaScript and a modern web browser',
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      isPartOf: { '@id': `${SITE_URL}/#website` },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: FAQ.map(({ question, answer }) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: { '@type': 'Answer', text: answer },
+      })),
+    },
+  ],
+}
+
+export const Route = createFileRoute('/')({
+  head: () => ({
+    meta: pageMeta({
+      title: SITE_TITLE,
+      description: SITE_DESCRIPTION,
+      path: '/',
+    }),
+    links: [{ rel: 'canonical', href: absoluteUrl('/') }],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify(STRUCTURED_DATA),
+      },
+    ],
+  }),
+  component: Home,
+})
 
 type Mode = 'create' | 'join'
 
@@ -50,8 +115,8 @@ function Home() {
           <span className="text-fuchsia-400">Faster than your friends.</span>
         </h1>
         <p className="mx-auto mt-4 max-w-md text-neutral-400">
-          Everyone hears the same 30-second preview. Find it in the search first
-          to score the most points.
+          A free multiplayer music quiz. Everyone hears the same 30-second
+          preview. Find it in the search first to score the most points.
         </p>
       </section>
 
@@ -97,6 +162,8 @@ function Home() {
         </NameForm>
         {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
       </Panel>
+
+      <About />
     </Shell>
   )
 }

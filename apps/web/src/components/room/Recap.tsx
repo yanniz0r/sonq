@@ -3,6 +3,7 @@ import type { PhaseView } from '@sonq/game'
 import { Scoreboard, byScore } from './Players'
 import { useRoomContext } from './RoomContext'
 import { Button, Cover, Panel } from '#/components/ui'
+import { trackEvent } from '#/lib/analytics'
 
 type EndedPhase = Extract<PhaseView, { kind: 'ended' }>
 
@@ -65,7 +66,13 @@ export function Recap({
           Leave
         </Button>
         {isHost ? (
-          <Button onClick={() => void send({ type: 'restart' })}>
+          <Button
+            onClick={() =>
+              void send({ type: 'restart' }).then((ok) => {
+                if (ok) trackEvent('game-restart')
+              })
+            }
+          >
             Play again
           </Button>
         ) : (

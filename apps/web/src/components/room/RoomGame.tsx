@@ -1,5 +1,5 @@
 import { useServerFn } from '@tanstack/react-start'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Command, PhaseView, RoomView } from '@sonq/game'
 
 import { Lobby } from './Lobby'
@@ -10,6 +10,7 @@ import { Round } from './Round'
 import { RoundAudio } from './RoundAudio'
 import type { RoomContextValue } from './RoomContext'
 import { ERROR_TEXT, GENERIC_ERROR, Shell, Toast } from '#/components/ui'
+import { trackEvent } from '#/lib/analytics'
 import type { Credentials } from '#/lib/credentials'
 import { loadVolume, saveVolume } from '#/lib/session'
 import { useRoom } from '#/lib/useRoom'
@@ -36,6 +37,8 @@ export function RoomGame({
     if (closed) onGone()
   }, [closed, onGone])
 
+  useTrackGameEnd(view)
+
   useEffect(() => {
     if (!toast) return
     const id = setTimeout(() => setToast(''), TOAST_MS)
@@ -55,6 +58,7 @@ export function RoomGame({
   }
 
   async function leave() {
+    if (view) trackEvent('room-leave', { phase: view.phase.kind })
     try {
       await runCommand({ data: { credentials, command: { type: 'leave' } } })
     } catch {
@@ -151,6 +155,33 @@ function PhaseScreen({
     case 'ended':
       return <Recap phase={phase} onLeave={onLeave} />
   }
+}
+
+// Reports a finished game once, from the host only (one event per game, not
+// per player). It watches the phase change rather than the recap, so
+// reloading the results doesn't count the game again.
+function useTrackGameEnd(view: RoomView | null) {
+  const previous = useRef<PhaseView['kind'] | null>(null)
+  useEffect(() => {
+    if (!view) return
+    const { phase } = view
+    const ended =
+      phase.kind === 'ended' &&
+      (previous.current === 'round' || previous.current === 'reveal')
+    previous.current = phase.kind
+    if (!ended || view.hostId !== view.me) return
+    const players = view.players.length
+    const played = phase.songs.length
+    const found = phase.songs.reduce((sum, s) => sum + s.correctCount, 0)
+    trackEvent('game-end', {
+      players,
+      rounds: view.settings.rounds,
+      played,
+      completed: played === view.settings.rounds,
+      foundPercent:
+        played && players ? Math.round((100 * found) / (played * players)) : 0,
+    })
+  }, [view])
 }
 
 // The same URL for a round and its reveal, so the song keeps playing.

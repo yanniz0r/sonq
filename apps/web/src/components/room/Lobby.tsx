@@ -5,6 +5,7 @@ import { PlayerList } from './Players'
 import { PlaylistPicker } from './PlaylistPicker'
 import { useRoomContext } from './RoomContext'
 import { Button, Cover, Panel } from '#/components/ui'
+import { trackEvent } from '#/lib/analytics'
 
 export function Lobby() {
   const { view, isHost, send } = useRoomContext()
@@ -71,7 +72,15 @@ export function Lobby() {
           <Button
             className="px-8 py-3 text-base"
             disabled={!playlist}
-            onClick={() => void send({ type: 'start' })}
+            onClick={() =>
+              void send({ type: 'start' }).then((ok) => {
+                if (ok)
+                  trackEvent('game-start', {
+                    players: view.players.length,
+                    rounds: view.settings.rounds,
+                  })
+              })
+            }
           >
             Start game
           </Button>
@@ -88,6 +97,7 @@ function InviteButton({ code }: { code: string }) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(`${window.location.origin}/r/${code}`)
+      trackEvent('invite-copy')
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {

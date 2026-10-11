@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '#/components/ui'
+import { trackEvent } from '#/lib/analytics'
 
 // A tiny silent clip. Playing it from a tap "unlocks" the element on
 // browsers (iOS Safari) that otherwise refuse to play without a gesture.
@@ -61,8 +62,10 @@ export function RoundAudio({
     audio.play().then(
       () => setBlocked(false),
       (error: unknown) => {
-        if (error instanceof DOMException && error.name === 'NotAllowedError')
+        if (error instanceof DOMException && error.name === 'NotAllowedError') {
           setBlocked(true)
+          trackEvent('audio-blocked')
+        }
       },
     )
   }

@@ -1,9 +1,15 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Scripts,
+  createRootRoute,
+  useRouterState,
+} from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { Panel, Shell } from '#/components/ui'
+import { loadAnalytics, trackPageview } from '#/lib/analytics'
 import {
   BACKGROUND_COLOR,
   OG_IMAGE,
@@ -67,7 +73,15 @@ function RootDocument({ children }: { children: ReactNode }) {
   // Marks the page as interactive once React has hydrated it, for e2e tests.
   useEffect(() => {
     document.documentElement.dataset.hydrated = ''
+    loadAnalytics()
   }, [])
+
+  // One pageview per path, after the new page's title has been committed.
+  // Query strings don't count as a new page.
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  useEffect(() => {
+    trackPageview(pathname)
+  }, [pathname])
 
   return (
     <html lang="en">

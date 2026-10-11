@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { About, FAQ } from '#/components/About'
 import { NameForm } from '#/components/NameForm'
 import { ERROR_TEXT, GENERIC_ERROR, Input, Panel, Shell } from '#/components/ui'
+import { trackEvent } from '#/lib/analytics'
 import type { Credentials } from '#/lib/credentials'
 import { saveCredentials } from '#/lib/session'
 import {
@@ -94,6 +95,8 @@ function Home() {
         : joinRoom({ data: { code, name } }),
     onSuccess: (result) => {
       if (!result.ok) return
+      if (mode === 'create') trackEvent('room-create')
+      else trackEvent('room-join', { via: 'code' })
       const { code: joined, playerId, secret } = result
       saveCredentials({ code: joined, playerId, secret })
       void navigate({ to: '/r/$code', params: { code: joined } })

@@ -7,6 +7,7 @@ import { useCallback, useState } from 'react'
 import { NameForm } from '#/components/NameForm'
 import { RoomGame } from '#/components/room/RoomGame'
 import { ERROR_TEXT, GENERIC_ERROR, Panel, Shell } from '#/components/ui'
+import { trackEvent } from '#/lib/analytics'
 import type { Credentials } from '#/lib/credentials'
 import {
   clearCredentials,
@@ -90,12 +91,13 @@ function JoinRoom({
   const join = useMutation({
     mutationFn: (name: string) => joinRoom({ data: { code, name } }),
     onSuccess: (result) => {
-      if (result.ok)
-        onJoined({
-          code: result.code,
-          playerId: result.playerId,
-          secret: result.secret,
-        })
+      if (!result.ok) return
+      trackEvent('room-join', { via: 'invite' })
+      onJoined({
+        code: result.code,
+        playerId: result.playerId,
+        secret: result.secret,
+      })
     },
   })
 

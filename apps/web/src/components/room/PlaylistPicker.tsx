@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 import { useRoomContext } from './RoomContext'
 import { Cover, ERROR_TEXT, GENERIC_ERROR, Input } from '#/components/ui'
+import { trackEvent } from '#/lib/analytics'
 import { useDebounced } from '#/lib/useDebounced'
 import {
   SEARCH_MIN_LENGTH,
@@ -13,6 +14,11 @@ import {
 } from '#/server/music'
 import { selectPlaylistFn } from '#/server/rooms'
 import type { PlaylistHit } from '#/server/music.server'
+
+// Where a pick came from, for analytics. Pasted playlists carry no title.
+type Pick =
+  | { id: number; source: 'featured' | 'search'; title: string }
+  | { id: number; source: 'link' }
 
 // One field for everything: empty shows Deezer's featured playlists, text
 // searches, and a pasted playlist link (or id) can be used directly.
@@ -37,17 +43,22 @@ export function PlaylistPicker() {
   })
 
   const select = useMutation({
-    mutationFn: (playlistId: number) =>
-      selectPlaylist({ data: { credentials, playlistId } }),
-    onSuccess: (result) => {
-      if (result.ok) setInput('')
-      else showError(ERROR_TEXT[result.error])
+    mutationFn: (pick: Pick) =>
+      selectPlaylist({ data: { credentials, playlistId: pick.id } }),
+    onSuccess: (result, pick) => {
+      if (result.ok) {
+        setInput('')
+        trackEvent('playlist-select', {
+          source: pick.source,
+          ...(pick.source !== 'link' && { playlist: pick.title }),
+        })
+      } else showError(ERROR_TEXT[result.error])
     },
     onError: () => showError(GENERIC_ERROR),
   })
 
   const hits = results.data?.ok ? results.data.playlists : []
-  const pendingId = select.isPending ? select.variables : null
+  const pendingId = select.isPending ? select.variables.id : null
 
   return (
     <div className="flex flex-col gap-3">
@@ -64,7 +75,7 @@ export function PlaylistPicker() {
           subtitle="From your link"
           pending={pendingId === linkedId}
           disabled={select.isPending}
-          onSelect={() => select.mutate(linkedId)}
+          onSelect={() => select.mutate({ id: linkedId, source: 'link' })}
         />
       ) : (
         <>
@@ -89,7 +100,13 @@ export function PlaylistPicker() {
                   {...rowProps(hit)}
                   pending={pendingId === hit.id}
                   disabled={select.isPending}
-                  onSelect={() => select.mutate(hit.id)}
+                  onSelect={() =>
+                    select.mutate({
+                      id: hit.id,
+                      source: searching ? 'search' : 'featured',
+                      title: hit.title,
+                    })
+                  }
                 />
               </li>
             ))}

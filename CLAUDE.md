@@ -83,6 +83,11 @@ To add a room feature: extend `commandSchema` → handle it in the reducer with 
 - Fields only accept primitives, so a `Room` can't be dumped by accident. **Never log player secrets**; [rooms.server.test.ts](apps/web/src/server/rooms.server.test.ts) asserts this. Log ids, not names.
 - Anything that logs takes a `Logger` as an optional dependency (`createRoomStore({ log })`, `createMusic(client, log)`), so tests can capture output with `createLogger(scope, { level: 'debug', write })`.
 
+## Analytics
+
+- Self-hosted Umami, injected by [analytics.ts](apps/web/src/lib/analytics.ts) after hydration, only in production builds on the `SITE_URL` host. Automatic tracking is off: the root route sends a pageview per path change, and every payload carries a cleaned URL (`/r/<code>` → `/r/:code`, no query string or hash), a title derived from that path (never `document.title`, which holds room codes), and a referrer cut to origin + path.
+- Track with `trackEvent(name, data)`. Every event is declared in the `Events` interface with the product question it answers. Keep values low-cardinality, and **never send names, room codes or credentials**. Room-level events (`game-start`, `game-end`, `game-restart`) are sent by the host only, so they count once per room.
+
 ## Conventions
 
 - TypeScript strict, plus `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`. Use the `Array<T>` style and `TName` type parameters (`@tanstack/eslint-config`). No `any`, and no `as` casts outside tests.

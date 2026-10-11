@@ -31,6 +31,9 @@ export function PlayerList({
               {p.id === view.me && (
                 <span className="text-neutral-500"> (you)</span>
               )}
+              {!p.connected && (
+                <span className="text-neutral-500"> (offline)</span>
+              )}
             </span>
             {p.id === view.hostId && (
               <span title="Host" aria-label="Host">

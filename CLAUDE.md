@@ -70,6 +70,18 @@ Invariants. Don't break these:
 
 To add a room feature: extend `commandSchema` → handle it in the reducer with a `reducer.test.ts` case → expose the new state through `phaseViewSchema`/`roomViewSchema` + `project` (the view tests parse every projection with the schema) → render it → add any new `GameError` to `ERROR_TEXT` in [ui.tsx](apps/web/src/components/ui.tsx), which TypeScript enforces.
 
+## Logging
+
+- Use `createLogger(scope)` from [log.server.ts](apps/web/src/server/log.server.ts). It writes one logfmt line per event: `12:03:41.207 DEBUG rooms   dispatch code=ABCD action=command:guess phase=round#1 version=5`.
+- `LOG_LEVEL` sets the level (`debug | info | warn | error | silent`). The default is `debug` in dev, `info` in production and `silent` under `bun test`. It is read at runtime, so changing it needs a restart, not a rebuild.
+- Scopes:
+  - `rooms`: every dispatch (action, result or error, phase transition, version), guesses next to their answer, deadline timers, streams, and auth failures. Room lifecycle, game start/end and host changes are logged at info.
+  - `deezer`: every real Deezer request (cache misses only) with its duration, plus failures with their `DeezerError` kind.
+  - `fn`: every server function call, from the global middleware in [start.ts](apps/web/src/start.ts).
+  - `audio`: preview redirects.
+- Fields only accept primitives, so a `Room` can't be dumped by accident. **Never log player secrets**; [rooms.server.test.ts](apps/web/src/server/rooms.server.test.ts) asserts this. Log ids, not names.
+- Anything that logs takes a `Logger` as an optional dependency (`createRoomStore({ log })`, `createMusic(client, log)`), so tests can capture output with `createLogger(scope, { level: 'debug', write })`.
+
 ## Conventions
 
 - TypeScript strict, plus `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`. Use the `Array<T>` style and `TName` type parameters (`@tanstack/eslint-config`). No `any`, and no `as` casts outside tests.

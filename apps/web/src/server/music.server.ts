@@ -5,6 +5,8 @@ import type { DeezerClient, DeezerPlaylist, DeezerTrack } from '@sonq/deezer'
 import type { GameError, Playlist, Result, Track } from '@sonq/game'
 
 import { createFakeDeezerClient } from './fake-deezer.server'
+import { createLogger } from './log.server'
+import type { LogFields, Logger } from './log.server'
 import { createTtlCache } from './ttl-cache'
 
 export interface PlaylistHit {
@@ -30,7 +32,12 @@ const MINUTE = 60_000
 const MAX_PLAYLIST_TRACKS = 500
 const SEARCH_LIMIT = 8
 
-export function createMusic(deezer: DeezerClient): Music {
+export function createMusic(
+  client: DeezerClient,
+  log: Logger = createLogger('deezer'),
+): Music {
+  // Wrapped below the caches, so only real Deezer requests are logged.
+  const deezer = withLogging(client, log)
   const trackSearches = createTtlCache<Array<Track>>({ ttlMs: 10 * MINUTE })
   const playlistSearches = createTtlCache<Array<PlaylistHit>>({
     ttlMs: 10 * MINUTE,
@@ -78,10 +85,13 @@ export function createMusic(deezer: DeezerClient): Music {
             deezer.getPlaylist(id),
             deezer.getPlaylistTracks(id, MAX_PLAYLIST_TRACKS),
           ])
-          return {
-            info,
-            tracks: uniqueById(tracks.filter(isPlayable).map(toTrack)),
-          }
+          const playable = uniqueById(tracks.filter(isPlayable).map(toTrack))
+          log.debug('playlist loaded', {
+            playlist: id,
+            tracks: tracks.length,
+            playable: playable.length,
+          })
+          return { info, tracks: playable }
         }),
       )
       if (!loaded.ok) return loaded
@@ -107,6 +117,85 @@ export function createMusic(deezer: DeezerClient): Music {
       }))
       return result.ok && result.url ? result.url : null
     },
+  }
+}
+
+// Logs every request with its duration, result size and, on failure, the
+// typed error kind. Deezer allows ~50 requests per 5 s, so this is the
+// place to look when `quota_exceeded` shows up.
+function withLogging(deezer: DeezerClient, log: Logger): DeezerClient {
+  async function call<T>(
+    request: keyof DeezerClient,
+    fields: LogFields,
+    run: () => Promise<T>,
+    describe: (result: T) => LogFields,
+  ): Promise<T> {
+    const started = performance.now()
+    const ms = () => Math.round(performance.now() - started)
+    try {
+      const result = await run()
+      log.debug('request', {
+        request,
+        ...fields,
+        ms: ms(),
+        ...describe(result),
+      })
+      return result
+    } catch (error) {
+      log.warn('request failed', {
+        request,
+        ...fields,
+        ms: ms(),
+        kind: error instanceof DeezerError ? error.kind : 'bug',
+        error: error instanceof Error ? error.message : String(error),
+      })
+      throw error
+    }
+  }
+  const count = (items: Array<unknown>) => ({ results: items.length })
+
+  return {
+    searchTracks: (query, limit) =>
+      call(
+        'searchTracks',
+        { query },
+        () => deezer.searchTracks(query, limit),
+        count,
+      ),
+    searchPlaylists: (query, limit) =>
+      call(
+        'searchPlaylists',
+        { query },
+        () => deezer.searchPlaylists(query, limit),
+        count,
+      ),
+    chartPlaylists: (limit) =>
+      call('chartPlaylists', {}, () => deezer.chartPlaylists(limit), count),
+    getPlaylist: (id) =>
+      call(
+        'getPlaylist',
+        { id },
+        () => deezer.getPlaylist(id),
+        (p) => ({
+          tracks: p.nb_tracks,
+        }),
+      ),
+    getPlaylistTracks: (id, max) =>
+      call(
+        'getPlaylistTracks',
+        { id },
+        () => deezer.getPlaylistTracks(id, max),
+        count,
+      ),
+    getTrack: (id) =>
+      call(
+        'getTrack',
+        { id },
+        () => deezer.getTrack(id),
+        (t) => ({
+          preview: t.preview !== '',
+        }),
+      ),
   }
 }
 

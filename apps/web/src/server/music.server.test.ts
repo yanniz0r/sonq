@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import { DeezerError } from '@sonq/deezer'
 import type { DeezerClient, DeezerPlaylist, DeezerTrack } from '@sonq/deezer'
 
+import { createLogger } from './log.server'
 import { createMusic } from './music.server'
 
 function deezerTrack(id: number, overrides: Partial<DeezerTrack> = {}) {
@@ -151,5 +152,34 @@ describe('previewUrl', () => {
       }),
     )
     expect(await music.previewUrl(1)).toBeNull()
+  })
+})
+
+describe('logging', () => {
+  test('logs real Deezer requests and failures, but not cache hits', async () => {
+    const lines: Array<string> = []
+    const log = createLogger('deezer', {
+      level: 'debug',
+      write: (line) => lines.push(line),
+    })
+    const music = createMusic(
+      fakeDeezer({
+        searchTracks: async () => [deezerTrack(1)],
+        getTrack: () =>
+          Promise.reject(new DeezerError('quota_exceeded', 'Quota')),
+      }),
+      log,
+    )
+    await music.searchTracks('queen')
+    await music.searchTracks('queen')
+    await music.previewUrl(1)
+
+    expect(lines).toHaveLength(2)
+    expect(lines[0]).toMatch(
+      /DEBUG deezer\s+request request=searchTracks query=queen ms=\d+ results=1$/,
+    )
+    expect(lines[1]).toMatch(
+      /WARN {2}deezer\s+request failed request=getTrack id=1 ms=\d+ kind=quota_exceeded error=Quota$/,
+    )
   })
 })

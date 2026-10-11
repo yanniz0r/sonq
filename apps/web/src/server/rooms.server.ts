@@ -23,6 +23,8 @@ import type {
   Track,
 } from '@sonq/game'
 
+import { createLogger } from './log.server'
+import type { LogFields, Logger } from './log.server'
 import type { Credentials } from '#/lib/credentials'
 
 // A reload or a brief network blip shouldn't make a player flicker offline.
@@ -84,34 +86,100 @@ const systemClock: Clock = {
 export function createRoomStore({
   clock = systemClock,
   random = Math.random,
-}: { clock?: Clock; random?: () => number } = {}): RoomStore {
+  log = createLogger('rooms'),
+}: { clock?: Clock; random?: () => number; log?: Logger } = {}): RoomStore {
   const entries = new Map<string, Entry>()
 
   function dispatch(code: string, action: Action): Result<{ room: Room }> {
     const entry = entries.get(code)
-    if (!entry) return { ok: false, error: 'room_not_found' }
+    if (!entry) {
+      log.debug('rejected', {
+        code,
+        ...describeAction(action),
+        error: 'room_not_found',
+      })
+      return { ok: false, error: 'room_not_found' }
+    }
 
+    const before = entry.room
     const now = clock.now()
-    const result = reduce(entry.room, action, { now, random })
-    if (!result.ok) return result
+    const result = reduce(before, action, { now, random })
+    if (!result.ok) {
+      log.debug('rejected', {
+        code,
+        ...describeAction(action),
+        error: result.error,
+      })
+      return result
+    }
 
     // Everyone left: the room is over.
     if (result.room.players.length === 0) {
-      dropRoom(code)
+      dropRoom(code, 'empty')
       return { ok: true, room: result.room }
     }
 
-    if (result.room !== entry.room) {
+    if (result.room === before) {
+      log.debug('unchanged', { code, ...describeAction(action) })
+    } else {
       entry.room = {
         ...result.room,
-        version: entry.room.version + 1,
+        version: before.version + 1,
         lastActivity: now,
       }
+      logChange(before, entry.room, action)
       broadcast(entry)
       watchHost(entry)
     }
     armDeadline(entry)
     return { ok: true, room: entry.room }
+  }
+
+  function logChange(before: Room, after: Room, action: Action) {
+    const { code } = after
+    const from = phaseLabel(before)
+    const to = phaseLabel(after)
+    log.debug('dispatch', {
+      code,
+      ...describeAction(action),
+      phase: from === to ? to : `${from}->${to}`,
+      version: after.version,
+    })
+
+    if (action.type === 'command' && action.command.type === 'guess') {
+      logGuess(after, action.by)
+    }
+    if (before.phase.kind === 'lobby' && after.phase.kind === 'round') {
+      log.info('game started', {
+        code,
+        players: after.players.length,
+        playlist: after.playlist?.id,
+        rounds: after.settings.rounds,
+      })
+    }
+    if (before.phase.kind !== 'ended' && after.phase.kind === 'ended') {
+      log.info('game ended', { code, rounds: after.history.length })
+    }
+    if (before.hostId !== after.hostId) {
+      log.info('host changed', { code, from: before.hostId, to: after.hostId })
+    }
+  }
+
+  // Logs a guess next to the answer, to debug title/artist matching.
+  function logGuess(room: Room, playerId: PlayerId) {
+    const { phase } = room
+    if (phase.kind !== 'round' && phase.kind !== 'reveal') return
+    const guess = phase.round.guesses[playerId]?.at(-1)
+    if (!guess) return
+    const { track } = phase.round
+    log.debug('guess', {
+      code: room.code,
+      player: playerId,
+      correct: guess.correct,
+      guess: `${guess.title} — ${guess.artist}`,
+      answer: `${track.titleShort} — ${track.artist}`,
+      elapsedMs: guess.at - phase.round.startsAt,
+    })
   }
 
   function broadcast(entry: Entry) {
@@ -139,13 +207,12 @@ export function createRoomStore({
     if (at === null) return
 
     const { code } = entry.room
-    const cancel = clock.schedule(
-      () => {
-        entry.deadline = null
-        dispatch(code, { type: 'deadline' })
-      },
-      Math.max(0, at - clock.now()),
-    )
+    const inMs = Math.max(0, at - clock.now())
+    log.debug('deadline armed', { code, phase: phaseLabel(entry.room), inMs })
+    const cancel = clock.schedule(() => {
+      entry.deadline = null
+      dispatch(code, { type: 'deadline' })
+    }, inMs)
     entry.deadline = { at, cancel }
   }
 
@@ -181,9 +248,10 @@ export function createRoomStore({
     )
   }
 
-  function dropRoom(code: string) {
+  function dropRoom(code: string, reason: 'empty' | 'idle') {
     const entry = entries.get(code)
     if (!entry) return
+    log.info('room closed', { code, reason, rooms: entries.size - 1 })
     for (const sub of entry.subscribers) sub.listener({ type: 'closed' })
     entry.graceTimers.forEach((cancel) => cancel())
     entry.hostTimer?.()
@@ -194,14 +262,16 @@ export function createRoomStore({
   function collectIdleRooms() {
     const cutoff = clock.now() - IDLE_ROOM_MS
     for (const [code, entry] of entries) {
-      if (entry.room.lastActivity < cutoff) dropRoom(code)
+      if (entry.room.lastActivity < cutoff) dropRoom(code, 'idle')
     }
   }
 
   function authorize({ code, playerId, secret }: Credentials) {
     const entry = entries.get(code)
     const player = entry?.room.players.find((p) => p.id === playerId)
-    return entry && player?.secret === secret ? entry : null
+    if (entry && player?.secret === secret) return entry
+    log.debug('unauthorized', { code, player: playerId, room: !!entry })
+    return null
   }
 
   function makePlayer(name: string, taken: Array<Player>): Player {
@@ -233,8 +303,10 @@ export function createRoomStore({
     createRoom(name) {
       // Rooms only grow here, so this is where idle ones are swept.
       collectIdleRooms()
-      if (entries.size >= MAX_ROOMS)
+      if (entries.size >= MAX_ROOMS) {
+        log.warn('room limit reached', { rooms: entries.size })
         return { ok: false, error: 'too_many_rooms' }
+      }
 
       let code = randomCode()
       while (entries.has(code)) code = randomCode()
@@ -258,6 +330,7 @@ export function createRoomStore({
         deadline: null,
       }
       entries.set(code, entry)
+      log.info('room created', { code, host: host.id, rooms: entries.size })
       return seat(entry, host)
     },
 
@@ -266,7 +339,13 @@ export function createRoomStore({
       if (!entry) return { ok: false, error: 'room_not_found' }
       const player = makePlayer(name, entry.room.players)
       const result = dispatch(code, { type: 'join', player })
-      return result.ok ? seat(entry, player) : result
+      if (!result.ok) return result
+      log.info('player joined', {
+        code,
+        player: player.id,
+        players: result.room.players.length,
+      })
+      return seat(entry, player)
     },
 
     runCommand(credentials, command) {
@@ -307,6 +386,11 @@ export function createRoomStore({
 
       const sub: Subscriber = { playerId, listener }
       entry.subscribers.add(sub)
+      log.debug('stream opened', {
+        code: entry.room.code,
+        player: playerId,
+        streams: entry.subscribers.size,
+      })
       entry.graceTimers.get(playerId)?.()
       entry.graceTimers.delete(playerId)
 
@@ -321,6 +405,11 @@ export function createRoomStore({
 
       return () => {
         entry.subscribers.delete(sub)
+        log.debug('stream closed', {
+          code: entry.room.code,
+          player: playerId,
+          streams: entry.subscribers.size,
+        })
         const stillOpen = [...entry.subscribers].some(
           (s) => s.playerId === playerId,
         )
@@ -329,6 +418,40 @@ export function createRoomStore({
       }
     },
   }
+}
+
+// The action as log fields. Payloads are summarized, never dumped.
+function describeAction(action: Action): LogFields {
+  switch (action.type) {
+    case 'command':
+      return { action: `command:${action.command.type}`, player: action.by }
+    case 'setPlaylist':
+      return {
+        action: 'setPlaylist',
+        player: action.by,
+        playlist: action.playlist.id,
+        tracks: action.playlist.tracks.length,
+      }
+    case 'join':
+      return { action: 'join', player: action.player.id }
+    case 'presence':
+      return {
+        action: 'presence',
+        player: action.playerId,
+        connected: action.connected,
+      }
+    case 'hostTimeout':
+    case 'deadline':
+      return { action: action.type }
+  }
+}
+
+// "lobby", "round#1", "reveal#1" or "ended".
+function phaseLabel(room: Room): string {
+  const { phase } = room
+  return phase.kind === 'round' || phase.kind === 'reveal'
+    ? `${phase.kind}#${room.history.length + 1}`
+    : phase.kind
 }
 
 function randomCode() {

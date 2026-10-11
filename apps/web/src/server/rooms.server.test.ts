@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test } from 'bun:test'
 import { COUNTDOWN_MS, REVEAL_MS, ROUND_MS } from '@sonq/game'
 import type { Playlist, RoomEvent, RoomView, Track } from '@sonq/game'
 
+import { createLogger } from './log.server'
 import { createRoomStore } from './rooms.server'
 import type { Clock, RoomStore } from './rooms.server'
 import type { Credentials } from '#/lib/credentials'
@@ -72,10 +73,19 @@ function listen(store: RoomStore, credentials: Credentials) {
 
 let time: ReturnType<typeof fakeClock>
 let store: RoomStore
+let logLines: Array<string>
 
 beforeEach(() => {
   time = fakeClock()
-  store = createRoomStore({ clock: time.clock, random: () => 0 })
+  logLines = []
+  store = createRoomStore({
+    clock: time.clock,
+    random: () => 0,
+    log: createLogger('rooms', {
+      level: 'debug',
+      write: (line) => logLines.push(line),
+    }),
+  })
 })
 
 function roomWithTwoPlayers() {
@@ -226,5 +236,33 @@ describe('room store', () => {
     time.advance(2 * 60 * 60_000 + 60_000)
     expectOk(store.createRoom('New'))
     expect(store.authorize(old)).toBeNull()
+  })
+
+  test('logs a game without ever leaking player secrets', () => {
+    const { host, guest } = roomWithTwoPlayers()
+    listen(store, host)
+    expectOk(store.setPlaylist(host, playlist))
+    expectOk(store.runCommand(host, { type: 'start' }))
+    time.advance(COUNTDOWN_MS)
+    expectOk(
+      store.runCommand(guest, {
+        type: 'guess',
+        trackId: 999,
+        title: 'Song 1',
+        artist: 'Artist 1',
+      }),
+    )
+    store.runCommand({ ...guest, secret: 'forged' }, { type: 'end' })
+    expectOk(store.runCommand(host, { type: 'end' }))
+
+    const log = logLines.join('\n')
+    expect(log).toContain('room created')
+    expect(log).toContain('game started')
+    expect(log).toContain('phase=lobby->round#1')
+    expect(log).toContain('correct=true')
+    expect(log).toContain('unauthorized')
+    expect(log).toContain('game ended')
+    expect(log).not.toContain(host.secret)
+    expect(log).not.toContain(guest.secret)
   })
 })

@@ -16,6 +16,10 @@ RUN bunx turbo run build --filter=@sonq/web
 
 FROM base AS runtime
 ENV NODE_ENV=production
+# For healthchecks run inside the container (e.g. Coolify's `curl /health`).
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends curl \
+  && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/apps/web/.output ./.output
 EXPOSE 3000
 CMD ["bun", ".output/server/index.mjs"]

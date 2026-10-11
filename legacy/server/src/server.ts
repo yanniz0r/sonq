@@ -44,7 +44,6 @@ io.on("connection", (socket: Socket) => {
       game: zod.string(),
       adminKey: zod.string().optional(),
     })
-    .nonstrict()
     .safeParse(socket.handshake.query);
   if (!parsedQuery.success) {
     socket.disconnect();

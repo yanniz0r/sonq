@@ -81,7 +81,7 @@ class GameDetailRouter {
     
     if (query) {
       const searchResult = await this.game.spotify!.search(query, ['playlist'])
-      return response.status(200).json(searchResult.playlists.items);
+      return response.status(200).json(searchResult.playlists.items.filter(Boolean));
     } else {
       response.send([])
     }

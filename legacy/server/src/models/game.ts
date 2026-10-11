@@ -291,6 +291,10 @@ class Game {
   public transitionToPlayGame() {
     this.wrongGuesses = [];
     this.currentSong = this.pickRandomSong();
+    console.log({
+      cs: this.currentSong,
+      songs: this.songs,
+    })
     this.phase = {
       type: Domain.GamePhaseType.PlaySong,
       data: {

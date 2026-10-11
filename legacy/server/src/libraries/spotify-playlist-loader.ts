@@ -37,6 +37,8 @@ class SpotifyPlaylistLoader {
         }
 
         for (let item of playlistTracks.items) {
+          if (!item) continue
+          console.log({item})
           if (item.track.preview_url) {
             songs.push(item.track);
           }
